@@ -160,3 +160,17 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  # ---------------- Tool mới của nhóm ----------------
+  - name: sentiment
+    description: >
+      Phân tích cảm xúc (tích cực/tiêu cực/trung lập) của một đoạn văn bản.
+      CHỈ dùng SAU KHI đã có nội dung text cụ thể (vd kết quả từ `lookup`,
+      `fetch`, `timeline`, `social_search`) và người dùng muốn biết cảm
+      xúc/thái độ của nội dung đó. KHÔNG dùng để tìm kiếm hay lấy dữ liệu —
+      không có khả năng tự lấy nội dung, phải được cung cấp `text` sẵn.
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Đoạn văn bản cần phân tích cảm xúc, phải là nội dung thật đã có sẵn"}
+      required: [text]

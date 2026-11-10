@@ -1,0 +1,928 @@
+{
+  "run_id": "v4c_B_group_openrouter_20261110T190545487755",
+  "version": "v4c",
+  "artifact_version": "v4c+pc105e9f26db9+td4e44c28c253",
+  "prompt_hash": "c105e9f26db9e501c918538a44cfe26ff9d392d81b812d17dbef4b66ed2ad957",
+  "tools_hash": "d4e44c28c25394968ae7ce74c7c2086bfea6bf372fde6586c5402893f501b1e7",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "D:\\CLAUDE PROJECT\\ai-thuc-chien-vingroup\\bai-tap\\Day3\\lab3\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\CLAUDE PROJECT\\ai-thuc-chien-vingroup\\bai-tap\\Day3\\lab3\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-10T19:05:45",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 7,
+    "case_accuracy": 0.7,
+    "tool_routing_accuracy": 0.7,
+    "argument_accuracy": 0.7,
+    "multiturn_accuracy": 0.4,
+    "failure_counts": {
+      "wrong_tool": 2,
+      "missing_info": 1
+    },
+    "observed_mismatch_counts": {
+      "extra_tool_call": 1,
+      "missing_tool_call": 2
+    }
+  },
+  "results": [
+    {
+      "id": "G01_sentiment_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Sau khi đã có nội dung từ lookup, khi người dùng hỏi về cảm xúc/thái độ của nội dung đó, agent phải route tới tool mới `sentiment` thay vì gọi lại lookup hoặc trả lời chay không qua tool."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin AI hôm nay giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Bài này cảm xúc tích cực hay tiêu cực vậy, phân tích giúp mình với"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "sentiment",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "sentiment",
+            "args": {
+              "text": "Tìm tin AI hôm nay giúp mình"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "sentiment",
+          "args": {
+            "text": "Tìm tin AI hôm nay giúp mình"
+          },
+          "result": {
+            "tool": "sentiment",
+            "text": "Tìm tin AI hôm nay giúp mình",
+            "label": "neutral",
+            "positive_hits": [],
+            "negative_hits": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_papers_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Yêu cầu tìm bài báo khoa học phải route tới `papers` (arXiv), không nhầm sang `lookup` (web chung) hay `social_search`."
+      },
+      "input": "Tìm giúp mình paper khoa học về diffusion models",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "diffusion models"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "diffusion models",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "papers",
+          "args": {
+            "query": "diffusion models",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "diffusion models",
+            "api_query": "all:diffusion AND all:models",
+            "total_results": 63494,
+            "items": [
+              {
+                "arxiv_id": "2605.22586v3",
+                "title": "A Tutorial on Diffusion Theory: From Differential Equations to Diffusion Models",
+                "summary": "Diffusion models have emerged as a dominant framework for generative modeling, but their mathematical foundations are often presented separately through diffusion probabilistic models, score-based modeling, stochastic differential equations, and numerical sampling methods. We write this tutorial to provide a unified and self-contained account of these viewpoints from the perspective of differential equations. Starting from a conditional Gaussian noising process, we derive ordinary differential equation (ODE) and stochastic differential equation (SDE) representations, pass to the corresponding marginal forward dynamics, and then obtain the reverse-time SDE and probability-flow ODE that make generation possible. We show that the central unknown quantity in reverse sampling is the marginal score, explain how score matching becomes the standard denoising objective under a noise-prediction parameterization, and discuss practical reverse-time sampling and guidance. We further place DDPM, DDIM, flow matching, and score-based SDEs in a common framework, and conclude with diffusion language models in continuous embedding space together with a brief discussion of discrete masked-token diffusion. The tutorial is intended as a bridge between the analytical foundations of diffusion processes and the modern generative algorithms built upon them.",
+                "authors": [
+                  "Jiayi Fu",
+                  "Yuxia Wang"
+                ],
+                "published": "2026-05-21T14:59:12Z",
+                "updated": "2026-05-27T21:34:42Z",
+                "url": "http://arxiv.org/abs/2605.22586v3",
+                "pdf_url": "https://arxiv.org/pdf/2605.22586v3",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG",
+                  "cs.CL"
+                ]
+              },
+              {
+                "arxiv_id": "2312.03397v1",
+                "title": "Generalized Contrastive Divergence: Joint Training of Energy-Based Model and Diffusion Model through Inverse Reinforcement Learning",
+                "summary": "We present Generalized Contrastive Divergence (GCD), a novel objective function for training an energy-based model (EBM) and a sampler simultaneously. GCD generalizes Contrastive Divergence (Hinton, 2002), a celebrated algorithm for training EBM, by replacing Markov Chain Monte Carlo (MCMC) distribution with a trainable sampler, such as a diffusion model. In GCD, the joint training of EBM and a diffusion model is formulated as a minimax problem, which reaches an equilibrium when both models converge to the data distribution. The minimax learning with GCD bears interesting equivalence to inverse reinforcement learning, where the energy corresponds to a negative reward, the diffusion model is a policy, and the real data is expert demonstrations. We present preliminary yet promising results showing that joint training is beneficial for both EBM and a diffusion model. GCD enables EBM training without MCMC while improving the sample quality of a diffusion model.",
+                "authors": [
+                  "Sangwoong Yoon",
+                  "Dohyun Kwon",
+                  "Himchan Hwang",
+                  "Yung-Kyun Noh",
+                  "Frank C. Park"
+                ],
+                "published": "2023-12-06T10:10:21Z",
+                "updated": "2023-12-06T10:10:21Z",
+                "url": "http://arxiv.org/abs/2312.03397v1",
+                "pdf_url": "https://arxiv.org/pdf/2312.03397v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG",
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2401.08741v1",
+                "title": "Fixed Point Diffusion Models",
+                "summary": "We introduce the Fixed Point Diffusion Model (FPDM), a novel approach to image generation that integrates the concept of fixed point solving into the framework of diffusion-based generative modeling. Our approach embeds an implicit fixed point solving layer into the denoising network of a diffusion model, transforming the diffusion process into a sequence of closely-related fixed point problems. Combined with a new stochastic training method, this approach significantly reduces model size, reduces memory usage, and accelerates training. Moreover, it enables the development of two new techniques to improve sampling efficiency: reallocating computation across timesteps and reusing fixed point solutions between timesteps. We conduct extensive experiments with state-of-the-art models on ImageNet, FFHQ, CelebA-HQ, and LSUN-Church, demonstrating substantial improvements in performance and efficiency. Compared to the state-of-the-art DiT model, FPDM contains 87% fewer parameters, consumes 60% less memory during training, and improves image generation quality in situations where sampling computation or time is limited. Our code and pretrained models are available at https://lukemelas.github.io/fixed-point-diffusion-models.",
+                "authors": [
+                  "Xingjian Bai",
+                  "Luke Melas-Kyriazi"
+                ],
+                "published": "2024-01-16T18:55:54Z",
+                "updated": "2024-01-16T18:55:54Z",
+                "url": "http://arxiv.org/abs/2401.08741v1",
+                "pdf_url": "https://arxiv.org/pdf/2401.08741v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV",
+                  "cs.AI",
+                  "cs.LG"
+                ]
+              },
+              {
+                "arxiv_id": "2405.03150v2",
+                "title": "Video Diffusion Models: A Survey",
+                "summary": "Diffusion generative models have recently become a powerful technique for creating and modifying high-quality, coherent video content. This survey provides a comprehensive overview of the critical components of diffusion models for video generation, including their applications, architectural design, and temporal dynamics modeling. The paper begins by discussing the core principles and mathematical formulations, then explores various architectural choices and methods for maintaining temporal consistency. A taxonomy of applications is presented, categorizing models based on input modalities such as text prompts, images, videos, and audio signals. Advancements in text-to-video generation are discussed to illustrate the state-of-the-art capabilities and limitations of current approaches. Additionally, the survey summarizes recent developments in training and evaluation practices, including the use of diverse video and image datasets and the adoption of various evaluation metrics to assess model performance. The survey concludes with an examination of ongoing challenges, such as generating longer videos and managing computational costs, and offers insights into potential future directions for the field. By consolidating the latest research and developments, this survey aims to serve as a valuable resource for researchers and practitioners working with video diffusion models. Website: https://github.com/ndrwmlnk/Awesome-Video-Diffusion-Models",
+                "authors": [
+                  "Andrew Melnik",
+                  "Michal Ljubljanac",
+                  "Cong Lu",
+                  "Qi Yan",
+                  "Weiming Ren",
+                  "Helge Ritter"
+                ],
+                "published": "2024-05-06T04:01:42Z",
+                "updated": "2024-11-17T00:40:09Z",
+                "url": "http://arxiv.org/abs/2405.03150v2",
+                "pdf_url": "https://arxiv.org/pdf/2405.03150v2",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV",
+                  "cs.LG"
+                ]
+              },
+              {
+                "arxiv_id": "2311.03226v1",
+                "title": "LDM3D-VR: Latent Diffusion Model for 3D VR",
+                "summary": "Latent diffusion models have proven to be state-of-the-art in the creation and manipulation of visual outputs. However, as far as we know, the generation of depth maps jointly with RGB is still limited. We introduce LDM3D-VR, a suite of diffusion models targeting virtual reality development that includes LDM3D-pano and LDM3D-SR. These models enable the generation of panoramic RGBD based on textual prompts and the upscaling of low-resolution inputs to high-resolution RGBD, respectively. Our models are fine-tuned from existing pretrained models on datasets containing panoramic/high-resolution RGB images, depth maps and captions. Both models are evaluated in comparison to existing related methods.",
+                "authors": [
+                  "Gabriela Ben Melech Stan",
+                  "Diana Wofk",
+                  "Estelle Aflalo",
+                  "Shao-Yen Tseng",
+                  "Zhipeng Cai",
+                  "Michael Paulitsch",
+                  "Vasudev Lal"
+                ],
+                "published": "2023-11-06T16:12:10Z",
+                "updated": "2023-11-06T16:12:10Z",
+                "url": "http://arxiv.org/abs/2311.03226v1",
+                "pdf_url": "https://arxiv.org/pdf/2311.03226v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CV",
+                "categories": [
+                  "cs.CV",
+                  "cs.AI"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_lookup_timeframe_month",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "timeframe phải được set đúng theo cụm từ 'trong tháng này' (timeframe=month, khác default week và khác day đã có nhiều ở base eval)."
+      },
+      "input": "Tìm tin tức về crypto trong tháng này",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "crypto",
+              "topic": "news",
+              "timeframe": "month"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "crypto",
+              "topic": "news",
+              "timeframe": "month",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "crypto",
+            "topic": "news",
+            "timeframe": "month",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "crypto",
+            "topic": "news",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "A simple explainer of the massive crypto heist at Binance : NPR",
+                "url": "https://www.npr.org/2026/10/31/nx-s1-6024426/binance-crypto-heist-cyber-criminals-north-korea",
+                "source": "npr.org",
+                "summary": "A unique feature of crypto exchanges is that people can buy and sell digital currencies such as bitcoin — and leave them with the exchanges for safekeeping.\n\nThis dual trust in the exchange makes them mighty tempting targets for hackers. And what's more concerning for critics, crypto exchanges also don't have to follow the same strict regulations that govern established Wall Street firm. [...] ### So first, what are crypto exchanges?\n\nThey are akin to the New York Stock Exchange (NYSE) or the Nasdaq, but instead of trading stocks, investors turn to Binance and other crypto exchanges to trade digital assets such as Bitcoin.\n\nA wide range of investors trade cryptocurrencies at these exchanges, from financial institutions and sophisticated traders, all the way to regular investors looking to make some money.\n\n### OK, so what happened this week? [...] \"So the regulatory framework for crypto is much weaker than what investors in the US enjoy in other markets,\" says Fischer.\n\nThough Binance has promised to pay back customers who lost funds, it is not necessarily bound to do so according to current regulations. And many critics worry that smaller exchanges could struggle to pay back their investors in case of a hack, leaving these traders to suffer the consequences.\n\n### Doesn't this reinforce the crypto sector's Wild West reputation?",
+                "score": 0.4450718
+              },
+              {
+                "title": "Who gets your crypto | Charles Schwab",
+                "url": "https://www.aboutschwab.com/mss/story/who-gets-your-crypto-when-youre-gone",
+                "source": "aboutschwab.com",
+                "summary": "As crypto becomes part of mainstream wealth, the conversation is shifting from safeguarding access today to preserving it across generations.\n The rise of digital assets is prompting estate planners to rethink traditional approaches to identifying, documenting, and transferring wealth.\n Crypto platforms are developing inheritance procedures, but the lack of industrywide standards can still leave heirs facing uncertainty. [...] As crypto becomes part of mainstream wealth, the conversation is shifting from safeguarding access today to preserving it across generations.\n The rise of digital assets is prompting estate planners to rethink traditional approaches to identifying, documenting, and transferring wealth.\n Crypto platforms are developing inheritance procedures, but the lack of industrywide standards can still leave heirs facing uncertainty. [...] ##  As crypto becomes part of mainstream wealth, the conversation is shifting from safeguarding access today to preserving it across generations.  The rise of digital assets is prompting estate planners to rethink traditional approaches to identifying, documenting, and transferring wealth.  Crypto platforms are developing inheritance procedures, but the lack of industrywide standards can still leave heirs facing uncertainty.  Beneficiary designations and other familiar wealth-transfer tools may",
+                "score": 0.43323857
+              },
+              {
+                "title": "Crypto and tech money lifts new Dems to CA Capitol",
+                "url": "https://calmatters.org/newsletter/crypto-meta-moderate-democrats-election",
+                "source": "calmatters.org",
+                "summary": "Nonprofit & Nonpartisan News\n\nAbout Newsletters  Search\n\nCalMatters is your nonprofit and nonpartisan newsroom dedicated to explaining how state government impacts our lives.\n\n Election Results\n Politics\n Housing\n Education\n Economy\n Immigration\n Environment\n California Voices\n Investigations\n Impact\n Events\n\nPosted inWhatMatters\n\n# Crypto, Meta money lifts new Democrats to CA Capitol\n\nAvatar photo  by Lynn La",
+                "score": 0.309504
+              },
+              {
+                "title": "Binance Hack Sends Crypto Stocks Tumbling - The New York Times",
+                "url": "https://www.nytimes.com/2026/10/30/business/binance-hack-crypto-stocks-bitcoin.html",
+                "source": "nytimes.com",
+                "summary": "Coinbase, another crypto exchange, sank more than 12 percent on Friday morning. Strategy, the world’s largest holder of Bitcoin, tumbled more than 10 percent; and Robinhood, which allows retail investors to trade cryptocurrencies, fell more than 8 percent.\n\nThe price of Bitcoin has slumped nearly 5 percent to $76,800. Other cryptocurrencies are floundering as well: Ethereum and Solana fell around 5 percent on Friday. [...] The rout began Thursday, after reports of what could be the largest crypto heist ever. Binance said it reserved $6.34 billion in company funds to cover losses from the theft.\n\n“Obviously the broader crypto market has turned bearish on the Binance hack, but I believe Binance can absorb the loss comfortably,” Jeff Ko, chief analyst at ViaBTC, a crypto-mining pool, wrote in a research note.\n\n“I don’t expect the stolen BTC to add much selling pressure,” he added in his note. [...] Supported by\n\n# Binance Hack Sends Crypto Stocks Tumbling\n\nThe rout hit publicly traded crypto exchanges and fintech companies, as well as cryptocurrencies like Bitcoin.\n\nBy Aruni Soni\n\nA $6.3 billion theft at Binance, the largest cryptocurrency exchange, rattled prominent crypto stocks across the market on Friday.",
+                "score": 0.30725458
+              },
+              {
+                "title": "Binance loses $6.3 billion in crypto heist—what happens to your money when an exchange gets hacked",
+                "url": "https://www.cnbc.com/make-it/2026/10/30/binance-crypto-hack-customer-funds.html",
+                "source": "cnbc.com",
+                "summary": "With self-custody, you use your own crypto wallet and control the private keys used to authorize transactions on the blockchain. Wallets typically come with a recovery phrase — essentially a master password that can be used to restore access to the wallet if you lose it.\n\nThat gives you control of your crypto without relying on an exchange, but it also makes you responsible for keeping that information safe. [...] “When you leave crypto on an exchange, you are relying on that company’s controls and its balance sheet,” says Martin Mulyadi, YHB Endowed Chair in Accounting and professor of accounting at Shenandoah University. “A pledge to make customers whole is only as strong as the resources behind it.”\n\n### What you should look for when choosing a crypto exchange [...] A record-breaking hack at Binance, the world’s largest cryptocurrency exchange, is a reminder of the risks investors take when trusting a company to hold their digital tokens.\n\nBinance said Friday that the security breach affectedabout $6.3 billion in client assets, making it the largest crypto hack on record. Around $3 billion of the affected assets has been frozen on blockchain networks, and the exchange says it has begun recovering some of them.",
+                "score": 0.28843427
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_missing_arxiv_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Người dùng nhắc 'bài báo đó' nhưng không có arxiv_url/ID cụ thể nào trước đó trong hội thoại — agent phải hỏi lại (clarify, response_type=text) thay vì tự bịa arxiv_url cho tool `paper_text`."
+      },
+      "input": "Lấy toàn văn bài báo đó giúp mình, tóm tắt lại",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp ID hoặc địa chỉ của bài báo mà bạn muốn lấy toàn văn không?",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp ID hoặc địa chỉ của bài báo mà bạn muốn lấy toàn văn không?",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cung cấp ID hoặc địa chỉ của bài báo mà bạn muốn lấy toàn văn không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_out_of_scope_translate",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Dịch thuật không nằm trong phạm vi tool của agent (research/social/web/send) — agent phải từ chối, không gọi tool nào (không tự dịch rồi gọi send, không bịa tool khác)."
+      },
+      "input": "Bạn dịch giúp mình đoạn này sang tiếng Nhật được không?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Xin lỗi, nhưng tôi không thể giúp bạn với yêu cầu dịch thuật. Tuy nhiên, bạn có thể sử dụng các công cụ dịch trực tuyến như Google Dịch để thực hiện việc này.",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_unnecessary_tool_thanks",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Lời cảm ơn/kết thúc hội thoại không cần gọi bất kỳ tool nào (kể cả `clarify`) — agent chỉ cần trả lời bình thường, không được gọi tool thừa."
+      },
+      "input": "Cảm ơn bạn nhé, vậy là đủ rồi",
+      "expect": {
+        "no_tool": true,
+        "behavior": "chat"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Không có gì! Nếu bạn cần thêm thông tin hay hỗ trợ gì khác, đừng ngần ngại hỏi nhé!",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G07_carryover_social_to_lookup",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Lượt đầu dùng social_search (tweet), lượt sau người dùng rõ ràng chuyển sang 'trên web' — agent phải chuyển đúng sang `lookup`, giữ lại từ khóa 'AI safety' từ ngữ cảnh, không lặp lại social_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tweet mới nhất về AI safety"
+        },
+        {
+          "role": "user",
+          "content": "Giờ tìm thêm tin tức về chủ đề đó trên web luôn"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI safety",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "AI safety",
+              "search_type": "Latest",
+              "limit": 5
+            }
+          },
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI safety",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "extra_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "extra tool call social_search"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "AI safety",
+            "search_type": "Latest",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "AI safety",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "@rutu609 Expected as coding with AI requires less effort ",
+                "summary": "@rutu609 Expected as coding with AI requires less effort \nBut company is running on historical profits yet they chose to layoff instead of giving internal job rotation is shocking , how about System engineers , functional safety etc",
+                "url": "https://x.com/Vinothchennaite/status/2120125432460898549",
+                "source": "@Vinothchennaite",
+                "date": "Tue Nov 10 12:04:27 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "1"
+                }
+              },
+              {
+                "title": "🚨 New work: Understanding AI from the Inside",
+                "summary": "🚨 New work: Understanding AI from the Inside\n\nLooking inside models lets us trace which features drive certain outputs and watch how representations evolve under training. It also lets us steer, edit or unlearn behaviours, and work towards models that verbalise their internals faithfully.\n\nWe map what mechanistic interpretability can (and can’t yet) do for safety, plus open problems, practical tips, interactive demos and 19 runnable notebooks.",
+                "url": "https://x.com/hunarbatra/status/2120125121256214681",
+                "source": "@hunarbatra",
+                "date": "Tue Nov 10 12:03:13 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "10"
+                }
+              },
+              {
+                "title": "Agent44 - Developer Experience",
+                "summary": "Agent44 - Developer Experience\n\nSecurity tools shouldn't require developers to rebuild their entire agent stack.\n\nThat's why I'm working on making Agent44 accessible through its npm package.\n\nThe goal, make tool-call safety easier to exp with inside existing AI agent workflows.",
+                "url": "https://x.com/imdev_44/status/2120125107796602944",
+                "source": "@imdev_44",
+                "date": "Tue Nov 10 12:03:10 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "1"
+                }
+              },
+              {
+                "title": "We cheered when AI got better at conversation. We didn't stop to ask what it does to the moments that actually matter. T",
+                "summary": "We cheered when AI got better at conversation. We didn't stop to ask what it does to the moments that actually matter. The same tools making life easier are quietly raising the stakes on safety.",
+                "url": "https://x.com/QAS_LLC/status/2120124781865431536",
+                "source": "@QAS_LLC",
+                "date": "Tue Nov 10 12:01:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "एंथ्रोपिक ने लॉन्च किए दो नए मॉडल, OpenAI के GPT-6 से भी सस्ते",
+                "summary": "एंथ्रोपिक ने लॉन्च किए दो नए मॉडल, OpenAI के GPT-6 से भी सस्ते\n\nइस खबर को डिटेल में पढ़ने के लिए नीचे दिए गए लिंक पर क्लिक करके ज़िंगाबाद वेबसाइट पर जाएं 👇\nhttps://t.co/CdjztOPRYs",
+                "url": "https://x.com/zingabad/status/2120124325361524769",
+                "source": "@zingabad",
+                "date": "Tue Nov 10 12:00:03 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "19"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI safety",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI safety",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "The AI Safety Debate Has Lost the Plot. We Asked 10 Experts What the Real Nightmares Are | WIRED",
+                "url": "https://www.wired.com/story/the-ai-safety-debate-has-lost-the-plot-we-asked-10-experts-what-the-real-nightmares-are",
+                "source": "wired.com",
+                "summary": "So WIRED set out to compile a guide to AI safety—a set of ideas that rewire our collective thinking around what safety really means and how it should work. I spoke with a panel of experts across disciplines, asking each of them: Is the world going to end? Once that was covered, I grilled them on the biggest risks they think we’re facing. [...] What we’re seeing today, instead, is that large AI labs are renegotiating these safety thresholds through the co-option of terminology, under the pretense that safety instead should be about this unsubstantiated, unscientific, and hypothetical concern. We have AI engineers telling us, no, no, no, that doesn’t matter. We get to determine what AI safety is. We get to draw what those thresholds are. It’s become a religious argument. And I find that very anti-democratic. [...] Some of the scenarios that people worry about—whether it’s biosecurity or a cyberattack or some of the everyday harms like the degradation of children’s social relationships—are very complex phenomena that can’t be easily tested or modeled by looking at a system in isolation. I think almost all evaluation scientists would tell you that it’s a nascent field. We can start to provide evidence, but it’s not necessarily proof of whether an AI is safe or not. We need to get better at evaluating these",
+                "score": 0.8266142
+              },
+              {
+                "title": "Accurate medical advice from AI can still be dangerous | STAT",
+                "url": "https://www.statnews.com/2026/11/10/ai-health-advice-accuracy-messaging-risk-behavioral-benchmarking",
+                "source": "statnews.com",
+                "summary": "Advertisement\n\nWe propose a new AI safety standard, behavioral benchmarking, to catch responses that are psychologically counterproductive, even when they are factually correct. Under this standard, a response would be evaluated by whether it makes people more or less likely to protect their health. [...] Medical ethics pairs the duty to do no harm with beneficence, which is an affirmative obligation to do good. Safety evaluations of AI have focused mainly on the first duty by screening for responses that encourage imminent self-harm, discourage necessary care, or spread false information. Behavioral benchmarking would extend the first duty beyond imminent danger to long-term harms. It could also advance the second duty, which has received far less attention: designing AI to help people by [...] Government and tech leaders believe AI will benefit us because it is remarkably good at retrieving factual medical information. Although nearly all published safety evaluations focus on accuracy, it is only one dimension of safety. Measuring accuracy cannot detect a subtle form of harm: Even a factually accurate health message can change behavior in ways that make people less healthy.\n\nAdvertisement",
+                "score": 0.80442166
+              },
+              {
+                "title": "Australia to launch AI safety regulator after OpenAI's breach of a government portal - ABC News",
+                "url": "https://abcnews.com/Technology/wireStory/australia-launch-ai-safety-regulator-after-openais-breach-138001591",
+                "source": "abcnews.com",
+                "summary": "MELBOURNE, Australia -- Australia plans to create an artificial intelligence safety regulator in response to a breach of an Australian health department website by a rogue OpenAI agent in June, Prime Minister Anthony Albanese said Tuesday.\n\nThe regulator would enforce world-leading legislated AI standards that would apply to all frontier AI companies that want to operate in Australia, Albanese said. Financial penalties would apply, although the government has yet to detail those penalties. [...] The standards would include companies maintaining security controls across all stages of models’ development and deployment, as well as identifying and managing serious risks. The standards also would mandate rapid notification to the government of incidents such as “misaligned behavior” conflicting with developers' intentions.\n\nAustralian government documents define frontier AI as the most sophisticated models at the cutting edge of current technological capability. [...] ## Live\n\n## Video\n\n## Local News\n\n## Shows\n\n## Good Morning America\n\n## ShopGMA\n\n## Stream on\n\nstream logo\n\n# Australia to launch AI safety regulator after OpenAI's breach of a government portal\n\nAustralia plans to create an artificial intelligence safety regulator in response to a breach of an Australian health department website by an OpenAI agent in June",
+                "score": 0.7306941
+              },
+              {
+                "title": "Capgemini to lead EU consortium for AI safety and cyber risk assessment | IT Pro",
+                "url": "https://www.itpro.com/technology/artificial-intelligence/capgemini-to-lead-eu-consortium-for-ai-safety-and-cyber-risk-assessment",
+                "source": "itpro.com",
+                "summary": "\"AI is transforming the cyber threat landscape as rapidly as it is creating new opportunities. Ensuring that advanced AI models remain safe and trustworthy requires the ability to anticipate, assess and mitigate emerging risks,\" said Alessandro Zamboni, partner at Wavestone.\n\n\"We are proud to contribute Wavestone’s cybersecurity and AI expertise to this European initiative, alongside Capgemini and LNE, to help turn the AI Act’s ambitions into operational reality.\" [...] “As Europe deploys the world’s first comprehensive AI safety framework, this work with the European Commission reflects our shared commitment to ensuring AI technologies are developed and deployed responsibly,” said Andrea Falleni, CEO of Capgemini’s Southern Europe region and group executive board member.\n\nGet the ITPro daily newsletter [...] The consortium has been created to deal with the cyber risks of advanced AI systems, including automated vulnerability discovery, exploit generation, or the orchestration of large-scale cyber attacks. It aims to standardize adversarial testing, software vulnerability discovery, and offensive cyber capability evaluations.\n\nLatest Videos FromIT Pro\n\nWatch full video here:",
+                "score": 0.72907686
+              },
+              {
+                "title": "Australia to establish AI safety regulator, mandate rapid incident reporting (OPENAI:Private) | Seeking Alpha",
+                "url": "https://seekingalpha.com/news/4669605-australia-to-establish-ai-safety-regulator-mandate-rapid-incident-reporting",
+                "source": "seekingalpha.com",
+                "summary": "## Investing Groups\n\n## Portfolios\n\n## Find & Compare\n\n# Australia to establish AI safety regulator, mandate rapid incident reporting\n\nD Sydney Kirribilli Bridge Close CBD Lit\n\nzetter/iStock via Getty Images\n\nAustralia will establish a dedicated regulator for AI safety and introduce mandatory security and safety requirements for advanced AI companies operating in the country, Prime Minister Anthony Albanese said.\n\nThe move follows an incident in June in which an OpenAI\n\n### Recommended For You [...] ### More Trending News",
+                "score": 0.6350646
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_sentiment_after_fetch",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Route tới `sentiment` sau khi nội dung đến từ `fetch` (khác G01 là sau `lookup`) — kiểm tra agent không bị giới hạn chỉ nhận diện ngữ cảnh cảm xúc sau 1 loại tool cụ thể."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đọc giúp mình bài viết này: https://example.com/blog/ai-news"
+        },
+        {
+          "role": "user",
+          "content": "Bài đó viết với giọng điệu tích cực hay tiêu cực vậy?"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "sentiment",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.com/blog/ai-news"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "missing tool call sentiment",
+          "extra tool call fetch"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://example.com/blog/ai-news"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://example.com/blog/ai-news",
+            "items": [
+              {
+                "title": "Example Domain",
+                "url": "https://example.com/blog/ai-news",
+                "source": "example.com",
+                "summary": "This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.\n\nهذا النطاق مُخصص للاستخدام في أمثلة التوثيق دون الحاجة إلى إذن. هذه ليست خدمة، يُرجى تجنب الاعتماد عليها لأغراض الاختبار والمراقبة.\n\n该域名仅用于文档示例，无需获得许可。这并非一项服务，请勿将其用于测试和监控目的。\n\nL’usage de ce domaine est réservé à des exemples de documentation, sans autorisation préalable. Il ne s’agit pas d’un service ; son utilisation à des fins de test ou de surveillance est à éviter.\n\nДанный домен предназначен для использования в примерах документации без необходимости получения предварительного разрешения. Это не сервис; не рекомендуется его использование для тестирования и мониторинга.\n\nEste dominio está destinado al uso en ejemplos de documentación sin necesidad de permiso. Esto no es un servicio; evitar utilizarlo para realizar pruebas o monitoreos.\n\n [Learn more](https://iana.org/help/example-domains)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_confirm_before_send_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Giống R12 ở base eval nhưng trong ngữ cảnh multi-turn (sau khi đã lookup xong) — agent vẫn phải xin xác nhận yes_no trước khi gọi `send`, không được tự gửi ngay vì đã có sẵn nội dung từ lượt trước."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin tức mới nhất về AI hôm nay"
+        },
+        {
+          "role": "user",
+          "content": "Giờ đăng bản tóm tắt đó lên Telegram giúp mình"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có chắc muốn đăng bản tóm tắt đó lên Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có chắc muốn đăng bản tóm tắt đó lên Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có chắc muốn đăng bản tóm tắt đó lên Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_clarify_then_fill_handle",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Lượt đầu mơ hồ (không có handle cụ thể) — agent lẽ ra có thể hỏi lại hoặc chờ, lượt sau người dùng bổ sung rõ 'Elon Musk' — agent phải dùng đúng handle đã chuẩn hoá (elonmusk) cho `timeline`, không bịa handle khác ở lượt đầu."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy giúp mình vài tweet mới nhất của một người nổi tiếng về AI"
+        },
+        {
+          "role": "user",
+          "content": "À, ý mình là Elon Musk"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "Elon Musk AI",
+              "search_type": "Latest",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "missing_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "missing tool call timeline",
+          "extra tool call social_search"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "Elon Musk AI",
+            "search_type": "Latest",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "Elon Musk AI",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "@Prof_leonelfer Sem provas só há crime com STF/XANDAO.AGORA O QUE LULA TOCAR E A IMPRESSAO DIGITAL CONFIRMAR AÍ SIM..MAS",
+                "summary": "@Prof_leonelfer Sem provas só há crime com STF/XANDAO.AGORA O QUE LULA TOCAR E A IMPRESSAO DIGITAL CONFIRMAR AÍ SIM..MAS SERÁ  QUE   COM A I.A. PODE SER  COPIADA!?!? ELON MUSK  COM A PALAVRA!?",
+                "url": "https://x.com/SZanazi/status/2120125377225888155",
+                "source": "@SZanazi",
+                "date": "Tue Nov 10 12:04:14 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "7"
+                }
+              },
+              {
+                "title": "CNBC　20:47 掲載",
+                "summary": "CNBC　20:47 掲載\n\nAnthropicは、ナスダック上場を目指すAI研究所として、今後のIPOで70ドルから78ドルの価格帯を設定しました。\n\nAnthropic sets price range of $70 to $78 in upcoming IPO as AI lab marches towards Nasdaq\n\nAnthropic's IPO is expected to come roughly five months after Elon Musk took SpaceX public in a record offering.\n\nhttps://t.co/rO3OV2AyIi\n\n提示された上限値では、アンソロピックはIPOを通じて最大643億5000万ドルの資金を調達することになる。同社の時価総額は、5月の資金調達ラウンドで発表した9650億ドルから、完全希薄化後ベースで最大1兆4050億ドルにまで上昇する可能性がある。\n\nアンソロピック社の経営陣は投資家への売り込み準備を進める一方で、先週の中間選挙で民主党が議会を席巻し、AI開発のペースを鈍化させる可能性のある州レベルの住民投票が多数可決されたことを受け、激動の政治情勢に対処しなければならない。さらに、金利上昇によって高額なインフラ投資に必要な資金を調達する企業が債務を抱えきれなくなることを懸念し、AI関連銘柄への投資にますます懐疑的になっている株式市場にも直面している。\n\nCNBCは先週、アンソロピックの投資家の一部が、以前の予想よりも低い企業価値評価に備えていると報じた。アントロピックは最近まで2兆ドルの評価額を目指していたが、株主はCNBCに対し、1.5兆ドルでさえも疑わしいと述べ、ある投資家はその数字を「無理がある」と評した。\n\nアンソロピックが予定通り今月中にティッカーシンボル「ANT」でナスダックに上場すれば、スペースXの上場から約5ヶ月後となる。\n\n同社は記録的な規模の株式公開を行い、857億ドルを調達した。イーロン・マスク氏が率いる再利用可能なロケットとAI企業である同社の時価総額は2兆ドル弱で、これはIPO当時の評価額とほぼ同水準である。",
+                "url": "https://x.com/miraclemasui/status/2120124866183778523",
+                "source": "@miraclemasui",
+                "date": "Tue Nov 10 12:02:12 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "316"
+                }
+              },
+              {
+                "title": "Elon Musk, the Nazi, is a weak man",
+                "summary": "Elon Musk, the Nazi, is a weak man\nHe panicked when he realized Ukraine was crushing Russian army\n\nIs Elon working on energy for AI centers from Russian nuclear plants? Easier than in other countries because Russia oligarchs don't have to follow regulations. Hands get greased",
+                "url": "https://x.com/KalOfTheRathi/status/2120124792473034759",
+                "source": "@KalOfTheRathi",
+                "date": "Tue Nov 10 12:01:55 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "4"
+                }
+              },
+              {
+                "title": "🚗 Today's $TSLA News (Nov 10)",
+                "summary": "🚗 Today's $TSLA News (Nov 10)\n\n1️⃣ Stock: Closed Monday at $378.05, +5.54%, as robotaxi service reached San Antonio and the broad market rallied. Pre-market: $375.64 (-0.64%).\n🔗 https://t.co/jqSJMaFEmw\n\n2️⃣ Elon: Replying to Palmer Luckey on ride-hail driver costs, Musk said Cybercab \"will do a majority of all passenger miles in any jurisdiction where it is not prohibited by law.\"\n🔗 https://t.co/QPD5xkHEmS\n\n3️⃣ Robotaxi & FSD: About 1,282 Tesla robotaxis registered (as of Nov 8, Texas DMV registrations, via robotaxistats). Insurer Lemonade extended its FSD discount to Ohio, its 7th state: 50% off FSD (Supervised) miles, 30% on v14 Lite.\n🔗 https://t.co/ipmgt4Aain\n\n4️⃣ Sales: Tesla stopped taking orders for the Cybertruck Premium AWD; the Cyberbeast, now the only orderable trim, rose $7,500 to $109,990.\n🔗 https://t.co/b61tHf6qth\n\n5️⃣ Wall Street: Jefferies kept Hold, cut its target to $375 from $400 and its 2026 EPS estimate by 23%, saying a SpaceX merger looks harder after the midterms. A TIKR analyst warned against chasing the stock at ~168x forward earnings. ARK says robotaxi cash flow could help fund SpaceX's AI push.\n🔗 https://t.co/MlUzC5IQb7\n\n※ Not investment advice. Prices as of 6:55 AM ET\n📷 Wikimedia Commons: Phillip Pessar (CC BY 4.0)",
+                "url": "https://x.com/Johaness212/status/2120124361319321966",
+                "source": "@Johaness212",
+                "date": "Tue Nov 10 12:00:12 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "15"
+                }
+              },
+              {
+                "title": "🤖 AI Signal (BSC) $EI",
+                "summary": "🤖 AI Signal (BSC) $EI\n\nCA: 0xb6f26efb200316fa7ec13889cef610cf38fc7777\n\nElon Inu is the twenty-first elon-themed launch on BSC today, and our signal went out less than two minutes after launch. Tier A tokens like this one doubled within ten minutes 27% of the time in our records. Most of the early buyer wallets are bundlers by our own labeling, and the deployer has created hundreds of tokens, so this one arrives with a production line behind it.\n\nThe project's X link points to a post by danny8080 with an image; the quoted text says North Korea-linked actors used both Elon and Inu coins, calls Elon Inu the best coin for the North Korea narrative, and notes it is paired to Near. The image text mentions an Elon Musk image under an 'Elon 2028' banner and that Elliptic said there is no suggestion Musk is connected to the tokens.\n\nNobody on X is talking about this contract yet. The symbol turns up in 18 posts, and every one of them is about other tokens or unrelated things.\n\nSince our signal, Elon Inu (EI) has sat below our push price and is at or near its peak since our signal. Buys still outnumber sells, and one-hour volume runs at 0.61 times market cap. It is still on the Flap bonding curve, 36% of the way to graduation.\n\nHolders roughly doubled since our signal, and the top ten now hold 14.6% of supply. Twenty-five bundler wallets remain, most of them still holding. The dev has sold out of this token. Buy and sell taxes are 1.0% each, and the pair is not a honeypot. Liquidity sits inside the launchpad contract on the bonding curve, so there are no LP tokens yet.\n\nFour wallets bought within 1 minute of each other, and together they put in $712.\n\nThe deployer's earlier best token didn't come with a peak figure we can quote here.\n\n📊 @ +45 s: MC $15.0K · Liq $5.0K · Holders 35 · 1h +269% · 1h Vol $11.4K\n\n📈 now (+1 min): MC $12.8K · Holders 71 · 5m buys/sells 15/6 · 5m +34%\n\nSignals on Telegram: Houndsbot\n\nNot financial advice. Analysis only · DYOR ·\n\nPath since our signal (+16s): $15.0K -> $12.8K (0.85x now, peak 0.95x at +3s)\n\n#BSC #memecoin\n\nFollow @houndsmeme for the daily record.",
+                "url": "https://x.com/bitecong/status/2120122855283479007",
+                "source": "@bitecong",
+                "date": "Tue Nov 10 11:54:13 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "437"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

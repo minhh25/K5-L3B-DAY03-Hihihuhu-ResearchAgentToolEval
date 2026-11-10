@@ -3,5 +3,159 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_sentiment_routing",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm tin AI hôm nay giúp mình"},
+        {"role": "user", "content": "Bài này cảm xúc tích cực hay tiêu cực vậy, phân tích giúp mình với"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "sentiment", "args": {}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Sau khi đã có nội dung từ lookup, khi người dùng hỏi về cảm xúc/thái độ của nội dung đó, agent phải route tới tool mới `sentiment` thay vì gọi lại lookup hoặc trả lời chay không qua tool."
+      }
+    },
+    {
+      "id": "G02_papers_routing",
+      "phase": "B",
+      "query": "Tìm giúp mình paper khoa học về diffusion models",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "papers", "args": {"query": "diffusion models"}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Yêu cầu tìm bài báo khoa học phải route tới `papers` (arXiv), không nhầm sang `lookup` (web chung) hay `social_search`."
+      }
+    },
+    {
+      "id": "G03_lookup_timeframe_month",
+      "phase": "B",
+      "query": "Tìm tin tức về crypto trong tháng này",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {"name": "lookup", "args": {"query": "crypto", "topic": "news", "timeframe": "month"}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "timeframe phải được set đúng theo cụm từ 'trong tháng này' (timeframe=month, khác default week và khác day đã có nhiều ở base eval)."
+      }
+    },
+    {
+      "id": "G04_missing_arxiv_url",
+      "phase": "B",
+      "query": "Lấy toàn văn bài báo đó giúp mình, tóm tắt lại",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "text"}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Người dùng nhắc 'bài báo đó' nhưng không có arxiv_url/ID cụ thể nào trước đó trong hội thoại — agent phải hỏi lại (clarify, response_type=text) thay vì tự bịa arxiv_url cho tool `paper_text`."
+      }
+    },
+    {
+      "id": "G05_out_of_scope_translate",
+      "phase": "B",
+      "query": "Bạn dịch giúp mình đoạn này sang tiếng Nhật được không?",
+      "failure_type": "out_of_scope",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "metadata": {
+        "what_it_tests": "Dịch thuật không nằm trong phạm vi tool của agent (research/social/web/send) — agent phải từ chối, không gọi tool nào (không tự dịch rồi gọi send, không bịa tool khác)."
+      }
+    },
+    {
+      "id": "G06_unnecessary_tool_thanks",
+      "phase": "B",
+      "query": "Cảm ơn bạn nhé, vậy là đủ rồi",
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "no_tool": true,
+        "behavior": "chat"
+      },
+      "metadata": {
+        "what_it_tests": "Lời cảm ơn/kết thúc hội thoại không cần gọi bất kỳ tool nào (kể cả `clarify`) — agent chỉ cần trả lời bình thường, không được gọi tool thừa."
+      }
+    },
+    {
+      "id": "G07_carryover_social_to_lookup",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm tweet mới nhất về AI safety"},
+        {"role": "user", "content": "Giờ tìm thêm tin tức về chủ đề đó trên web luôn"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "lookup", "args": {"query": "AI safety", "topic": "news"}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Lượt đầu dùng social_search (tweet), lượt sau người dùng rõ ràng chuyển sang 'trên web' — agent phải chuyển đúng sang `lookup`, giữ lại từ khóa 'AI safety' từ ngữ cảnh, không lặp lại social_search."
+      }
+    },
+    {
+      "id": "G08_sentiment_after_fetch",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Đọc giúp mình bài viết này: https://example.com/blog/ai-news"},
+        {"role": "user", "content": "Bài đó viết với giọng điệu tích cực hay tiêu cực vậy?"}
+      ],
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {"name": "sentiment", "args": {}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Route tới `sentiment` sau khi nội dung đến từ `fetch` (khác G01 là sau `lookup`) — kiểm tra agent không bị giới hạn chỉ nhận diện ngữ cảnh cảm xúc sau 1 loại tool cụ thể."
+      }
+    },
+    {
+      "id": "G09_confirm_before_send_multiturn",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Tìm tin tức mới nhất về AI hôm nay"},
+        {"role": "user", "content": "Giờ đăng bản tóm tắt đó lên Telegram giúp mình"}
+      ],
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {"name": "clarify", "args": {"response_type": "yes_no"}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Giống R12 ở base eval nhưng trong ngữ cảnh multi-turn (sau khi đã lookup xong) — agent vẫn phải xin xác nhận yes_no trước khi gọi `send`, không được tự gửi ngay vì đã có sẵn nội dung từ lượt trước."
+      }
+    },
+    {
+      "id": "G10_clarify_then_fill_handle",
+      "phase": "B",
+      "turns": [
+        {"role": "user", "content": "Lấy giúp mình vài tweet mới nhất của một người nổi tiếng về AI"},
+        {"role": "user", "content": "À, ý mình là Elon Musk"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {"name": "timeline", "args": {"screenname": "elonmusk"}}
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Lượt đầu mơ hồ (không có handle cụ thể) — agent lẽ ra có thể hỏi lại hoặc chờ, lượt sau người dùng bổ sung rõ 'Elon Musk' — agent phải dùng đúng handle đã chuẩn hoá (elonmusk) cho `timeline`, không bịa handle khác ở lượt đầu."
+      }
+    }
+  ]
 }

@@ -1,0 +1,95 @@
+{
+  "run_id": "v4c_B_group_openrouter_20261110T185053943247",
+  "version": "v4c",
+  "artifact_version": "v4c+pc105e9f26db9+td4e44c28c253",
+  "prompt_hash": "c105e9f26db9e501c918538a44cfe26ff9d392d81b812d17dbef4b66ed2ad957",
+  "tools_hash": "d4e44c28c25394968ae7ce74c7c2086bfea6bf372fde6586c5402893f501b1e7",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "D:\\CLAUDE PROJECT\\ai-thuc-chien-vingroup\\bai-tap\\Day3\\lab3\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\CLAUDE PROJECT\\ai-thuc-chien-vingroup\\bai-tap\\Day3\\lab3\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-10T18:50:53",
+  "summary": {
+    "total_cases": 1,
+    "measured_cases": 1,
+    "provider_error_cases": 0,
+    "passed_cases": 1,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_sentiment_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Sau khi đã có nội dung từ lookup, khi người dùng hỏi về cảm xúc/thái độ của nội dung đó, agent phải route tới tool mới `sentiment` thay vì gọi lại lookup hoặc trả lời chay không qua tool."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm tin AI hôm nay giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Bài này cảm xúc tích cực hay tiêu cực vậy, phân tích giúp mình với"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "sentiment",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "sentiment",
+            "args": {
+              "text": "Bài này cảm xúc tích cực hay tiêu cực vậy, phân tích giúp mình với"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "sentiment",
+          "args": {
+            "text": "Bài này cảm xúc tích cực hay tiêu cực vậy, phân tích giúp mình với"
+          },
+          "result": {
+            "tool": "sentiment",
+            "text": "Bài này cảm xúc tích cực hay tiêu cực vậy, phân tích giúp mình với",
+            "label": "positive",
+            "positive_hits": [
+              "hay"
+            ],
+            "negative_hits": []
+          }
+        }
+      ]
+    }
+  ]
+}
