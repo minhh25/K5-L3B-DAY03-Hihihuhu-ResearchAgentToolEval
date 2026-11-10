@@ -86,12 +86,13 @@ tools:
 
   # ---------------- Bonus tools ----------------
   - name: send
-    description: "Sử dụng để gửi, đăng, hoặc xuất bản một đoạn văn bản (như email, bài viết, tin nhắn). KHÔNG BAO GIỜ sử dụng tool này nếu người dùng chưa xem trước nội dung và CHƯA xác nhận đồng ý gửi (explicit confirmation). Nếu người dùng yêu cầu gửi nhưng chưa duyệt bản nháp, hãy hiển thị bản nháp cho họ xem trước."
+    description: "Gửi một đoạn văn bản đi."
     parameters:
       type: object
       properties:
-        text: {type: string, default: "", description: "Nội dung văn bản cuối cùng đã được người dùng duyệt"}
-        confirmed: {type: boolean, default: false, description: "BẮT BUỘC phải truyền giá trị true khi gọi hàm này, biểu thị rằng người dùng đã xác nhận."}
+        text: {type: string, default: "", description: "Nội dung"}
+        confirmed: {type: boolean, default: false, description: "Cờ xác nhận"}
+      required: [text]
 
   - name: policy
     description: "Tìm trong tài liệu nội bộ."
