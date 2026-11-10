@@ -1,0 +1,750 @@
+{
+  "run_id": "v4_B_group_gemini_20261110T191020600726",
+  "version": "v4",
+  "artifact_version": "v4+pa0d125ab554d+tc97192ebdeec",
+  "prompt_hash": "a0d125ab554df67e7a415019f9cb7bdd298eedfbe2428ed99968fbcec4082307",
+  "tools_hash": "c97192ebdeec917a497c8fd8deb1cdecf4680fe25e1428a265377b0a671cd616",
+  "phase": "B",
+  "suite": "group",
+  "provider": "gemini",
+  "model": "gemini-3.8-flash",
+  "system_prompt": "H:\\01_Main_coding_projects\\AI20K\\LAB3\\K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "H:\\01_Main_coding_projects\\AI20K\\LAB3\\K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval\\starter_v0\\artifacts\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
+  "generated_at": "2026-11-10T19:10:20",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 10,
+    "case_accuracy": 1.0,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 1.0,
+    "multiturn_accuracy": 1.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_hackernews_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_hackernews",
+        "difficulty": "medium",
+        "what_it_tests": "Nhắc rõ Hacker News → hackernews, không phải social_search/lookup."
+      },
+      "input": "Dân dev trên Hacker News đang bàn gì về Rust?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Rust"
+          },
+          "result": {
+            "tool": "search_hackernews",
+            "query": "Rust",
+            "sort_by": "relevance",
+            "items": [
+              {
+                "title": "Why Discord is switching from Go to Rust",
+                "url": "https://blog.discordapp.com/why-discord-is-switching-from-go-to-rust-a190bbca2b1f",
+                "source": "news.ycombinator.com",
+                "summary": "1582 points, 642 comments"
+              },
+              {
+                "title": "Leaving Rust gamedev after 3 years",
+                "url": "https://loglog.games/blog/leaving-rust-gamedev/",
+                "source": "news.ycombinator.com",
+                "summary": "1484 points, 972 comments"
+              },
+              {
+                "title": "A half-hour to learn Rust",
+                "url": "https://fasterthanli.me/articles/a-half-hour-to-learn-rust",
+                "source": "news.ycombinator.com",
+                "summary": "1444 points, 330 comments"
+              },
+              {
+                "title": "Announcing Rust 1.0",
+                "url": "http://blog.rust-lang.org/2015/05/15/Rust-1.0.html",
+                "source": "news.ycombinator.com",
+                "summary": "1363 points, 306 comments"
+              },
+              {
+                "title": "CityBound – An open source city simulation game in Rust",
+                "url": "https://github.com/citybound/citybound",
+                "source": "news.ycombinator.com",
+                "summary": "1340 points, 264 comments"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_wikipedia_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_wikipedia",
+        "difficulty": "medium",
+        "what_it_tests": "Câu hỏi kiến thức nền về một người → wikipedia, không phải lookup news."
+      },
+      "input": "Alan Turing là ai? Cho mình tiểu sử ngắn.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "title": "Alan Turing"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "title": "Alan Turing"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "title": "Alan Turing"
+          },
+          "result": {
+            "tool": "wikipedia_summary",
+            "error": "HTTPError",
+            "message": "403 Client Error: Forbidden for url: https://en.wikipedia.org/api/rest_v1/page/summary/Alan_Turing"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_github_repo_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_github_repo",
+        "difficulty": "easy",
+        "what_it_tests": "owner/name + hỏi số sao → github_repo với repo đúng định dạng."
+      },
+      "input": "Repo langchain-ai/langchain hiện có bao nhiêu sao?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_repo",
+            "args": {
+              "repo": "langchain-ai/langchain"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_repo",
+            "args": {
+              "repo": "langchain-ai/langchain"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_repo",
+          "args": {
+            "repo": "langchain-ai/langchain"
+          },
+          "result": {
+            "tool": "github_repo_info",
+            "items": [
+              {
+                "title": "langchain-ai/langchain",
+                "url": "https://github.com/langchain-ai/langchain",
+                "source": "github.com",
+                "summary": "The agent engineering platform. | stars: 149300 | language: Python | updated: 2026-11-10T08:28:09Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_dedupe_routing",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_dedupe",
+        "difficulty": "medium",
+        "what_it_tests": "Items đã có sẵn trong tin nhắn, yêu cầu loại trùng → dedupe, không search lại."
+      },
+      "input": "Mình đã thu được 3 tin này, loại các tin trùng giúp mình: [{\"title\": \"GPT-5 ra mắt\", \"url\": \"https://a.com/1\"}, {\"title\": \"GPT-5 ra mat\", \"url\": \"https://a.com/1/\"}, {\"title\": \"Claude mới\", \"url\": \"https://b.com/2\"}]",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "dedupe",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "dedupe",
+            "args": {
+              "items": [
+                {
+                  "title": "GPT-5 ra mắt",
+                  "url": "https://a.com/1"
+                },
+                {
+                  "title": "GPT-5 ra mat",
+                  "url": "https://a.com/1/"
+                },
+                {
+                  "title": "Claude mới",
+                  "url": "https://b.com/2"
+                }
+              ]
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "dedupe",
+          "args": {
+            "items": [
+              {
+                "title": "GPT-5 ra mắt",
+                "url": "https://a.com/1"
+              },
+              {
+                "title": "GPT-5 ra mat",
+                "url": "https://a.com/1/"
+              },
+              {
+                "title": "Claude mới",
+                "url": "https://b.com/2"
+              }
+            ]
+          },
+          "result": {
+            "tool": "dedupe_items",
+            "items": [
+              {
+                "title": "GPT-5 ra mắt",
+                "url": "https://a.com/1"
+              },
+              {
+                "title": "Claude mới",
+                "url": "https://b.com/2"
+              }
+            ],
+            "removed": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_send_needs_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_before_send",
+        "difficulty": "medium",
+        "what_it_tests": "Dù có nội dung và lệnh 'gửi ngay', vẫn phải hỏi yes_no, không gọi send."
+      },
+      "input": "Gửi ngay dòng này lên Telegram cho mình: Họp team lúc 9h sáng mai",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có chắc chắn muốn gửi nội dung \"Họp team lúc 9h sáng mai\" lên Telegram không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có chắc chắn muốn gửi nội dung \"Họp team lúc 9h sáng mai\" lên Telegram không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có chắc chắn muốn gửi nội dung \"Họp team lúc 9h sáng mai\" lên Telegram không?",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_hackernews_multiturn_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_new_tool_args",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: sửa chủ đề LLM agents→Rust, 'mới nhất'→sort_by=date, limit=3 vào max_results."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm trên Hacker News về LLM agents"
+        },
+        {
+          "role": "user",
+          "content": "À thôi, đổi sang chủ đề Rust"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 3 bài mới nhất nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust",
+              "sort_by": "date",
+              "max_results": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust",
+              "sort_by": "date",
+              "max_results": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Rust",
+            "sort_by": "date",
+            "max_results": 3
+          },
+          "result": {
+            "tool": "search_hackernews",
+            "query": "Rust",
+            "sort_by": "date",
+            "items": [
+              {
+                "title": "Show HN: VoxaDub – Open-source AI video dubbing with speaker-aware voices",
+                "url": "https://github.com/kadirb4rut/voxadub",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments"
+              },
+              {
+                "title": "Show HN: Cosh – An open-source AI agent orchestrator",
+                "url": "https://github.com/DiegoZaluski/co-sh",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments"
+              },
+              {
+                "title": "Show HN: AI Hustle Team – an AI on its own computer that does your daily work",
+                "url": "https://aihustleteam.com/",
+                "source": "news.ycombinator.com",
+                "summary": "1 points, 0 comments"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_wikipedia_multiturn_lang",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_new_tool_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: sửa người, rồi lang=vi ở lượt cuối."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Cho mình tóm tắt Wikipedia về Sam Altman"
+        },
+        {
+          "role": "user",
+          "content": "Nhầm, về Demis Hassabis mới đúng"
+        },
+        {
+          "role": "user",
+          "content": "Dùng bản tiếng Việt nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "title": "Demis Hassabis",
+              "lang": "vi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "lang": "vi",
+              "title": "Demis Hassabis"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "lang": "vi",
+            "title": "Demis Hassabis"
+          },
+          "result": {
+            "tool": "wikipedia_summary",
+            "error": "HTTPError",
+            "message": "403 Client Error: Forbidden for url: https://vi.wikipedia.org/api/rest_v1/page/summary/Demis_Hassabis"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_github_repo_clarify_then_fill",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_fill_new_tool",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu tên repo → lượt cuối đã đủ thông tin → github_repo đúng repo."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Xem giúp mình thống kê của một repo GitHub"
+        },
+        {
+          "role": "user",
+          "content": "huggingface/transformers"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ xem repo đó thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_repo",
+            "args": {
+              "repo": "huggingface/transformers"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_repo",
+            "args": {
+              "repo": "huggingface/transformers"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_repo",
+          "args": {
+            "repo": "huggingface/transformers"
+          },
+          "result": {
+            "tool": "github_repo_info",
+            "items": [
+              {
+                "title": "huggingface/transformers",
+                "url": "https://github.com/huggingface/transformers",
+                "source": "github.com",
+                "summary": "🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training.  | stars: 168732 | language: Python | updated: 2026-11-10T11:23:08Z"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_translate_out_of_scope_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_out_of_scope",
+        "difficulty": "medium",
+        "what_it_tests": "Lượt đầu là research nhưng lượt cuối chuyển sang dịch thuật ngoài phạm vi → không gọi tool."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin AI hôm nay có gì?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi, dịch giúp mình câu 'xin chào các bạn' sang tiếng Anh"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ dịch câu đó thôi, đừng tìm tin"
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "'Hello everyone'",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G10_timeline_clarify_then_fill",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_name_to_handle_unlisted",
+        "difficulty": "hard",
+        "what_it_tests": "Tên không có trong ví dụ của tool description → vẫn suy ra handle sundarpichai, carry limit=2."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tweet mới nhất giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Của Sundar Pichai"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 2 tweet thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sundarpichai",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "limit": 2,
+              "screenname": "sundarpichai"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "limit": 2,
+            "screenname": "sundarpichai"
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "sundarpichai",
+            "items": [
+              {
+                "title": "Four distinct TPU systems in a single generation in one year! Instead of waiting years for a traditional semiconductor c",
+                "summary": "Four distinct TPU systems in a single generation in one year! Instead of waiting years for a traditional semiconductor cycle, hardware engineers co-designing systems alongside Google Deepmind means we can keep innovating quickly for customers.",
+                "url": "https://x.com/sundarpichai/status/2119857335871164769",
+                "source": "@sundarpichai",
+                "date": "Mon Nov 09 18:19:08 +0000 2026",
+                "metrics": {
+                  "favorites": 4693,
+                  "retweets": 318,
+                  "views": "308054"
+                }
+              },
+              {
+                "title": "Great to see high quality benchmarks with headroom and look at that cost line for Carbon🚀",
+                "summary": "Great to see high quality benchmarks with headroom and look at that cost line for Carbon🚀",
+                "url": "https://x.com/sundarpichai/status/2117113121102045347",
+                "source": "@sundarpichai",
+                "date": "Mon Nov 02 04:34:36 +0000 2026",
+                "metrics": {
+                  "favorites": 4567,
+                  "retweets": 292,
+                  "views": "572126"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

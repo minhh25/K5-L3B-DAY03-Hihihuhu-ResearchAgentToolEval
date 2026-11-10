@@ -3,5 +3,116 @@
   "dataset_role": "group",
   "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
   "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "cases": [
+    {
+      "id": "G01_hackernews_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Dân dev trên Hacker News đang bàn gì về Rust?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "hackernews", "args": {"query": "Rust"}}]},
+      "metadata": {"skill": "route_new_tool_hackernews", "difficulty": "medium", "what_it_tests": "Nhắc rõ Hacker News → hackernews, không phải social_search/lookup."}
+    },
+    {
+      "id": "G02_wikipedia_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Alan Turing là ai? Cho mình tiểu sử ngắn.",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "wikipedia", "args": {"title": "Alan Turing"}}]},
+      "metadata": {"skill": "route_new_tool_wikipedia", "difficulty": "medium", "what_it_tests": "Câu hỏi kiến thức nền về một người → wikipedia, không phải lookup news."}
+    },
+    {
+      "id": "G03_github_repo_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Repo langchain-ai/langchain hiện có bao nhiêu sao?",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "github_repo", "args": {"repo": "langchain-ai/langchain"}}]},
+      "metadata": {"skill": "route_new_tool_github_repo", "difficulty": "easy", "what_it_tests": "owner/name + hỏi số sao → github_repo với repo đúng định dạng."}
+    },
+    {
+      "id": "G04_dedupe_routing",
+      "phase": "B",
+      "suite": "group",
+      "query": "Mình đã thu được 3 tin này, loại các tin trùng giúp mình: [{\"title\": \"GPT-5 ra mắt\", \"url\": \"https://a.com/1\"}, {\"title\": \"GPT-5 ra mat\", \"url\": \"https://a.com/1/\"}, {\"title\": \"Claude mới\", \"url\": \"https://b.com/2\"}]",
+      "failure_type": "wrong_tool",
+      "expect": {"tool_calls": [{"name": "dedupe", "args": {}}]},
+      "metadata": {"skill": "route_new_tool_dedupe", "difficulty": "medium", "what_it_tests": "Items đã có sẵn trong tin nhắn, yêu cầu loại trùng → dedupe, không search lại."}
+    },
+    {
+      "id": "G05_send_needs_confirmation",
+      "phase": "B",
+      "suite": "group",
+      "query": "Gửi ngay dòng này lên Telegram cho mình: Họp team lúc 9h sáng mai",
+      "failure_type": "wrong_boundary",
+      "expect": {"tool_calls": [{"name": "clarify", "args": {"response_type": "yes_no"}}]},
+      "metadata": {"skill": "confirm_before_send", "difficulty": "medium", "what_it_tests": "Dù có nội dung và lệnh 'gửi ngay', vẫn phải hỏi yes_no, không gọi send."}
+    },
+    {
+      "id": "G06_hackernews_multiturn_correction",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tìm trên Hacker News về LLM agents"},
+        {"role": "user", "content": "À thôi, đổi sang chủ đề Rust"},
+        {"role": "user", "content": "Lấy 3 bài mới nhất nhé"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "hackernews", "args": {"query": "Rust", "sort_by": "date", "max_results": 3}}]},
+      "metadata": {"skill": "multiturn_new_tool_args", "difficulty": "hard", "what_it_tests": "3 turns: sửa chủ đề LLM agents→Rust, 'mới nhất'→sort_by=date, limit=3 vào max_results."}
+    },
+    {
+      "id": "G07_wikipedia_multiturn_lang",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Cho mình tóm tắt Wikipedia về Sam Altman"},
+        {"role": "user", "content": "Nhầm, về Demis Hassabis mới đúng"},
+        {"role": "user", "content": "Dùng bản tiếng Việt nhé"}
+      ],
+      "failure_type": "wrong_arg_value",
+      "expect": {"tool_calls": [{"name": "wikipedia", "args": {"title": "Demis Hassabis", "lang": "vi"}}]},
+      "metadata": {"skill": "multiturn_new_tool_correction", "difficulty": "hard", "what_it_tests": "3 turns: sửa người, rồi lang=vi ở lượt cuối."}
+    },
+    {
+      "id": "G08_github_repo_clarify_then_fill",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Xem giúp mình thống kê của một repo GitHub"},
+        {"role": "user", "content": "huggingface/transformers"},
+        {"role": "user", "content": "Chỉ xem repo đó thôi"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "github_repo", "args": {"repo": "huggingface/transformers"}}]},
+      "metadata": {"skill": "multiturn_clarify_fill_new_tool", "difficulty": "medium", "what_it_tests": "Thiếu tên repo → lượt cuối đã đủ thông tin → github_repo đúng repo."}
+    },
+    {
+      "id": "G09_translate_out_of_scope_multiturn",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tin AI hôm nay có gì?"},
+        {"role": "user", "content": "Thôi, dịch giúp mình câu 'xin chào các bạn' sang tiếng Anh"},
+        {"role": "user", "content": "Chỉ dịch câu đó thôi, đừng tìm tin"}
+      ],
+      "failure_type": "out_of_scope",
+      "expect": {"no_tool": true, "behavior": "refuse"},
+      "metadata": {"skill": "multiturn_out_of_scope", "difficulty": "medium", "what_it_tests": "Lượt đầu là research nhưng lượt cuối chuyển sang dịch thuật ngoài phạm vi → không gọi tool."}
+    },
+    {
+      "id": "G10_timeline_clarify_then_fill",
+      "phase": "B",
+      "suite": "group",
+      "turns": [
+        {"role": "user", "content": "Tweet mới nhất giúp mình"},
+        {"role": "user", "content": "Của Sundar Pichai"},
+        {"role": "user", "content": "Lấy 2 tweet thôi"}
+      ],
+      "failure_type": "missing_info",
+      "expect": {"tool_calls": [{"name": "timeline", "args": {"screenname": "sundarpichai", "limit": 2}}]},
+      "metadata": {"skill": "multiturn_name_to_handle_unlisted", "difficulty": "hard", "what_it_tests": "Tên không có trong ví dụ của tool description → vẫn suy ra handle sundarpichai, carry limit=2."}
+    }
+  ]
 }

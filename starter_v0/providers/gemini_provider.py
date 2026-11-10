@@ -77,6 +77,7 @@ class GeminiProvider:
     ) -> None:
         self.api_key_env = api_key_env
         self.default_model = default_model
+        self.base_url = os.getenv("GEMINI_BASE_URL")
 
     def complete(
         self,
@@ -94,6 +95,7 @@ class GeminiProvider:
             raise RuntimeError("Install live provider dependency first: pip install google-genai") from exc
 
         api_key = os.getenv(self.api_key_env)
+        base_url = self.base_url
         if not api_key:
             raise RuntimeError(f"Missing API key env var: {self.api_key_env}")
 
@@ -105,7 +107,10 @@ class GeminiProvider:
         if declarations:
             config_kwargs["tools"] = [types.Tool(function_declarations=declarations)]
 
-        client = genai.Client(api_key=api_key)
+        client = genai.Client(
+            api_key=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"),
+            http_options=types.HttpOptions(base_url=base_url) if base_url else None,
+        )
         resp = client.models.generate_content(
             model=model or self.default_model,
             contents=contents,
