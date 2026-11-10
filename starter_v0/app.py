@@ -25,7 +25,7 @@ load_lab_env(ROOT)
 st.set_page_config(page_title="Research Agent", page_icon="🔎", layout="centered")
 
 PROVIDER_NAME = "openrouter"
-VERSION_LABEL = "v4c"
+VERSION_LABEL = "v4d"
 SYSTEM_PROMPT_PATH = ARTIFACTS_DIR / "system_prompt.md"
 TOOLS_PATH = ARTIFACTS_DIR / "tools.yaml"
 TRANSCRIPTS_DIR = ROOT / "transcripts"
