@@ -16,14 +16,28 @@
 tools:
   # ---------------- Core tools ----------------
   - name: clarify
-    description: "Gửi một câu hỏi cho người dùng."
+    description: >
+      Gửi một câu hỏi cho người dùng và chờ câu trả lời ở lượt sau. Dùng khi
+      THIẾU thông tin bắt buộc để gọi tool khác (vd: không biết tài khoản,
+      không có URL, không có nội dung cần gửi), HOẶC khi cần XIN XÁC NHẬN
+      trước khi thực hiện một hành động không thể hoàn tác (vd: gọi `send`).
+      Luôn truyền `response_type` tường minh, không bỏ trống.
     parameters:
       type: object
       properties:
         question: {type: string, default: "", description: "Câu hỏi"}
-        response_type: {type: string, enum: [text, yes_no, choice], default: "text", description: "Kiểu trả lời"}
-        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn"}
-      required: [question]
+        response_type:
+          type: string
+          enum: [text, yes_no, choice]
+          default: "text"
+          description: >
+            BẮT BUỘC chọn đúng loại, luôn truyền tường minh:
+            "text" khi hỏi để lấy một thông tin còn thiếu (tên tài khoản, URL,
+            nội dung...); "yes_no" khi xin xác nhận Có/Không trước khi thực
+            hiện một hành động, đặc biệt là trước khi gọi `send`; "choice" khi
+            đưa ra vài lựa chọn cố định trong `options` để người dùng chọn.
+        options: {type: array, default: [], items: {type: string}, description: "Các lựa chọn, chỉ dùng khi response_type=choice"}
+      required: [question, response_type]
 
   - name: timeline
     description: "Lấy các bài đăng gần đây."
@@ -35,23 +49,46 @@ tools:
       required: [screenname]
 
   - name: social_search
-    description: "Tìm trên mạng xã hội."
+    description: >
+      Tìm bài đăng trên mạng xã hội (Twitter/X) theo từ khóa. CHỈ dùng khi
+      người dùng nói rõ muốn tìm "tweet", "bài đăng", "mạng xã hội", "social"
+      — không dùng cho tin tức/web chung chung (dùng `lookup` cho trường hợp
+      đó). Nếu một hội thoại đang nói về tin tức/web (đã gọi `lookup` ở lượt
+      trước), các lượt sau vẫn tiếp tục là tin tức/web thì giữ nguyên `lookup`,
+      không tự chuyển sang `social_search` trừ khi người dùng nhắc tới tweet.
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Từ khóa"}
+        query:
+          type: string
+          default: ""
+          description: >
+            Chỉ từ khóa chủ đề cốt lõi (vd "AI", "robotics"). KHÔNG thêm các
+            từ như "tweet", "mới nhất", "tin tức" vào query.
         search_type: {type: string, enum: [Latest, Top], default: "Latest", description: "Cách sắp xếp"}
         limit: {type: integer, default: 5, description: "Số lượng"}
       required: [query]
 
   - name: lookup
-    description: "Tra cứu thông tin trên internet."
+    description: >
+      Tra cứu thông tin trên web/internet (không phải mạng xã hội). Dùng khi
+      người dùng hỏi tin tức, bài viết, thông tin chung trên web. Nếu một
+      request nói "tin tức"/"tin AI hôm nay" thì set topic=news và
+      timeframe=day; các lượt sau trong cùng hội thoại vẫn đang hỏi tin tức
+      thì giữ nguyên topic=news, timeframe=day (carry-over), trừ khi người
+      dùng đổi ý rõ ràng.
     parameters:
       type: object
       properties:
-        query: {type: string, default: "", description: "Truy vấn"}
-        topic: {type: string, enum: [general, news], default: "general", description: "Phân loại"}
-        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian"}
+        query:
+          type: string
+          default: ""
+          description: >
+            Chỉ từ khóa chủ đề cốt lõi (vd "AI", "robotics"). KHÔNG thêm chữ
+            "tin tức"/"news" vào query — việc đó đã được field `topic` thể
+            hiện riêng.
+        topic: {type: string, enum: [general, news], default: "general", description: "general = tra cứu chung; news = tin tức. Luôn set news nếu người dùng hỏi tin tức."}
+        timeframe: {type: string, enum: [day, week, month, year], default: "week", description: "Khoảng thời gian. Nếu người dùng nói 'hôm nay' thì set day."}
         max_results: {type: integer, default: 5, description: "Số kết quả"}
       required: [query]
 
@@ -123,3 +160,17 @@ tools:
         max_pages: {type: integer, default: 5, description: "Số trang"}
         max_chars: {type: integer, default: 8000, description: "Số ký tự"}
       required: [arxiv_url]
+
+  # ---------------- Tool mới của nhóm ----------------
+  - name: sentiment
+    description: >
+      Phân tích cảm xúc (tích cực/tiêu cực/trung lập) của một đoạn văn bản.
+      CHỈ dùng SAU KHI đã có nội dung text cụ thể (vd kết quả từ `lookup`,
+      `fetch`, `timeline`, `social_search`) và người dùng muốn biết cảm
+      xúc/thái độ của nội dung đó. KHÔNG dùng để tìm kiếm hay lấy dữ liệu —
+      không có khả năng tự lấy nội dung, phải được cung cấp `text` sẵn.
+    parameters:
+      type: object
+      properties:
+        text: {type: string, default: "", description: "Đoạn văn bản cần phân tích cảm xúc, phải là nội dung thật đã có sẵn"}
+      required: [text]

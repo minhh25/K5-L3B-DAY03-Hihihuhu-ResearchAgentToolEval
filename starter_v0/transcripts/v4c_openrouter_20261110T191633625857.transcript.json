@@ -1,0 +1,28 @@
+{
+  "transcript_id": "v4c_openrouter_20261110T191633625857",
+  "version": "v4c",
+  "artifact_version": "v4c+pc105e9f26db9+td4e44c28c253",
+  "prompt_hash": "c105e9f26db9e501c918538a44cfe26ff9d392d81b812d17dbef4b66ed2ad957",
+  "tools_hash": "d4e44c28c25394968ae7ce74c7c2086bfea6bf372fde6586c5402893f501b1e7",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "D:\\CLAUDE PROJECT\\ai-thuc-chien-vingroup\\bai-tap\\Day3\\lab3\\starter_v0\\artifacts\\system_prompt.md",
+  "tools": "D:\\CLAUDE PROJECT\\ai-thuc-chien-vingroup\\bai-tap\\Day3\\lab3\\starter_v0\\artifacts\\tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T19:16:33",
+  "updated_at": "2026-11-10T19:16:38",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T19:16:37",
+      "user": "Tìm tin AI hôm nay có gì nổi bật?",
+      "status": "provider_error",
+      "assistant_text": "Lỗi: UnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f527' in position 0: character maps to <undefined>",
+      "rounds": [],
+      "tool_events": [],
+      "error": "UnicodeEncodeError: 'charmap' codec can't encode character '\\U0001f527' in position 0: character maps to <undefined>",
+      "ended_at": "2026-11-10T19:16:38"
+    }
+  ]
+}

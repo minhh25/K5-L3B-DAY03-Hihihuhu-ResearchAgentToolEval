@@ -3,9 +3,18 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+
+try:
+    # Windows console / some captured-stdout contexts (e.g. Streamlit) default to
+    # a legacy codec (cp1252) that cannot encode Vietnamese diacritics or emoji.
+    # Force UTF-8 so print() never raises UnicodeEncodeError on tool args/text.
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 from env_loader import load_lab_env
 from providers import make_provider

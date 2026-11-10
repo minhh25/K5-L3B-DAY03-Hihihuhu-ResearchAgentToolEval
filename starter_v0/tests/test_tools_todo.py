@@ -104,19 +104,29 @@ def test_policy_instruction_like_lines_go_to_untrusted_text() -> None:
     pytest.skip(TODO)
 
 
-# ---------------- YOUR NEW TOOL(S) ----------------
-# Write at least 3 tests per tool your team adds:
-#   1. happy path (mocked if it calls an API)
-#   2. bad / missing input from the model (empty string, wrong type, out-of-enum value)
-#   3. failure path (missing key, HTTP error, timeout) -> returns error dict, does not raise
+# ---------------- sentiment (tool mới của nhóm) ----------------
 
-def test_my_new_tool_happy_path() -> None:
-    pytest.skip(TODO)
+sentiment_tool = TOOL_FUNCTIONS["sentiment"]
 
 
-def test_my_new_tool_bad_input_from_model() -> None:
-    pytest.skip(TODO)
+def test_sentiment_happy_path_detects_positive_and_negative() -> None:
+    positive = sentiment_tool(text="Sản phẩm này rất tốt, tôi rất thích")
+    negative = sentiment_tool(text="Dịch vụ quá tệ, thật sự chán")
+    assert positive["label"] == "positive"
+    assert "tot" in positive["positive_hits"]
+    assert negative["label"] == "negative"
+    assert "te" in negative["negative_hits"]
 
 
-def test_my_new_tool_failure_returns_error_dict() -> None:
-    pytest.skip(TODO)
+def test_sentiment_bad_input_from_model_returns_error_not_raise() -> None:
+    # Model có thể gửi nhầm kiểu dữ liệu (vd số thay vì chuỗi) — không được raise.
+    result = sentiment_tool(text=12345)
+    assert result["error"] == "TypeError"
+    assert "text" in result["message"]
+
+
+def test_sentiment_empty_text_is_neutral_without_crashing() -> None:
+    result = sentiment_tool(text="")
+    assert result["label"] == "neutral"
+    assert result["positive_hits"] == []
+    assert result["negative_hits"] == []
