@@ -1,0 +1,170 @@
+{
+  "verified_at": "2026-11-10T19:25:12.779640+07:00",
+  "python": "3.11.4 (v3.11.4:d2340ef257, Jun  6 2023, 19:15:51) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "platform": "macOS-27.0.1-arm64-arm-64bit",
+  "checks": {
+    "pytest": {
+      "command": "python -m pytest -q starter_v0/tests",
+      "exit_code": 0,
+      "output": "........................................................................ [ 59%]\n..................................................                       [100%]\n122 passed in 1.61s"
+    },
+    "syntax": {
+      "command": "/Users/minh25/Documents/AI Thuc chien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/.venv/bin/python -m compileall -q agent.py chat.py app.py run_eval.py tools providers scripts",
+      "exit_code": 0
+    },
+    "submission": {
+      "command": "python scripts/validate_submission.py",
+      "exit_code": 0,
+      "result": {
+        "checks": {
+          "baseline_v0": true,
+          "eval_base_unchanged": true,
+          "eval_extension_unchanged": true,
+          "registry_schema": true,
+          "group_5_single_5_multi": true,
+          "csv_hashes_and_validity": true,
+          "official_report_sections": true,
+          "secret_scan": {
+            "ok": true,
+            "files_scanned": 131,
+            "checked": "Exact configured secret values; not a universal secret detector"
+          }
+        },
+        "accepted_runs": [
+          "v0_B_base_openrouter_20261110T174805758386",
+          "v1_B_base_openrouter_20261110T181336483617",
+          "v2_B_base_openrouter_20261110T183829845094",
+          "v3_B_group_openrouter_20261110T184314570949",
+          "v3_B_base_openrouter_20261110T184502669655"
+        ],
+        "incomplete_runs": [
+          "v2_B_base_openrouter_20261110T181712260298",
+          "v3_B_base_openrouter_20261110T182024813462",
+          "v3_B_group_openrouter_20261110T182107700731"
+        ],
+        "live_transcripts_with_at_least_3_model_turns": [
+          "transcripts/v3_openrouter_20261110T184037247511.transcript.json"
+        ],
+        "live_scenario_review": "Review B4 for research, clarification/fill and send confirmation; turn count alone does not grade behavior",
+        "pending": [
+          "Public deployment",
+          "Member identities and personal verification",
+          "User-owned commits, push and LMS submission"
+        ]
+      }
+    },
+    "diff_whitespace": {
+      "command": "git diff --check -- <UI and related report paths>",
+      "exit_code": 0,
+      "scope": "Files touched in the UI redesign; other user edits preserved."
+    },
+    "ui_startup": {
+      "url": "http://127.0.0.1:8501",
+      "checks": [
+        {
+          "path": "/",
+          "status_code": 200,
+          "body": "Streamlit HTML served"
+        },
+        {
+          "path": "/_stcore/health",
+          "status_code": 200,
+          "body": "ok"
+        }
+      ],
+      "note": "Local startup and HTTP health; interactive behavior tested separately with offline Streamlit AppTest."
+    },
+    "ui_live": {
+      "check": "Real Streamlit AppTest with live provider; no fake provider or HTTP mocks",
+      "passed": true,
+      "provider": "openrouter",
+      "model": "nvidia/nemotron-3.5-lightning:free",
+      "artifact_version": "v3+p43a59c82af5c+tb05a5d016dc4",
+      "status": "answered",
+      "transcript": "transcripts/v3_ui_20261110T184128802184.transcript.json",
+      "assistant_text": "URL giữ lại: **https://example.org/a**",
+      "tool_names": [
+        "filter_sources"
+      ],
+      "external_send_clicked": false,
+      "exit_code": 0,
+      "note": "Historical live model check before the visual redesign; unchanged agent/prompt/tools. No new live calls for CSS/layout work."
+    },
+    "local_links": {
+      "exit_code": 0,
+      "broken": []
+    },
+    "ui_redesign": {
+      "ui_revision": "friendly-local-v1",
+      "unit_ui_tests": 6,
+      "visual": {
+        "url": "http://127.0.0.1:8501",
+        "checks": [
+          {
+            "heading": "Bạn muốn tìm hiểu\nđiều gì hôm nay?",
+            "heading_y": 256,
+            "viewport": 1440,
+            "body_width": 1440,
+            "cards": [
+              {
+                "width": 278,
+                "x": 421
+              },
+              {
+                "width": 278,
+                "x": 731
+              },
+              {
+                "width": 278,
+                "x": 1041
+              }
+            ],
+            "sidebar": null,
+            "name": "desktop",
+            "screenshot": "analysis/ui_desktop.png"
+          },
+          {
+            "heading": "Bạn muốn tìm hiểu\nđiều gì hôm nay?",
+            "heading_y": 84,
+            "viewport": 390,
+            "body_width": 390,
+            "cards": [
+              {
+                "width": 352,
+                "x": 19
+              },
+              {
+                "width": 352,
+                "x": 19
+              },
+              {
+                "width": 352,
+                "x": 19
+              }
+            ],
+            "sidebar": null,
+            "name": "mobile",
+            "screenshot": "analysis/ui_mobile.png"
+          }
+        ],
+        "note": "Real Chrome rendering; no model calls or send actions."
+      },
+      "startup": {
+        "url": "http://127.0.0.1:8501",
+        "checks": [
+          {
+            "path": "/",
+            "status_code": 200
+          },
+          {
+            "path": "/_stcore/health",
+            "status_code": 200
+          }
+        ],
+        "server_kept_running_for_user": true
+      },
+      "model_calls_for_redesign": 0,
+      "browser_opened_for_user": true
+    }
+  }
+}

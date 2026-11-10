@@ -1,0 +1,5 @@
+Lọc cục bộ các nguồn công khai mẫu sau, chỉ giữ domain example.org: [{"url":"https://example.org/a"},{"url":"https://example.net/b"}].
+Tóm tắt bài này giúp mình, mình chưa đưa URL.
+URL mình muốn đọc là https://example.org/research-note.
+Chuẩn bị gửi nội dung "Bản tin thử nghiệm, chưa phê duyệt." lên Telegram; hãy hỏi xác nhận trước.
+/exit

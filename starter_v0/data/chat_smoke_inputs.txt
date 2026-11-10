@@ -1,0 +1,5 @@
+Tìm trên web 2 tin về battery recycling trong hôm nay, trả lời ngắn với link nguồn.
+Tóm tắt bài này giúp mình, mình chưa đưa URL.
+Đổi sang tóm tắt tài liệu giao diện chat. URL chính xác cần đọc: https://docs.streamlit.io/develop/api-reference/chat/st.chat_input
+Chuẩn bị gửi nội dung "Bản tin thử nghiệm, chưa phê duyệt." lên Telegram; hãy hỏi xác nhận trước.
+/exit

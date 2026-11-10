@@ -1,0 +1,1396 @@
+{
+  "verified_at": "2026-11-10T23:48:46.683500+07:00",
+  "repository": "minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval",
+  "source": "Read-only public GitHub API and raw files at exact commit SHA; remote code was not executed or merged.",
+  "pull_requests": [
+    {
+      "endpoint": "/pulls/1",
+      "number": 1,
+      "title": "CP1-CP5: baseline, toi uu prompt, tool moi sentiment, eval nhom, UI Streamlit",
+      "author": "hungvueducation-hash",
+      "body": "## Summary\n- CP1: setup + baseline v0 (case_accuracy=0.65), phan tich 7 case FAIL\n- CP2: toi uu v1-v3 dat case_accuracy=0.95, tool_routing=1.0; them v4/v4c/v4d (fix bug xac nhan that qua live test) va v5 (thi nghiem bi bac bo, co ghi lai lam bang chung khoa hoc)\n- CP3: them tool moi `sentiment` (phan tich cam xuc), dang ky + 3 unit test + 1 eval case route dung\n- CP4: viet du 10 case eval nhom (5 single + 5 multi-turn), 7/10 PASS, phat hien 3 loi that chua sua (G07/G08/G10)\n- CP5: xay dung UI Streamlit (`app.py`), test that qua Playwright headless (4 live turns, 2 session), phat hien + fix 2 bug that:\n  - `UnicodeEncodeError` khi console Windows khong encode duoc emoji/tieng Viet co dau\n  - Vong lap xac nhan vo han khi gui Telegram (thieu `confirmed=true`) - phat hien qua live test voi luong lon cau hoi that, da verify fix bang tin nhan that gui thanh cong len Telegram group\n\nChi tiet day du: `report/team/group_report.md` (Phan A + B1-B5a), `starter_v0/artifacts/version_log.csv`.\n\n## Test plan\n- [x] `pytest` 70 passed, 14 skipped (bonus challenge, khong bat buoc)\n- [x] `pytest tests/test_tool_contract.py` xanh sau moi thay doi tools.yaml/tools/__init__.py\n- [x] Base eval v0-v4d chay that qua OpenRouter, co run JSON lam bang chung\n- [x] Eval nhom 10 case chay that, co run JSON\n- [x] UI test qua Playwright headless, co screenshot + transcript that\n- [x] Fix bug Telegram da verify bang 1 tin nhan that gui thanh cong\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "state": "open",
+      "merged": false,
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "head_ref": "vutienhung",
+      "changed_files": 33
+    },
+    {
+      "endpoint": "/pulls/2",
+      "number": 2,
+      "title": "Doanxuanduybao",
+      "author": "CapybaraSlayer96",
+      "body": "",
+      "state": "open",
+      "merged": false,
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "head_ref": "doanxuanduybao",
+      "changed_files": 35
+    }
+  ],
+  "remote_branches": [
+    {
+      "name": "doanxuanduybao",
+      "sha": "2b39c22da839beca9c392173628475a72b3d2329"
+    },
+    {
+      "name": "main",
+      "sha": "c68da4cdb50c118c9f00622bd72e6cd7afc57b18"
+    },
+    {
+      "name": "nguyendinhvuhai",
+      "sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3"
+    },
+    {
+      "name": "vutienhung",
+      "sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7"
+    }
+  ],
+  "reviewed_commits": [
+    {
+      "sha": "a5aae7189923acb2a793515ae709c41c70922301",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/a5aae7189923acb2a793515ae709c41c70922301",
+      "author": "HaiVuuu",
+      "subject": "Initial commit",
+      "files": [
+        {
+          "path": ".gitignore",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/.env.example",
+          "status": "removed"
+        },
+        {
+          "path": "starter_v0/artifacts/system_prompt.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/tools.yaml",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/version_log.csv",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/data/eval_group.json",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/runs/v0_B_base_openrouter_20261110T175727229478.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v1_B_base_openrouter_20261110T181024936909.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v2_B_base_openrouter_20261110T181510696750.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v3_B_base_openrouter_20261110T181843630923.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v3_B_group_openrouter_20261110T191101668964.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tests/test_tools_todo.py",
+          "status": "modified"
+        }
+      ],
+      "new_test_functions": [
+        "test_send_confirmed_without_env_returns_error_and_no_request"
+      ]
+    },
+    {
+      "sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "author": "HaiVuuu",
+      "subject": "Updated",
+      "files": [
+        {
+          "path": "starter_v0/tests/test_tools_todo.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/tools/__init__.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/tools/calculate_math/tool.py",
+          "status": "added"
+        }
+      ],
+      "new_test_functions": []
+    },
+    {
+      "sha": "313a64a8456cff0373be7a8719d1dd896aa527cd",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/313a64a8456cff0373be7a8719d1dd896aa527cd",
+      "author": "hungvueducation-hash",
+      "subject": "CP1-CP2: baseline v0 + toi uu prompt/tools qua v1-v5",
+      "files": [
+        {
+          "path": "report/team/2A202603882_VuTienHung.md",
+          "status": "added"
+        },
+        {
+          "path": "report/team/group_report.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/system_prompt.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/tools.yaml",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/version_log.csv",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/runs/v0_B_base_openrouter_20261110T173654082508.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v1_B_base_openrouter_20261110T180546988890.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v2_B_base_openrouter_20261110T181930034875.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v3_B_base_openrouter_20261110T182203917895.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4_B_base_openrouter_20261110T182956350018.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4b_B_base_openrouter_20261110T183205805441.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4c_B_base_openrouter_20261110T183354095364.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v5_B_base_openrouter_20261110T183624271897.json",
+          "status": "added"
+        }
+      ],
+      "new_test_functions": []
+    },
+    {
+      "sha": "d0bbdb21674addf6a62837335cbf6c7bd98a5ad3",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/d0bbdb21674addf6a62837335cbf6c7bd98a5ad3",
+      "author": "hungvueducation-hash",
+      "subject": "CP3-CP5: tool moi sentiment, eval nhom 10 case, UI Streamlit",
+      "files": [
+        {
+          "path": "report/team/group_report.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/app.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/artifacts/tools.yaml",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/chat.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/data/eval_group.json",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/requirements.txt",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/runs/v4c_B_base_openrouter_20261110T185215906960.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4c_B_group_openrouter_20261110T185053943247.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4c_B_group_openrouter_20261110T190420163651.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4c_B_group_openrouter_20261110T190545487755.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tests/test_tools_todo.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/tools/__init__.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/tools/sentiment/TOOL.md",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/sentiment/tool.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4c_openrouter_20261110T191505983164.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4c_openrouter_20261110T191633625857.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4c_openrouter_20261110T191935116417.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4c_openrouter_20261110T192023895918.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4c_openrouter_20261110T192604938163.transcript.json",
+          "status": "added"
+        }
+      ],
+      "new_test_functions": [
+        "test_sentiment_happy_path_detects_positive_and_negative",
+        "test_sentiment_bad_input_from_model_returns_error_not_raise",
+        "test_sentiment_empty_text_is_neutral_without_crashing"
+      ]
+    },
+    {
+      "sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "author": "hungvueducation-hash",
+      "subject": "v4d: fix bug vong lap xac nhan vo han khi gui Telegram",
+      "files": [
+        {
+          "path": "report/team/group_report.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/app.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/system_prompt.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/version_log.csv",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/runs/v4d_B_base_openrouter_20261110T194355154509.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4c_openrouter_20261110T193737145678.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4d_openrouter_20261110T195117278582.transcript.json",
+          "status": "added"
+        }
+      ],
+      "new_test_functions": []
+    },
+    {
+      "sha": "f297b27d0724db111fda4cc512ec3a01d758ee0d",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/f297b27d0724db111fda4cc512ec3a01d758ee0d",
+      "author": "CapybaraSlayer96",
+      "subject": "feat: tối ưu prompt/tool v1-v4, thêm 4 tool mới, unit test, eval nhóm, UI Streamlit, báo cáo",
+      "files": [
+        {
+          "path": "TEAM.md",
+          "status": "modified"
+        },
+        {
+          "path": "report/team/2A202603858_DoanXuanDuyBao.md",
+          "status": "added"
+        },
+        {
+          "path": "report/team/group_report.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/analysis/base_runs.csv",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/app.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/artifacts/system_prompt.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/tools.yaml",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/version_log.csv",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/data/eval_group.json",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/providers/gemini_provider.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/requirements.txt",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/runs/v0_B_base_gemini_20261110T182734036319.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v1_B_base_gemini_20261110T184751782001.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v2_B_base_gemini_20261110T185025591414.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v3_B_base_gemini_20261110T185228915396.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4_B_base_gemini_20261110T190743824427.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v4_B_group_gemini_20261110T191020600726.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tests/test_tools_todo.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/tools/__init__.py",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/tools/dedupe/TOOL.md",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/dedupe/tool.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/github_repo/TOOL.md",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/github_repo/tool.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/hackernews/TOOL.md",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/hackernews/tool.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/wikipedia/TOOL.md",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/tools/wikipedia/tool.py",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4_gemini_20261110T191450040203.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4_gemini_20261110T192201995066.transcript.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/transcripts/v4_gemini_20261110T192333079129.transcript.json",
+          "status": "added"
+        }
+      ],
+      "new_test_functions": [
+        "test_hackernews_maps_hits_and_clamps_limit",
+        "test_hackernews_bad_input_returns_error_and_no_request",
+        "test_hackernews_http_error_returns_error_dict",
+        "test_wikipedia_maps_summary",
+        "test_wikipedia_bad_input_returns_error_and_no_request",
+        "test_wikipedia_404_returns_error_dict",
+        "test_github_repo_accepts_url_and_maps_stats",
+        "test_github_repo_malformed_repo_returns_error_and_no_request",
+        "test_github_repo_http_error_returns_error_dict",
+        "test_dedupe_removes_same_url_and_same_title_ignoring_accents",
+        "test_dedupe_bad_input_returns_error_dict",
+        "test_dedupe_skips_non_dict_and_keyless_items"
+      ]
+    },
+    {
+      "sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/commit/2b39c22da839beca9c392173628475a72b3d2329",
+      "author": "CapybaraSlayer96",
+      "subject": "feat: v5-v7 routing, description, response_type; log run local qwen và eval nhóm; cập nhật báo cáo",
+      "files": [
+        {
+          "path": "TEAM.md",
+          "status": "modified"
+        },
+        {
+          "path": "report/team/2A202603858_DoanXuanDuyBao.md",
+          "status": "modified"
+        },
+        {
+          "path": "report/team/group_report.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/system_prompt.md",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/tools.yaml",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/artifacts/version_log.csv",
+          "status": "modified"
+        },
+        {
+          "path": "starter_v0/runs/v4-qwen_B_base_ollama_20261110T193344154584.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v5_B_base_gemini_20261110T212532391145.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v6_B_base_gemini_20261110T212904933375.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v7_B_base_gemini_20261110T213204182019.json",
+          "status": "added"
+        },
+        {
+          "path": "starter_v0/runs/v7_B_group_gemini_20261110T213314649731.json",
+          "status": "added"
+        }
+      ],
+      "new_test_functions": []
+    }
+  ],
+  "remote_run_summaries": [
+    {
+      "author": "HaiVuuu",
+      "head_sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "path": "starter_v0/runs/v0_B_base_openrouter_20261110T175727229478.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/d86c8c337e3001d6a9b1471c4428bb3996f6fca3/starter_v0/runs/v0_B_base_openrouter_20261110T175727229478.json",
+      "version": "v0",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 14,
+        "case_accuracy": 0.7,
+        "tool_routing_accuracy": 0.75,
+        "argument_accuracy": 0.7,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "out_of_scope": 2,
+          "missing_info": 2,
+          "wrong_boundary": 1,
+          "wrong_tool": 1
+        },
+        "observed_mismatch_counts": {
+          "unexpected_tool_call": 2,
+          "missing_tool_call": 3,
+          "wrong_arg_value": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "HaiVuuu",
+      "head_sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "path": "starter_v0/runs/v1_B_base_openrouter_20261110T181024936909.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/d86c8c337e3001d6a9b1471c4428bb3996f6fca3/starter_v0/runs/v1_B_base_openrouter_20261110T181024936909.json",
+      "version": "v1",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 15,
+        "case_accuracy": 0.75,
+        "tool_routing_accuracy": 0.85,
+        "argument_accuracy": 0.75,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "missing_info": 2,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 3
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "HaiVuuu",
+      "head_sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "path": "starter_v0/runs/v2_B_base_openrouter_20261110T181510696750.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/d86c8c337e3001d6a9b1471c4428bb3996f6fca3/starter_v0/runs/v2_B_base_openrouter_20261110T181510696750.json",
+      "version": "v2",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 15,
+        "case_accuracy": 0.75,
+        "tool_routing_accuracy": 0.85,
+        "argument_accuracy": 0.75,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "missing_info": 2,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 3
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "HaiVuuu",
+      "head_sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "path": "starter_v0/runs/v3_B_base_openrouter_20261110T181843630923.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/d86c8c337e3001d6a9b1471c4428bb3996f6fca3/starter_v0/runs/v3_B_base_openrouter_20261110T181843630923.json",
+      "version": "v3",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 15,
+        "case_accuracy": 0.75,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 0.75,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "missing_info": 2,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 5
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "HaiVuuu",
+      "head_sha": "d86c8c337e3001d6a9b1471c4428bb3996f6fca3",
+      "path": "starter_v0/runs/v3_B_group_openrouter_20261110T191101668964.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/d86c8c337e3001d6a9b1471c4428bb3996f6fca3/starter_v0/runs/v3_B_group_openrouter_20261110T191101668964.json",
+      "version": "v3",
+      "suite": "group",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 10,
+        "measured_cases": 10,
+        "provider_error_cases": 0,
+        "passed_cases": 9,
+        "case_accuracy": 0.9,
+        "tool_routing_accuracy": 0.9,
+        "argument_accuracy": 0.9,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "out_of_scope": 1
+        },
+        "observed_mismatch_counts": {
+          "extra_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v0_B_base_openrouter_20261110T173654082508.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v0_B_base_openrouter_20261110T173654082508.json",
+      "version": "v0",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 13,
+        "case_accuracy": 0.65,
+        "tool_routing_accuracy": 0.75,
+        "argument_accuracy": 0.65,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "out_of_scope": 2,
+          "missing_info": 2,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "unexpected_tool_call": 2,
+          "missing_tool_call": 3
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v1_B_base_openrouter_20261110T180546988890.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v1_B_base_openrouter_20261110T180546988890.json",
+      "version": "v1",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 16,
+        "case_accuracy": 0.8,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.8,
+        "multiturn_accuracy": 0.8333,
+        "failure_counts": {
+          "missing_info": 2,
+          "wrong_boundary": 1,
+          "wrong_arg_value": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 3,
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v2_B_base_openrouter_20261110T181930034875.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v2_B_base_openrouter_20261110T181930034875.json",
+      "version": "v2",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 17,
+        "case_accuracy": 0.85,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.85,
+        "multiturn_accuracy": 0.8333,
+        "failure_counts": {
+          "wrong_boundary": 1,
+          "wrong_tool": 1,
+          "wrong_arg_value": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v3_B_base_openrouter_20261110T182203917895.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v3_B_base_openrouter_20261110T182203917895.json",
+      "version": "v3",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 19,
+        "case_accuracy": 0.95,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 0.95,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4_B_base_openrouter_20261110T182956350018.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4_B_base_openrouter_20261110T182956350018.json",
+      "version": "v4",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 18,
+        "case_accuracy": 0.9,
+        "tool_routing_accuracy": 0.9,
+        "argument_accuracy": 0.9,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 1,
+          "wrong_arg_value": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 2
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4b_B_base_openrouter_20261110T183205805441.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4b_B_base_openrouter_20261110T183205805441.json",
+      "version": "v4b",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 19,
+        "case_accuracy": 0.95,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 0.95,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4c_B_base_openrouter_20261110T183354095364.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4c_B_base_openrouter_20261110T183354095364.json",
+      "version": "v4c",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 19,
+        "case_accuracy": 0.95,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.95,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "missing_info": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4c_B_base_openrouter_20261110T185215906960.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4c_B_base_openrouter_20261110T185215906960.json",
+      "version": "v4c",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 19,
+        "case_accuracy": 0.95,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.95,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "missing_info": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4c_B_group_openrouter_20261110T185053943247.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4c_B_group_openrouter_20261110T185053943247.json",
+      "version": "v4c",
+      "suite": "group",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 1,
+        "measured_cases": 1,
+        "provider_error_cases": 0,
+        "passed_cases": 1,
+        "case_accuracy": 1.0,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 1.0,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {},
+        "observed_mismatch_counts": {}
+      },
+      "valid": true,
+      "complete_required_suite": false,
+      "valid_for_required_evidence": false
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4c_B_group_openrouter_20261110T190420163651.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4c_B_group_openrouter_20261110T190420163651.json",
+      "version": "v4c",
+      "suite": "group",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 10,
+        "measured_cases": 10,
+        "provider_error_cases": 0,
+        "passed_cases": 7,
+        "case_accuracy": 0.7,
+        "tool_routing_accuracy": 0.8,
+        "argument_accuracy": 0.7,
+        "multiturn_accuracy": 0.4,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "missing_info": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 1,
+          "missing_tool_call": 2
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4c_B_group_openrouter_20261110T190545487755.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4c_B_group_openrouter_20261110T190545487755.json",
+      "version": "v4c",
+      "suite": "group",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 10,
+        "measured_cases": 10,
+        "provider_error_cases": 0,
+        "passed_cases": 7,
+        "case_accuracy": 0.7,
+        "tool_routing_accuracy": 0.7,
+        "argument_accuracy": 0.7,
+        "multiturn_accuracy": 0.4,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "missing_info": 1
+        },
+        "observed_mismatch_counts": {
+          "extra_tool_call": 1,
+          "missing_tool_call": 2
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v4d_B_base_openrouter_20261110T194355154509.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v4d_B_base_openrouter_20261110T194355154509.json",
+      "version": "v4d",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 19,
+        "case_accuracy": 0.95,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.95,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "hungvueducation-hash",
+      "head_sha": "7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7",
+      "path": "starter_v0/runs/v5_B_base_openrouter_20261110T183624271897.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/7291b98d19fbcb44d0dcc6611f2ebc60c0626ad7/starter_v0/runs/v5_B_base_openrouter_20261110T183624271897.json",
+      "version": "v5",
+      "suite": "base",
+      "provider": "openrouter",
+      "model": "openai/gpt-4o-mini",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 18,
+        "case_accuracy": 0.9,
+        "tool_routing_accuracy": 0.9,
+        "argument_accuracy": 0.9,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 1,
+          "missing_info": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 2
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v0_B_base_gemini_20261110T182734036319.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v0_B_base_gemini_20261110T182734036319.json",
+      "version": "v0",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 13,
+        "case_accuracy": 0.65,
+        "tool_routing_accuracy": 0.75,
+        "argument_accuracy": 0.65,
+        "multiturn_accuracy": 0.8333,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "out_of_scope": 1,
+          "missing_info": 2,
+          "wrong_boundary": 1,
+          "wrong_arg_value": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "unexpected_tool_call": 1,
+          "missing_tool_call": 4
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v1_B_base_gemini_20261110T184751782001.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v1_B_base_gemini_20261110T184751782001.json",
+      "version": "v1",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 17,
+        "case_accuracy": 0.85,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.85,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v2_B_base_gemini_20261110T185025591414.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v2_B_base_gemini_20261110T185025591414.json",
+      "version": "v2",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 17,
+        "case_accuracy": 0.85,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.85,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 2,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v3_B_base_gemini_20261110T185228915396.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v3_B_base_gemini_20261110T185228915396.json",
+      "version": "v3",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 17,
+        "case_accuracy": 0.85,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.85,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "missing_info": 1,
+          "wrong_boundary": 1,
+          "wrong_tool": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v4-qwen_B_base_ollama_20261110T193344154584.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v4-qwen_B_base_ollama_20261110T193344154584.json",
+      "version": "v4-qwen",
+      "suite": "base",
+      "provider": "ollama",
+      "model": "qwen2.5:7b-instruct-q4_K_M",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 16,
+        "case_accuracy": 0.8,
+        "tool_routing_accuracy": 0.85,
+        "argument_accuracy": 0.8,
+        "multiturn_accuracy": 0.8333,
+        "failure_counts": {
+          "missing_info": 2,
+          "wrong_boundary": 1,
+          "wrong_arg_value": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 3,
+          "wrong_arg_value": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v4_B_base_gemini_20261110T190743824427.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v4_B_base_gemini_20261110T190743824427.json",
+      "version": "v4",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 20,
+        "case_accuracy": 1.0,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 1.0,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {},
+        "observed_mismatch_counts": {}
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v4_B_group_gemini_20261110T191020600726.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v4_B_group_gemini_20261110T191020600726.json",
+      "version": "v4",
+      "suite": "group",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 10,
+        "measured_cases": 10,
+        "provider_error_cases": 0,
+        "passed_cases": 10,
+        "case_accuracy": 1.0,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 1.0,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {},
+        "observed_mismatch_counts": {}
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v5_B_base_gemini_20261110T212532391145.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v5_B_base_gemini_20261110T212532391145.json",
+      "version": "v5",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 19,
+        "case_accuracy": 0.95,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.95,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "wrong_tool": 1
+        },
+        "observed_mismatch_counts": {
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v6_B_base_gemini_20261110T212904933375.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v6_B_base_gemini_20261110T212904933375.json",
+      "version": "v6",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 18,
+        "case_accuracy": 0.9,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 0.9,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "missing_info": 1,
+          "wrong_boundary": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v7_B_base_gemini_20261110T213204182019.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v7_B_base_gemini_20261110T213204182019.json",
+      "version": "v7",
+      "suite": "base",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 20,
+        "measured_cases": 20,
+        "provider_error_cases": 0,
+        "passed_cases": 17,
+        "case_accuracy": 0.85,
+        "tool_routing_accuracy": 0.95,
+        "argument_accuracy": 0.85,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {
+          "missing_info": 1,
+          "wrong_boundary": 1,
+          "wrong_tool": 1
+        },
+        "observed_mismatch_counts": {
+          "wrong_arg_value": 2,
+          "missing_tool_call": 1
+        }
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    },
+    {
+      "author": "CapybaraSlayer96",
+      "head_sha": "2b39c22da839beca9c392173628475a72b3d2329",
+      "path": "starter_v0/runs/v7_B_group_gemini_20261110T213314649731.json",
+      "source_url": "https://github.com/minhh25/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/blob/2b39c22da839beca9c392173628475a72b3d2329/starter_v0/runs/v7_B_group_gemini_20261110T213314649731.json",
+      "version": "v7",
+      "suite": "group",
+      "provider": "gemini",
+      "model": "gemini-3.8-flash",
+      "summary": {
+        "total_cases": 10,
+        "measured_cases": 10,
+        "provider_error_cases": 0,
+        "passed_cases": 10,
+        "case_accuracy": 1.0,
+        "tool_routing_accuracy": 1.0,
+        "argument_accuracy": 1.0,
+        "multiturn_accuracy": 1.0,
+        "failure_counts": {},
+        "observed_mismatch_counts": {}
+      },
+      "valid": true,
+      "complete_required_suite": true,
+      "valid_for_required_evidence": true
+    }
+  ],
+  "selected_local_solution": {
+    "branch": "nguyendinhminh",
+    "tool_challenge": "filter_sources",
+    "basis": "User explicitly selected Minh implementation; remote alternatives are evidence, not merged code."
+  },
+  "validity_note": "valid checks provider_error=0 and measured=total; required base/group evidence additionally needs 20/10 cases. The 1-case group trial is not a complete group suite."
+}

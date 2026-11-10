@@ -1,0 +1,12 @@
+{
+  "command": "python scripts/preflight_provider.py --provider openrouter --model nvidia/nemotron-3.5-lightning:free",
+  "status": "OK",
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3.5-lightning:free",
+  "tool": "timeline",
+  "args": {
+    "limit": 1,
+    "screenname": "sama"
+  },
+  "note": "Ghi từ output preflight thật sau khi người dùng cập nhật .env; không lưu credential."
+}

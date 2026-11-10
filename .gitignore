@@ -9,6 +9,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+.streamlit/secrets.toml
 
 # Local-only files (not part of the lab)
 INTERNAL-DEMO-SCRIPT.md

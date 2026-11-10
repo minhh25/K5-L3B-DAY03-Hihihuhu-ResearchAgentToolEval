@@ -1,0 +1,14 @@
+{
+  "url": "http://127.0.0.1:8501",
+  "checks": [
+    {
+      "path": "/",
+      "status_code": 200
+    },
+    {
+      "path": "/_stcore/health",
+      "status_code": 200
+    }
+  ],
+  "server_kept_running_for_user": true
+}

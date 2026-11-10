@@ -1,0 +1,3 @@
+Tóm tắt tài liệu công khai về st.chat_input trong Streamlit. Mình chưa đưa URL; hãy hỏi mình trước.
+URL chính xác cần đọc: https://docs.streamlit.io/develop/api-reference/chat/st.chat_input
+/exit

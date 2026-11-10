@@ -1,0 +1,16 @@
+{
+  "url": "http://127.0.0.1:8501",
+  "checks": [
+    {
+      "path": "/",
+      "status_code": 200,
+      "body": "Streamlit HTML served"
+    },
+    {
+      "path": "/_stcore/health",
+      "status_code": 200,
+      "body": "ok"
+    }
+  ],
+  "note": "Local startup and HTTP health; interactive behavior tested separately with offline Streamlit AppTest."
+}

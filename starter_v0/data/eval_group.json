@@ -1,7 +1,296 @@
 {
   "dataset_id": "day03_v2_research_group",
   "dataset_role": "group",
-  "description": "Case do NHÓM tự viết thêm để cover thêm trường hợp. Mỗi case cần: id, phase='B', query HOẶC turns, failure_type (thuộc allowed_failure_types), và expect (tool_calls[...] hoặc no_tool=true). Nên kèm metadata.what_it_tests.",
-  "allowed_failure_types": ["wrong_tool", "wrong_arg_value", "wrong_boundary", "unnecessary_tool", "out_of_scope", "missing_info"],
-  "cases": []
+  "description": "10 case nhóm: 5 single-turn + 5 multi-turn, gồm tool mới và boundary.",
+  "allowed_failure_types": [
+    "wrong_tool",
+    "wrong_arg_value",
+    "wrong_boundary",
+    "unnecessary_tool",
+    "out_of_scope",
+    "missing_info"
+  ],
+  "cases": [
+    {
+      "id": "G01_filter_supplied_sources",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "include_domains": [
+                "example.org"
+              ],
+              "min_score": 0.6,
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Tool mới: domain, score, giữ dữ liệu đầu vào để tool tự lọc"
+      },
+      "query": "Lọc danh sách nguồn này bằng tool cục bộ, không truy cập web. Chỉ giữ domain example.org (gồm subdomain), score tối thiểu 0.6, tối đa 2 nguồn. Truyền cả danh sách đầu vào cho tool: [{\"url\":\"https://example.org/a?utm_source=lab\",\"score\":0.9},{\"url\":\"https://news.example.org/b\",\"score\":0.7},{\"url\":\"https://other.org/c\",\"score\":0.8}]."
+    },
+    {
+      "id": "G02_missing_feed_identity",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "missing_info",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Không lấy topic thay cho tài khoản bị thiếu"
+      },
+      "query": "Mình muốn theo dõi feed X của một phòng nghiên cứu, lấy 4 bài mới nhất. Mình chưa nói tên phòng hay tài khoản; hãy hỏi mình thông tin cần thiết trước."
+    },
+    {
+      "id": "G03_two_research_sources",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "battery recycling",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "battery recycling",
+              "search_type": "Top",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Hai nguồn độc lập, query thuần chủ đề, Top trên X"
+      },
+      "query": "Tìm tin web hôm nay về chủ đề \"battery recycling\", đồng thời lấy 2 tweet phổ biến nhất về đúng chủ đề đó trên X. Chưa cần định dạng bản tin."
+    },
+    {
+      "id": "G04_approval_for_exact_draft",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Có nội dung vẫn phải xin xác nhận, không tự gửi"
+      },
+      "query": "Hãy gửi nội dung \"Bản tin pin: cần đối chiếu nguồn trước khi kết luận.\" lên Telegram của nhóm. Đây là yêu cầu soạn gửi ban đầu, mình chưa duyệt bước xác nhận."
+    },
+    {
+      "id": "G05_format_given_items",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "unnecessary_tool",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "template": "bullets"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Có dữ liệu thì format, không tìm thêm"
+      },
+      "query": "Trình bày thành bullets đúng 2 nguồn đã cho, không tìm hoặc đọc thêm: [{\"title\":\"Study A\",\"url\":\"https://example.org/a\",\"summary\":\"Kết quả thử nghiệm A\"},{\"title\":\"Study B\",\"url\":\"https://example.org/b\",\"summary\":\"Kết quả thử nghiệm B\"}]."
+    },
+    {
+      "id": "G06_correct_topic_window_count",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "energy storage",
+              "topic": "news",
+              "timeframe": "month",
+              "max_results": 2
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Cập nhật từng trường, giữ số lượng đã sửa"
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm 6 tin web chủ đề solar power trong tuần này."
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề thành energy storage và khoảng thời gian sang tháng này."
+        },
+        {
+          "role": "user",
+          "content": "Giữ các điều kiện mới, chỉ lấy 2 kết quả thôi."
+        }
+      ]
+    },
+    {
+      "id": "G07_filter_context_override",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "exclude_domains": [
+                "b.example.org"
+              ],
+              "limit": 1
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Tool mới giữ danh sách từ lượt trước và sửa tiêu chí loại domain"
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Danh sách nguồn sẵn có: [{\"url\":\"https://a.example.org/1\",\"score\":0.8},{\"url\":\"https://b.example.org/2\",\"score\":0.9}]. Chỉ xử lý cục bộ."
+        },
+        {
+          "role": "user",
+          "content": "Lọc danh sách đó, bỏ domain a.example.org, giữ tối đa 3 nguồn."
+        },
+        {
+          "role": "user",
+          "content": "Sửa lại: bỏ b.example.org thay cho a.example.org; giới hạn 1 nguồn. Chuyển nguyên danh sách nguồn cho tool lọc."
+        }
+      ]
+    },
+    {
+      "id": "G08_cancel_then_capabilities",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_boundary",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "metadata": {
+        "what_it_tests": "Hủy tác vụ ghi và trả lời meta không tool"
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Chuẩn bị gửi một digest lên Telegram."
+        },
+        {
+          "role": "user",
+          "content": "Chưa gửi vội, mình chưa duyệt nội dung."
+        },
+        {
+          "role": "user",
+          "content": "Hủy yêu cầu gửi. Bây giờ chỉ giải thích bạn có thể dùng những loại nguồn nào, không tra cứu thêm."
+        }
+      ]
+    },
+    {
+      "id": "G09_replace_article_url",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.org/research/v2?lang=vi"
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Thay URL cũ bằng URL mới và giữ query string"
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Đọc bài https://example.org/research/v1."
+        },
+        {
+          "role": "user",
+          "content": "Đó là bản cũ; thay bằng https://example.org/research/v2?lang=vi"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tóm tắt đúng bản vừa thay, không tìm nguồn khác."
+        }
+      ]
+    },
+    {
+      "id": "G10_social_sort_and_count_correction",
+      "phase": "B",
+      "suite": "group",
+      "failure_type": "wrong_arg_value",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "climate adaptation",
+              "search_type": "Latest",
+              "limit": 4
+            }
+          }
+        ]
+      },
+      "metadata": {
+        "what_it_tests": "Giữ chủ đề khi sửa thứ tự và giới hạn qua nhiều lượt"
+      },
+      "turns": [
+        {
+          "role": "user",
+          "content": "Tìm 8 tweet Top về climate adaptation trên X."
+        },
+        {
+          "role": "user",
+          "content": "Chuyển từ phổ biến sang mới nhất nhé."
+        },
+        {
+          "role": "user",
+          "content": "Lấy 4 bài thôi, chủ đề vẫn như trên."
+        }
+      ]
+    }
+  ]
 }

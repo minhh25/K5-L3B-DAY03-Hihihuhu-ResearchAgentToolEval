@@ -1,0 +1,83 @@
+(.venv) minh25@minh25s-MacBook-Air starter_v0 % python -m pytest -v tests/test_tools_todo.py
+===================================== test session starts ======================================
+platform darwin -- Python 3.11.4, pytest-9.2.0, pluggy-1.7.0 -- /Users/minh25/Documents/AI Thucchien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/minh25/Documents/AI Thuc chien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/starter_v0
+configfile: pytest.ini
+plugins: anyio-4.16.0
+collected 38 items                                                                             
+
+tests/test_tools_todo.py::test_clarify_choice_returns_options_and_awaits_user PASSED     [  2%]
+tests/test_tools_todo.py::test_format_sections_groups_items_by_section PASSED            [  5%]
+tests/test_tools_todo.py::test_format_thread_numbers_items PASSED                        [  7%]
+tests/test_tools_todo.py::test_format_empty_items_does_not_crash[None] PASSED            [ 10%]
+tests/test_tools_todo.py::test_format_empty_items_does_not_crash[items1] PASSED          [ 13%]
+tests/test_tools_todo.py::test_send_confirmed_posts_to_telegram PASSED                   [ 15%]
+tests/test_tools_todo.py::test_send_confirmed_without_env_returns_error_and_no_request PASSED [18%]
+tests/test_tools_todo.py::test_lookup_without_timeframe_omits_time_range PASSED          [ 21%]
+tests/test_tools_todo.py::test_fetch_maps_firecrawl_response PASSED                      [ 23%]
+tests/test_tools_todo.py::test_fetch_truncates_markdown_to_4000_chars PASSED             [ 26%]
+tests/test_tools_todo.py::test_timeline_respects_limit_and_skips_items_without_id PASSED [ 28%]
+tests/test_tools_todo.py::test_social_search_passes_search_type[Top] PASSED              [ 31%]
+tests/test_tools_todo.py::test_social_search_passes_search_type[Latest] PASSED           [ 34%]
+tests/test_tools_todo.py::test_policy_empty_query_returns_no_results PASSED              [ 36%]
+tests/test_tools_todo.py::test_policy_area_filter_only_returns_that_area PASSED          [ 39%]
+tests/test_tools_todo.py::test_policy_instruction_like_lines_go_to_untrusted_text PASSED [ 42%]
+tests/test_tools_todo.py::test_filter_sources_normalizes_deduplicates_and_filters_without_mutation PASSED [ 44%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs0] PASSED [ 47%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs1] PASSED [ 50%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs2] PASSED [ 52%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs3] PASSED [ 55%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs4] PASSED [ 57%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs5] PASSED [ 60%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs6] PASSED [ 63%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs7] PASSED [ 65%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs8] PASSED [ 68%]
+tests/test_tools_todo.py::test_filter_sources_failure_returns_error_dict PASSED          [ 71%]
+tests/test_tools_todo.py::test_filter_sources_empty_data[None] PASSED                    [ 73%]
+tests/test_tools_todo.py::test_filter_sources_empty_data[items1] PASSED                  [ 76%]
+tests/test_tools_todo.py::test_filter_sources_zero_limit_and_invalid_urls PASSED         [ 78%]
+tests/test_tools_todo.py::test_filter_sources_preserves_meaningful_query_and_subdomains PASSED [ 81%]
+tests/test_tools_todo.py::test_send_timeout_does_not_expose_token PASSED                 [ 84%]
+tests/test_tools_todo.py::test_send_requires_literal_boolean_confirmation[false] PASSED  [ 86%]
+tests/test_tools_todo.py::test_send_requires_literal_boolean_confirmation[true] PASSED   [ 89%]
+tests/test_tools_todo.py::test_send_requires_literal_boolean_confirmation[1] PASSED      [ 92%]
+tests/test_tools_todo.py::test_send_requires_literal_boolean_confirmation[confirmed3] PASSED [ 94%]
+tests/test_tools_todo.py::test_send_requires_literal_boolean_confirmation[confirmed4] PASSED [ 97%]
+tests/test_tools_todo.py::test_send_api_rejection_is_not_reported_as_sent PASSED         [100%]
+
+====================================== 38 passed in 0.18s ======================================
+(.venv) minh25@minh25s-MacBook-Air starter_v0 % python -m pytest -v tests/test_tools_todo.py -k filter_sources
+===================================== test session starts ======================================
+platform darwin -- Python 3.11.4, pytest-9.2.0, pluggy-1.7.0 -- /Users/minh25/Documents/AI Thucchien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/minh25/Documents/AI Thuc chien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/starter_v0
+configfile: pytest.ini
+plugins: anyio-4.16.0
+collected 38 items / 23 deselected / 15 selected                                               
+
+tests/test_tools_todo.py::test_filter_sources_normalizes_deduplicates_and_filters_without_mutation PASSED [  6%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs0] PASSED [ 13%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs1] PASSED [ 20%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs2] PASSED [ 26%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs3] PASSED [ 33%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs4] PASSED [ 40%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs5] PASSED [ 46%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs6] PASSED [ 53%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs7] PASSED [ 60%]
+tests/test_tools_todo.py::test_filter_sources_bad_input_from_model_returns_error[kwargs8] PASSED [ 66%]
+tests/test_tools_todo.py::test_filter_sources_failure_returns_error_dict PASSED          [ 73%]
+tests/test_tools_todo.py::test_filter_sources_empty_data[None] PASSED                    [ 80%]
+tests/test_tools_todo.py::test_filter_sources_empty_data[items1] PASSED                  [ 86%]
+tests/test_tools_todo.py::test_filter_sources_zero_limit_and_invalid_urls PASSED         [ 93%]
+tests/test_tools_todo.py::test_filter_sources_preserves_meaningful_query_and_subdomains PASSED [100%]
+
+============================== 15 passed, 23 deselected in 0.07s ===============================
+(.venv) minh25@minh25s-MacBook-Air starter_v0 % python -m pytest -q tests/test_tool_contract.py
+python -m pytest -q
+............................................................                             [100%]
+60 passed in 0.14s
+........................................................................................ [ 73%]
+................................                                                         [100%]
+120 passed in 1.01s
+(.venv) minh25@minh25s-MacBook-Air starter_v0 % 

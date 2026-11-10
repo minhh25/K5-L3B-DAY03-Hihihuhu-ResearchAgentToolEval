@@ -1,0 +1,206 @@
+{
+  "transcript_id": "v3_openrouter_20261110T184244879038",
+  "version": "v3",
+  "artifact_version": "v3+p43a59c82af5c+tb05a5d016dc4",
+  "prompt_hash": "43a59c82af5c6821abacdd977616c63d969a15943f19445c5ce3eda15969203e",
+  "tools_hash": "b05a5d016dc451dfbf88094d7873067dd4c24d978bb5681bedd3ba50dffb63c3",
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3.5-lightning:free",
+  "system_prompt": "/Users/minh25/Documents/AI Thuc chien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/starter_v0/artifacts/system_prompt.md",
+  "tools": "/Users/minh25/Documents/AI Thuc chien Vin/LAB/K5-L3B-DAY03-Hihihuhu-ResearchAgentToolEval/starter_v0/artifacts/tools.yaml",
+  "history_window": 5,
+  "max_tool_rounds": 4,
+  "created_at": "2026-11-10T18:42:44",
+  "updated_at": "2026-11-10T18:43:34",
+  "turns": [
+    {
+      "turn_index": 1,
+      "started_at": "2026-11-10T18:42:44",
+      "user": "Tóm tắt tài liệu công khai về st.chat_input trong Streamlit. Mình chưa đưa URL; hãy hỏi mình trước.",
+      "status": "waiting_for_user",
+      "assistant_text": "Bạn có thể cung cấp URL tài liệu hoặc nguồn cụ thể về st.chat_input trong Streamlit không?",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "clarify",
+              "args": {
+                "response_type": "text",
+                "question": "Bạn có thể cung cấp URL tài liệu hoặc nguồn cụ thể về st.chat_input trong Streamlit không?"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "clarify",
+              "args": {
+                "response_type": "text",
+                "question": "Bạn có thể cung cấp URL tài liệu hoặc nguồn cụ thể về st.chat_input trong Streamlit không?"
+              },
+              "result": {
+                "tool": "ask_user",
+                "question": "Bạn có thể cung cấp URL tài liệu hoặc nguồn cụ thể về st.chat_input trong Streamlit không?",
+                "response_type": "text",
+                "options": [],
+                "awaiting_user": true
+              }
+            }
+          ]
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "clarify",
+          "args": {
+            "response_type": "text",
+            "question": "Bạn có thể cung cấp URL tài liệu hoặc nguồn cụ thể về st.chat_input trong Streamlit không?"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cung cấp URL tài liệu hoặc nguồn cụ thể về st.chat_input trong Streamlit không?",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ],
+      "pending_send": null,
+      "ended_at": "2026-11-10T18:42:48"
+    },
+    {
+      "turn_index": 2,
+      "started_at": "2026-11-10T18:42:48",
+      "user": "URL chính xác cần đọc: https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+      "status": "answered",
+      "assistant_text": "**Tóm tắt `st.chat_input` trong Streamlit (theo docs chính thức v1.67.0)**\n\n`st.chat_input` là widget dùng để hiển thị ô nhập tin nhắn trong các ứng dụng chat Streamlit. Dưới đây là các điểm chính:\n\n| Tham số | Mô tả |\n|---|---|\n| **placeholder** | Văn bản hiển thị khi ô rỗng. Mặc định là `\"Your message\"`. **Lưu ý:** Không nên để chuỗi rỗng vì lý do truy cậpibilité. |\n| **key** | Khóa duy nhất để widget giữ trạng thái qua rerun. Nếu `None` sẽ tự tạo. Đặt key giúp đọc/ghi giá trị qua `st.session_state[key]`. |\n| **max_chars** | Giới hạn số ký tự nhập. Mặc định `None` (không giới hạn). |\n| **max_upload_size** | Kích thước file tối đa (MB). Mặc định `None` tuân theo cài `server.maxUploadSize` trong `config.toml`. |\n| **accept_file** | Cho phép upload file: `False` (mặc định), `True` (một file), `\"multiple\"`, `\"directory\"`. |\n| **file_type** | Loại file được phép (ext, MIME type, hoặc wildcard như `\"image/*\"`). |\n| **accept_audio** / **audio_sample_rate** | Tích hợp ghi âm audio (mặc định 16000 Hz). |\n| **disabled** | Vô hiệu hóa widget. |\n| **submit_mode** | Chế độ gửi, mặc định `\"submit\"`. |\n| **on_submit, args, kwargs** | Xử lý khi người dùng gửi. |\n| **width, height** | Kích thước widget (`\"stretch\"` mặc định). |\n\n💡 **Tip:** Đọc hướng dẫn \"[Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps)\" để biết cách kết hợp `st.chat_message` và `st.chat_input` xây dựng ứng dụng chat hoàn chỉnh.\n\n**Nguồn:** [Streamlit Docs – st.chat_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input)",
+      "rounds": [
+        {
+          "round": 1,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "fetch",
+              "args": {
+                "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input"
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "fetch",
+              "args": {
+                "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input"
+              },
+              "result": {
+                "tool": "read_url",
+                "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+                "items": [
+                  {
+                    "title": "st.chat_input - Streamlit Docs",
+                    "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+                    "source": "docs.streamlit.io",
+                    "summary": "Show API reference for\n\nVersion v1.67.0 _expand\\_more_\n\n1. Contents\n2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input)\n3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)\n\n_star_\n\n#### Tip\n\nRead the [Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps) tutorial to learn how to use `st.chat_message` and `st.chat_input` to build chat-based apps.\n\n## st.chat\\_input\n\nDisplay a chat input widget.\n\n| Function signature [\\[source\\]](https://github.com/streamlit/streamlit/blob/1.67.0/lib/streamlit/elements/widgets/chat.py#L662 \"View st.chat_input source code on GitHub\") |\n| --- |\n| st.chat\\_input(placeholder=\"Your message\", \\*, key=None, max\\_chars=None, max\\_upload\\_size=None, accept\\_file=False, file\\_type=None, accept\\_audio=False, audio\\_sample\\_rate=16000, disabled=False, submit\\_mode=\"submit\", on\\_submit=None, args=None, kwargs=None, width=\"stretch\", height=\"content\") |\n| --- |\n| Parameters |\n| placeholder(str) | A placeholder text shown when the chat input is empty. This<br>defaults to `\"Your message\"`. For accessibility reasons, you<br>should not use an empty string. |\n| key(str, int, or None) | An optional string or integer to use as the unique key for<br>the widget. If this is `None` (default), a key will be<br>generated for the widget based on the values of the other<br>parameters. No two widgets may have the same key. Assigning<br>a key stabilizes the widget's identity and preserves its<br>state across reruns even when other parameters change.<br>Note<br>Changing `accept_file`, `file_type`, `max_chars`,<br>or `max_upload_size` resets the widget even when a key<br>is provided.<br>A key lets you read or update the widget's value via<br>`st.session_state[key]`. For more details, see [Widget\\<br>behavior](https://docs.streamlit.io/develop/concepts/architecture/widget-behavior).<br>Additionally, if `key` is provided, it will be used as a<br>CSS class name prefixed with `st-key-`. |\n| max\\_chars(int or None) | The maximum number of characters that can be entered. If this is<br>`None` (default), there will be no maximum. |\n| max\\_upload\\_size(int or None) | The maximum allowed size of each uploaded file in megabytes.<br>If this is `None` (default), the maximum file size is set by the<br>`server.maxUploadSize` configuration option in your<br>`config.toml` file. If this is an integer, it must be positive<br>and will override the `server.maxUploadSize` configuration option. |\n| accept\\_file(bool, \"multiple\", or \"directory\") | Whether the chat input should accept files. This can be one of the<br>following values:<br>- `False` (default): No files are accepted and the user can only<br>submit a message.<br>- `True`: The user can add a single file to their submission.<br>- `\"multiple\"`: The user can add multiple files to their<br>submission.<br>- `\"directory\"`: The user can add multiple files to their<br>submission by selecting a directory. If `file_type` is set,<br>only files matching those type(s) will be uploaded.<br>By default, uploaded files are limited to 200 MB each. You can<br>configure this using the `server.maxUploadSize` config option.<br>For more information on how to set config options, see<br>[`config.toml`](https://docs.streamlit.io/develop/api-reference/configuration/config.toml). |\n| file\\_type(str, Sequence\\[str\\], or None) | The allowed file types for uploaded files. This can be one of the<br>following values:<br>- `None` (default): All file extensions are allowed.<br>- A file extension: Only one file extension is allowed. For example,<br>to only accept CSV files, use `\"csv\"` or `\".csv\"`.<br>- A MIME type: Only one MIME type is allowed. For example,<br>to accept JPEG images, use `\"image/jpeg\"`.<br>- A MIME wildcard: All types within a MIME media type are allowed.<br>For example, to accept all images, use `\"image/*\"`.<br>- A MIME media type: This is a shortc"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "round": 2,
+          "assistant_text": null,
+          "tool_calls": [
+            {
+              "name": "format",
+              "args": {
+                "template": "brief",
+                "headline": "Tóm tắt st.chat_input trong Streamlit",
+                "items": [
+                  {
+                    "title": "st.chat_input - Streamlit Docs",
+                    "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+                    "source": "docs.streamlit.io",
+                    "summary": "Show API reference for\n\nVersion v1.67.0 _expand\\_more_\n\n1. Contents\n2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input)\n3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)\n\n_star_\n\n#### Tip\n\nRead the [Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps) tutorial to learn how to use `st.chat_message` and `st.chat_input` to build chat-based apps.\n\n## st.chat\\_input\n\nDisplay a chat input widget.\n\n| Function signature [\\[source\\]](https://github.com/streamlit/streamlit/blob/1.67.0/lib/streamlit/elements/widgets/chat.py#L662 \"View st.chat_input source code on GitHub\") |\n| --- |\n| st.chat\\_input(placeholder=\"Your message\", \\*, key=None, max\\_chars=None, max\\_upload\\_size=None, accept\\_file=False, file\\_type=None, accept\\_audio=False, audio\\_sample\\_rate=16000, disabled=False, submit\\_mode=\"submit\", on\\_submit=None, args=None, kwargs=None, width=\"stretch\", height=\"content\") |\n| --- |\n| Parameters |\n| placeholder(str) | A placeholder text shown when the chat input is empty. This<br>defaults to `\"Your message\"`. For accessibility reasons, you<br>should not use an empty string. |\n| key(str, int, or None) | An optional string or integer to use as the unique key for<br>the widget. If this is `None` (default), a key will be<br>generated for the widget based on the values of the other<br>parameters. No two widgets may have the same key. Assigning<br>a key stabilizes the widget's identity and preserves its<br>state across reruns even when other parameters change.<br>Note<br>Changing `accept_file`, `file_type`, `max_chars`,<br>or `max_upload_size` resets the widget even when a key<br>is provided.<br>A key lets you read or update the widget's value via<br>`st.session_state[key]`. For more details, see [Widget\\<br>behavior](https://docs.streamlit.io/develop/concepts/architecture/widget-behavior).\nAdditionally, if `key` is provided, it will be used as a<br>CSS class name prefixed with `st-key-`. |\n| max\\_chars(int or None) | The maximum number of characters that can be entered. If this is<br>`None` (default), there will be no maximum. |\n| max\\_upload\\_size(int or None) | The maximum allowed size of each uploaded file in megabytes.<br>If this is `None` (default), the maximum file size is set by the<br>`server.maxUploadSize` configuration option in your<br>`config.toml` file. If this is an integer, it must be positive<br>and will override the `server.maxUploadSize` configuration option. |\n| accept\\_file(bool, \"multiple\", or \"directory\") | Whether the chat input should accept files. This can be one of the<br>following values:<br>- `False` (default): No files are accepted and the user can<br>submit a message.<br>- `True`: The user can add a single file to their submission.<br>- `\"multiple\"`: The user can add multiple files to their<br>submission.<br>- `\"directory\"`: The user can add multiple files to their<br>submission by selecting a directory. If `file_type` is set,<br>only files matching those type(s) will be uploaded.<br>By default, uploaded files are limited to 200 MB each. You can<br>configure this using the `server.maxUploadSize` config option.\nFor more information on how to set config options, see<br>[`config.toml`](https://docs.streamlit.io/develop/api-reference/configuration/config.toml). |\n| file\\_type(str, Sequence\\[str\\], or None) | The allowed file types for uploaded files. This can be one of the<br>following values:<br>- `None` (default): All file extensions are allowed.<br>- A file extension: Only one file extension is allowed. For example,<br>to only accept CSV files, use `\"csv\"` or `\".csv\"`.<br>- A MIME type: Only one MIME type is allowed. For example,<br>to accept JPEG images, use `\"image/jpeg\"`.<br>- A MIME wildcard: All types within a MIME media type are allowed.<br>For example, to accept all images, use `\"image/*\"`.<br>- A MIME media type: This is a shortc"
+                  }
+                ]
+              }
+            }
+          ],
+          "tool_results": [
+            {
+              "tool": "format",
+              "args": {
+                "template": "brief",
+                "headline": "Tóm tắt st.chat_input trong Streamlit",
+                "items": [
+                  {
+                    "title": "st.chat_input - Streamlit Docs",
+                    "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+                    "source": "docs.streamlit.io",
+                    "summary": "Show API reference for\n\nVersion v1.67.0 _expand\\_more_\n\n1. Contents\n2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input)\n3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)\n\n_star_\n\n#### Tip\n\nRead the [Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps) tutorial to learn how to use `st.chat_message` and `st.chat_input` to build chat-based apps.\n\n## st.chat\\_input\n\nDisplay a chat input widget.\n\n| Function signature [\\[source\\]](https://github.com/streamlit/streamlit/blob/1.67.0/lib/streamlit/elements/widgets/chat.py#L662 \"View st.chat_input source code on GitHub\") |\n| --- |\n| st.chat\\_input(placeholder=\"Your message\", \\*, key=None, max\\_chars=None, max\\_upload\\_size=None, accept\\_file=False, file\\_type=None, accept\\_audio=False, audio\\_sample\\_rate=16000, disabled=False, submit\\_mode=\"submit\", on\\_submit=None, args=None, kwargs=None, width=\"stretch\", height=\"content\") |\n| --- |\n| Parameters |\n| placeholder(str) | A placeholder text shown when the chat input is empty. This<br>defaults to `\"Your message\"`. For accessibility reasons, you<br>should not use an empty string. |\n| key(str, int, or None) | An optional string or integer to use as the unique key for<br>the widget. If this is `None` (default), a key will be<br>generated for the widget based on the values of the other<br>parameters. No two widgets may have the same key. Assigning<br>a key stabilizes the widget's identity and preserves its<br>state across reruns even when other parameters change.<br>Note<br>Changing `accept_file`, `file_type`, `max_chars`,<br>or `max_upload_size` resets the widget even when a key<br>is provided.<br>A key lets you read or update the widget's value via<br>`st.session_state[key]`. For more details, see [Widget\\<br>behavior](https://docs.streamlit.io/develop/concepts/architecture/widget-behavior).\nAdditionally, if `key` is provided, it will be used as a<br>CSS class name prefixed with `st-key-`. |\n| max\\_chars(int or None) | The maximum number of characters that can be entered. If this is<br>`None` (default), there will be no maximum. |\n| max\\_upload\\_size(int or None) | The maximum allowed size of each uploaded file in megabytes.<br>If this is `None` (default), the maximum file size is set by the<br>`server.maxUploadSize` configuration option in your<br>`config.toml` file. If this is an integer, it must be positive<br>and will override the `server.maxUploadSize` configuration option. |\n| accept\\_file(bool, \"multiple\", or \"directory\") | Whether the chat input should accept files. This can be one of the<br>following values:<br>- `False` (default): No files are accepted and the user can<br>submit a message.<br>- `True`: The user can add a single file to their submission.<br>- `\"multiple\"`: The user can add multiple files to their<br>submission.<br>- `\"directory\"`: The user can add multiple files to their<br>submission by selecting a directory. If `file_type` is set,<br>only files matching those type(s) will be uploaded.<br>By default, uploaded files are limited to 200 MB each. You can<br>configure this using the `server.maxUploadSize` config option.\nFor more information on how to set config options, see<br>[`config.toml`](https://docs.streamlit.io/develop/api-reference/configuration/config.toml). |\n| file\\_type(str, Sequence\\[str\\], or None) | The allowed file types for uploaded files. This can be one of the<br>following values:<br>- `None` (default): All file extensions are allowed.<br>- A file extension: Only one file extension is allowed. For example,<br>to only accept CSV files, use `\"csv\"` or `\".csv\"`.<br>- A MIME type: Only one MIME type is allowed. For example,<br>to accept JPEG images, use `\"image/jpeg\"`.<br>- A MIME wildcard: All types within a MIME media type are allowed.<br>For example, to accept all images, use `\"image/*\"`.<br>- A MIME media type: This is a shortc"
+                  }
+                ]
+              },
+              "result": {
+                "tool": "render_digest",
+                "template": "brief",
+                "markdown": "**Tóm tắt st.chat_input trong Streamlit**\n\n- Show API reference for  Version v1.67.0 _expand\\_more_  1. Contents 2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input) 3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)  _sta... - [docs.streamlit.io](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input)",
+                "item_count": 1
+              }
+            }
+          ]
+        },
+        {
+          "round": 3,
+          "assistant_text": "**Tóm tắt `st.chat_input` trong Streamlit (theo docs chính thức v1.67.0)**\n\n`st.chat_input` là widget dùng để hiển thị ô nhập tin nhắn trong các ứng dụng chat Streamlit. Dưới đây là các điểm chính:\n\n| Tham số | Mô tả |\n|---|---|\n| **placeholder** | Văn bản hiển thị khi ô rỗng. Mặc định là `\"Your message\"`. **Lưu ý:** Không nên để chuỗi rỗng vì lý do truy cậpibilité. |\n| **key** | Khóa duy nhất để widget giữ trạng thái qua rerun. Nếu `None` sẽ tự tạo. Đặt key giúp đọc/ghi giá trị qua `st.session_state[key]`. |\n| **max_chars** | Giới hạn số ký tự nhập. Mặc định `None` (không giới hạn). |\n| **max_upload_size** | Kích thước file tối đa (MB). Mặc định `None` tuân theo cài `server.maxUploadSize` trong `config.toml`. |\n| **accept_file** | Cho phép upload file: `False` (mặc định), `True` (một file), `\"multiple\"`, `\"directory\"`. |\n| **file_type** | Loại file được phép (ext, MIME type, hoặc wildcard như `\"image/*\"`). |\n| **accept_audio** / **audio_sample_rate** | Tích hợp ghi âm audio (mặc định 16000 Hz). |\n| **disabled** | Vô hiệu hóa widget. |\n| **submit_mode** | Chế độ gửi, mặc định `\"submit\"`. |\n| **on_submit, args, kwargs** | Xử lý khi người dùng gửi. |\n| **width, height** | Kích thước widget (`\"stretch\"` mặc định). |\n\n💡 **Tip:** Đọc hướng dẫn \"[Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps)\" để biết cách kết hợp `st.chat_message` và `st.chat_input` xây dựng ứng dụng chat hoàn chỉnh.\n\n**Nguồn:** [Streamlit Docs – st.chat_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input)",
+          "tool_calls": [],
+          "tool_results": []
+        }
+      ],
+      "tool_events": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+            "items": [
+              {
+                "title": "st.chat_input - Streamlit Docs",
+                "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+                "source": "docs.streamlit.io",
+                "summary": "Show API reference for\n\nVersion v1.67.0 _expand\\_more_\n\n1. Contents\n2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input)\n3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)\n\n_star_\n\n#### Tip\n\nRead the [Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps) tutorial to learn how to use `st.chat_message` and `st.chat_input` to build chat-based apps.\n\n## st.chat\\_input\n\nDisplay a chat input widget.\n\n| Function signature [\\[source\\]](https://github.com/streamlit/streamlit/blob/1.67.0/lib/streamlit/elements/widgets/chat.py#L662 \"View st.chat_input source code on GitHub\") |\n| --- |\n| st.chat\\_input(placeholder=\"Your message\", \\*, key=None, max\\_chars=None, max\\_upload\\_size=None, accept\\_file=False, file\\_type=None, accept\\_audio=False, audio\\_sample\\_rate=16000, disabled=False, submit\\_mode=\"submit\", on\\_submit=None, args=None, kwargs=None, width=\"stretch\", height=\"content\") |\n| --- |\n| Parameters |\n| placeholder(str) | A placeholder text shown when the chat input is empty. This<br>defaults to `\"Your message\"`. For accessibility reasons, you<br>should not use an empty string. |\n| key(str, int, or None) | An optional string or integer to use as the unique key for<br>the widget. If this is `None` (default), a key will be<br>generated for the widget based on the values of the other<br>parameters. No two widgets may have the same key. Assigning<br>a key stabilizes the widget's identity and preserves its<br>state across reruns even when other parameters change.<br>Note<br>Changing `accept_file`, `file_type`, `max_chars`,<br>or `max_upload_size` resets the widget even when a key<br>is provided.<br>A key lets you read or update the widget's value via<br>`st.session_state[key]`. For more details, see [Widget\\<br>behavior](https://docs.streamlit.io/develop/concepts/architecture/widget-behavior).<br>Additionally, if `key` is provided, it will be used as a<br>CSS class name prefixed with `st-key-`. |\n| max\\_chars(int or None) | The maximum number of characters that can be entered. If this is<br>`None` (default), there will be no maximum. |\n| max\\_upload\\_size(int or None) | The maximum allowed size of each uploaded file in megabytes.<br>If this is `None` (default), the maximum file size is set by the<br>`server.maxUploadSize` configuration option in your<br>`config.toml` file. If this is an integer, it must be positive<br>and will override the `server.maxUploadSize` configuration option. |\n| accept\\_file(bool, \"multiple\", or \"directory\") | Whether the chat input should accept files. This can be one of the<br>following values:<br>- `False` (default): No files are accepted and the user can only<br>submit a message.<br>- `True`: The user can add a single file to their submission.<br>- `\"multiple\"`: The user can add multiple files to their<br>submission.<br>- `\"directory\"`: The user can add multiple files to their<br>submission by selecting a directory. If `file_type` is set,<br>only files matching those type(s) will be uploaded.<br>By default, uploaded files are limited to 200 MB each. You can<br>configure this using the `server.maxUploadSize` config option.<br>For more information on how to set config options, see<br>[`config.toml`](https://docs.streamlit.io/develop/api-reference/configuration/config.toml). |\n| file\\_type(str, Sequence\\[str\\], or None) | The allowed file types for uploaded files. This can be one of the<br>following values:<br>- `None` (default): All file extensions are allowed.<br>- A file extension: Only one file extension is allowed. For example,<br>to only accept CSV files, use `\"csv\"` or `\".csv\"`.<br>- A MIME type: Only one MIME type is allowed. For example,<br>to accept JPEG images, use `\"image/jpeg\"`.<br>- A MIME wildcard: All types within a MIME media type are allowed.<br>For example, to accept all images, use `\"image/*\"`.<br>- A MIME media type: This is a shortc"
+              }
+            ]
+          }
+        },
+        {
+          "tool": "format",
+          "args": {
+            "template": "brief",
+            "headline": "Tóm tắt st.chat_input trong Streamlit",
+            "items": [
+              {
+                "title": "st.chat_input - Streamlit Docs",
+                "url": "https://docs.streamlit.io/develop/api-reference/chat/st.chat_input",
+                "source": "docs.streamlit.io",
+                "summary": "Show API reference for\n\nVersion v1.67.0 _expand\\_more_\n\n1. Contents\n2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input)\n3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)\n\n_star_\n\n#### Tip\n\nRead the [Build a basic LLM chat app](https://docs.streamlit.io/develop/tutorials/chat-and-llm-apps/build-conversational-apps) tutorial to learn how to use `st.chat_message` and `st.chat_input` to build chat-based apps.\n\n## st.chat\\_input\n\nDisplay a chat input widget.\n\n| Function signature [\\[source\\]](https://github.com/streamlit/streamlit/blob/1.67.0/lib/streamlit/elements/widgets/chat.py#L662 \"View st.chat_input source code on GitHub\") |\n| --- |\n| st.chat\\_input(placeholder=\"Your message\", \\*, key=None, max\\_chars=None, max\\_upload\\_size=None, accept\\_file=False, file\\_type=None, accept\\_audio=False, audio\\_sample\\_rate=16000, disabled=False, submit\\_mode=\"submit\", on\\_submit=None, args=None, kwargs=None, width=\"stretch\", height=\"content\") |\n| --- |\n| Parameters |\n| placeholder(str) | A placeholder text shown when the chat input is empty. This<br>defaults to `\"Your message\"`. For accessibility reasons, you<br>should not use an empty string. |\n| key(str, int, or None) | An optional string or integer to use as the unique key for<br>the widget. If this is `None` (default), a key will be<br>generated for the widget based on the values of the other<br>parameters. No two widgets may have the same key. Assigning<br>a key stabilizes the widget's identity and preserves its<br>state across reruns even when other parameters change.<br>Note<br>Changing `accept_file`, `file_type`, `max_chars`,<br>or `max_upload_size` resets the widget even when a key<br>is provided.<br>A key lets you read or update the widget's value via<br>`st.session_state[key]`. For more details, see [Widget\\<br>behavior](https://docs.streamlit.io/develop/concepts/architecture/widget-behavior).\nAdditionally, if `key` is provided, it will be used as a<br>CSS class name prefixed with `st-key-`. |\n| max\\_chars(int or None) | The maximum number of characters that can be entered. If this is<br>`None` (default), there will be no maximum. |\n| max\\_upload\\_size(int or None) | The maximum allowed size of each uploaded file in megabytes.<br>If this is `None` (default), the maximum file size is set by the<br>`server.maxUploadSize` configuration option in your<br>`config.toml` file. If this is an integer, it must be positive<br>and will override the `server.maxUploadSize` configuration option. |\n| accept\\_file(bool, \"multiple\", or \"directory\") | Whether the chat input should accept files. This can be one of the<br>following values:<br>- `False` (default): No files are accepted and the user can<br>submit a message.<br>- `True`: The user can add a single file to their submission.<br>- `\"multiple\"`: The user can add multiple files to their<br>submission.<br>- `\"directory\"`: The user can add multiple files to their<br>submission by selecting a directory. If `file_type` is set,<br>only files matching those type(s) will be uploaded.<br>By default, uploaded files are limited to 200 MB each. You can<br>configure this using the `server.maxUploadSize` config option.\nFor more information on how to set config options, see<br>[`config.toml`](https://docs.streamlit.io/develop/api-reference/configuration/config.toml). |\n| file\\_type(str, Sequence\\[str\\], or None) | The allowed file types for uploaded files. This can be one of the<br>following values:<br>- `None` (default): All file extensions are allowed.<br>- A file extension: Only one file extension is allowed. For example,<br>to only accept CSV files, use `\"csv\"` or `\".csv\"`.<br>- A MIME type: Only one MIME type is allowed. For example,<br>to accept JPEG images, use `\"image/jpeg\"`.<br>- A MIME wildcard: All types within a MIME media type are allowed.<br>For example, to accept all images, use `\"image/*\"`.<br>- A MIME media type: This is a shortc"
+              }
+            ]
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "brief",
+            "markdown": "**Tóm tắt st.chat_input trong Streamlit**\n\n- Show API reference for  Version v1.67.0 _expand\\_more_  1. Contents 2. [st.chat\\_input](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#stchat_input) 3. [ChatInputValue](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input#chatinputvalue)  _sta... - [docs.streamlit.io](https://docs.streamlit.io/develop/api-reference/chat/st.chat_input)",
+            "item_count": 1
+          }
+        }
+      ],
+      "ended_at": "2026-11-10T18:43:34"
+    }
+  ]
+}

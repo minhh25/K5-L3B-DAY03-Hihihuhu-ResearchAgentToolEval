@@ -1,0 +1,6 @@
+{
+  "baseline_file": "runs/v0_B_base_openrouter_20261110T174805758386.json",
+  "sha256": "dc212aca1fdef291be85ad8f0ce840120abd53d83e1ea65f4f027b0228473f26",
+  "eval_base_sha256": "c917b3606e88643c27a479c43236f76ffa701ff271aa6d24c30e223fefd72c44",
+  "eval_extension_sha256": "73a8f4c72675e4a8ac9bb9e7b2a4de6082244c92076078cd96dd5eb0f4307f05"
+}

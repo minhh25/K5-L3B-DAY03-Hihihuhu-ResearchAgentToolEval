@@ -1,0 +1,72 @@
+{
+  "ui_revision": "friendly-local-v1",
+  "unit_ui_tests": 6,
+  "visual": {
+    "url": "http://127.0.0.1:8501",
+    "checks": [
+      {
+        "heading": "Bạn muốn tìm hiểu\nđiều gì hôm nay?",
+        "heading_y": 256,
+        "viewport": 1440,
+        "body_width": 1440,
+        "cards": [
+          {
+            "width": 278,
+            "x": 421
+          },
+          {
+            "width": 278,
+            "x": 731
+          },
+          {
+            "width": 278,
+            "x": 1041
+          }
+        ],
+        "sidebar": null,
+        "name": "desktop",
+        "screenshot": "analysis/ui_desktop.png"
+      },
+      {
+        "heading": "Bạn muốn tìm hiểu\nđiều gì hôm nay?",
+        "heading_y": 84,
+        "viewport": 390,
+        "body_width": 390,
+        "cards": [
+          {
+            "width": 352,
+            "x": 19
+          },
+          {
+            "width": 352,
+            "x": 19
+          },
+          {
+            "width": 352,
+            "x": 19
+          }
+        ],
+        "sidebar": null,
+        "name": "mobile",
+        "screenshot": "analysis/ui_mobile.png"
+      }
+    ],
+    "note": "Real Chrome rendering; no model calls or send actions."
+  },
+  "startup": {
+    "url": "http://127.0.0.1:8501",
+    "checks": [
+      {
+        "path": "/",
+        "status_code": 200
+      },
+      {
+        "path": "/_stcore/health",
+        "status_code": 200
+      }
+    ],
+    "server_kept_running_for_user": true
+  },
+  "model_calls_for_redesign": 0,
+  "browser_opened_for_user": true
+}

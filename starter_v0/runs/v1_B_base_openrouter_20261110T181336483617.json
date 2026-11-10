@@ -1,0 +1,2075 @@
+{
+  "run_id": "v1_B_base_openrouter_20261110T181336483617",
+  "version": "v1",
+  "artifact_version": "v1+p81a9c9153b25+t41a2894f8ad1",
+  "prompt_hash": "81a9c9153b25c055bf6fa700be926bfe404b010245d2091383774ba72aef4e52",
+  "tools_hash": "41a2894f8ad1b5f1af946a1ebd34dc809faa05f187393d1fb770540a67c9074a",
+  "phase": "B",
+  "suite": "base",
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3.5-lightning:free",
+  "system_prompt": "artifacts/versions/v1_system_prompt.md",
+  "tools": "artifacts/versions/v1_tools.yaml",
+  "eval_cases": "data/eval_base.json",
+  "dataset_id": "day03_v2_research_base",
+  "dataset_role": "base",
+  "description": "Core eval cho research agent: routing đúng tool + đúng args, hỏi lại khi thiếu (ask_user), xác nhận trước khi gửi, và xử lý câu ngoài phạm vi / không cần tool. Chấm trên tool_calls + args (subset). KHÔNG sửa file này — chỉ thêm case vào eval_group.json.",
+  "generated_at": "2026-11-10T18:13:36",
+  "execution_policy": "Read tools execute live; send proposals are scored but external writes are blocked.",
+  "summary": {
+    "total_cases": 20,
+    "measured_cases": 20,
+    "provider_error_cases": 0,
+    "passed_cases": 14,
+    "case_accuracy": 0.7,
+    "tool_routing_accuracy": 0.95,
+    "argument_accuracy": 0.7,
+    "multiturn_accuracy": 0.6667,
+    "failure_counts": {
+      "wrong_tool": 2,
+      "missing_info": 1,
+      "wrong_boundary": 1,
+      "wrong_arg_value": 2
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 5,
+      "extra_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "R01_user_tweets_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_user_tweets_name_to_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Tin CỦA một người nổi tiếng → map tên Sam Altman thành handle sama rồi gọi get_user_tweets."
+      },
+      "input": "Tweet mới nhất của Sam Altman là gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "sama",
+              "limit": 1
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "sama",
+            "limit": 1
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "sama",
+            "items": [
+              {
+                "title": "RT @fouadmatin: Today’s GPT-6 Cyber release is a meaningful step for defenders: stronger vulnerability research and bett",
+                "summary": "RT @fouadmatin: Today’s GPT-6 Cyber release is a meaningful step for defenders: stronger vulnerability research and better alignment. We’ve…",
+                "url": "https://x.com/sama/status/2118471941002842341",
+                "source": "@sama",
+                "date": "Thu Nov 05 22:34:04 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 53,
+                  "views": "47480"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R02_search_tweets_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_search_tweets",
+        "difficulty": "easy",
+        "what_it_tests": "Tweet theo CHỦ ĐỀ → search_tweets, không phải get_user_tweets."
+      },
+      "input": "Mọi người đang bàn gì về GPT-5 trên Twitter?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {}
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "GPT-5",
+              "search_type": "Latest",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "GPT-5",
+            "search_type": "Latest",
+            "limit": 10
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "GPT-5",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "@EdenBitton7 Depends how big your tasks are, ya mate. Plus Codex is 15 to 160 per 5 hours on GPT-6.1 Sol and 350 to 3,00",
+                "summary": "@EdenBitton7 Depends how big your tasks are, ya mate. Plus Codex is 15 to 160 per 5 hours on GPT-6.1 Sol and 350 to 3,000 on GPT-6 Luna, and the vendor calls those estimates. Pro $200 lists no five-hour limit, so it's for people who keep hitting that wall.",
+                "url": "https://x.com/Clevernesspc1/status/2120111903620084068",
+                "source": "@Clevernesspc1",
+                "date": "Tue Nov 10 11:10:42 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "2"
+                }
+              },
+              {
+                "title": "5毛钱买10个GPT号，号池管理用deepseek插件不够方便。",
+                "summary": "5毛钱买10个GPT号，号池管理用deepseek插件不够方便。\n\n搞了magpie插件，管理号池方便多了。\n\n以后就用magpie，其他号池管理退休了。\n\n#GPT #号池管理",
+                "url": "https://x.com/Stanllll6o/status/2120111103091024160",
+                "source": "@Stanllll6o",
+                "date": "Tue Nov 10 11:07:31 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "15"
+                }
+              },
+              {
+                "title": "你用过下面哪几个模型？",
+                "summary": "你用过下面哪几个模型？\n\nGPT-1\nGPT-2\nGPT-3\nGPT-3.5\nGPT-3.5-Turbo\nGPT-4\nGPT-4-32K\nGPT-4-Turbo\nGPT-4o\nGPT-4o-mini\no1-preview\no1-mini\no1\no1-pro\no3-mini\no3\no3-pro\no4-mini\nGPT-4.5\nGPT-4.1\nGPT-4.1-mini\nGPT-4.1-nano\nGPT-5\nGPT-5-mini\nGPT-5-nano\nGPT-5-Codex\nGPT-5-Pro\nGPT-5.1\nGPT-5.1-Codex\nGPT-5.1-Codex-Max\nGPT-5.2\nGPT-5.2-Pro\nGPT-5.2-Codex\nGPT-5.3-Codex\nGPT-5.3-Instant\nGPT-5.4\nGPT-5.4-Pro\nGPT-5.4-mini\nGPT-5.4-nano\nGPT-5.5\nGPT-5.5-Pro\nGPT-5.6-Sol\nGPT-5.6-Terra\nGPT-5.6-Luna\nGPT-6-Astra\nGPT-6-Sol\nGPT-6-Luna\nGPT-6.1-Sol\nGPT-6.1-Terra\nGPT-6-Rosalind\nGPT-6-Cyber",
+                "url": "https://x.com/yygqdkqk/status/2120111057167606050",
+                "source": "@yygqdkqk",
+                "date": "Tue Nov 10 11:07:20 +0000 2026",
+                "metrics": {
+                  "favorites": 3,
+                  "retweets": 0,
+                  "views": "24"
+                }
+              },
+              {
+                "title": "@Dicklong1999 2 个 Pro 100 大于 1 个 Pro 500，1 个 Pro 100 大于 5-6 个 plus，GPT 叔叔解决数学难题的能力用在这里我是真服了，这账算得比我上班摸鱼算工资还溜，Pro 账户的性价比这下",
+                "summary": "@Dicklong1999 2 个 Pro 100 大于 1 个 Pro 500，1 个 Pro 100 大于 5-6 个 plus，GPT 叔叔解决数学难题的能力用在这里我是真服了，这账算得比我上班摸鱼算工资还溜，Pro 账户的性价比这下是真藏不住了。",
+                "url": "https://x.com/Betaer/status/2120111037227876551",
+                "source": "@Betaer",
+                "date": "Tue Nov 10 11:07:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "10"
+                }
+              },
+              {
+                "title": "GPT Image",
+                "summary": "GPT Image\n\n提示词：\n绝美23岁东亚成年女性，身材匀称丰满，上围明显自然丰满圆润、富有真实体量感，配合纤细腰部，胸腰差明显，但不夸张、不假体感。鹅蛋脸、深棕杏眼，黑长发顺着肩后铺开，淡玫瑰眼妆配红润唇色，眉眼舒展，肤理自然。\n她穿雾紫色短袖蕾丝连体内衣，宽低方领落在胸前，弧形杯缝呈现自然轮廓，细小几何花纹沿肩袖延伸，腰部用平整细织面料收拢，腿口为流畅弧线；重点是短袖、方领与连续腰线，而非装饰绑带。夜晚，她斜坐在梳妆台旁的矮软榻上，背部由斜置软垫承托，双腿并拢沿榻面伸展、膝部微弯，双手分别松落在髋旁榻面，不承担上身重量。脸转向摄影者，目光越过镜头落向稍远处，嘴角自然轻扬，姿态舒展而不刻意拱背。\n写实内衣编辑摄影，4:5竖幅，50mm，机位位于软榻斜前方、略高于她的面部，头顶、发型与下巴完整入镜，顶部留少量空间，下缘裁至膝上。右前方柔光塑造面颊与腰侧，梳妆镜边缘和暖灯留在柔暗背景；蕾丝花纹、织面细纹与自然衣褶清楚，脸部明亮，身体保留柔和明暗。",
+                "url": "https://x.com/sdjn_wgc/status/2120110751314596059",
+                "source": "@sdjn_wgc",
+                "date": "Tue Nov 10 11:06:07 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "85"
+                }
+              },
+              {
+                "title": "GPT Image",
+                "summary": "GPT Image\n\n提示词：\n绝美23岁东亚成年女性，身材匀称丰满，上围明显自然丰满圆润、富有真实体量感，配合纤细腰部，胸腰差明显，但不夸张、不假体感。鹅蛋脸、深棕杏眼，黑长发落在背后，妆面轻盈，唇色自然红润，眼睛明亮。\n她穿杏橘色柔缎交叉挂脖文胸，两条窄带在锁骨下方交叉后绕向颈后，分杯边缘形成低开的V形，弧形杯缝顺着上身贴合；搭配烟棕色低腰高腿口内裤，腰边用一条杏橘细滚边呼应上装。她坐在梳妆台旁的浅色地毯上，双腿并拢折向身体一侧，坐骨稳定着地，上身舒展，一手撑在远侧地毯，另一手自然落在近侧膝旁，肩线向摄影者轻转。她抬眼与镜头对视，眼尾有一点柔软笑意，嘴唇自然轻合，挂脖交叉线与腰线完整可见。\n夜间写实私房时尚摄影，4:5竖幅，50mm，机位与坐姿眼高齐平，完整保留头顶、发型与下巴，顶部略留空间，下方包含折向侧面的双腿与足尖。左前方柔光照亮脸，梳妆台下的暗部保持层次；背景只留木质桌腿与台灯暖点，柔缎窄高光、滚边和地毯短绒清楚，人物贴近画面，不用俯视压缩身体。",
+                "url": "https://x.com/sdjn_wgc/status/2120110731320336442",
+                "source": "@sdjn_wgc",
+                "date": "Tue Nov 10 11:06:02 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "73"
+                }
+              },
+              {
+                "title": "@theo Genuinely curious what people are using that can’t handle context. I haven’t had context issues since pre gpt 5",
+                "summary": "@theo Genuinely curious what people are using that can’t handle context. I haven’t had context issues since pre gpt 5",
+                "url": "https://x.com/ollymarkey/status/2120110444153290954",
+                "source": "@ollymarkey",
+                "date": "Tue Nov 10 11:04:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "38"
+                }
+              },
+              {
+                "title": "𝖈𝖍𝖆𝖙 𝖌𝖕𝖙 𝖕𝖗𝖊𝖒𝖎𝖚𝖒 𝖕𝖑𝖚𝖘 sharing",
+                "summary": "𝖈𝖍𝖆𝖙 𝖌𝖕𝖙 𝖕𝖗𝖊𝖒𝖎𝖚𝖒 𝖕𝖑𝖚𝖘 sharing\n- 𝒮𝑒𝒽𝒶𝓇𝒾 (6𝓀)\n- 2 𝒽𝒶𝓇𝒾 (9𝓀)\n- 3 𝒽𝒶𝓇𝒾 (12𝓀)\n- 4 𝒽𝒶𝓇𝒾 (15𝓀)\n- 5 𝒽𝒶𝓇𝒾 (17.5𝓀)\n- 𝒮𝑒𝓂𝒾𝓃𝑔𝑔𝓊 (22𝓀)\n\nBulanan 𝔀𝓽𝓼 ready 𝔀𝓽𝓫 pro 𝓬𝓱𝓪𝓽𝓰𝓹𝓽 murah 𝓳𝓾𝓪𝓵 𝓫𝓮𝓵𝓲 go 𝓒𝓸𝓭𝓮𝔁 harian #zonauang https://t.co/a2QIiyumAb",
+                "url": "https://x.com/ChanieBiz/status/2120110069753012446",
+                "source": "@ChanieBiz",
+                "date": "Tue Nov 10 11:03:25 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "92"
+                }
+              },
+              {
+                "title": "tried fable 5.2 on the 5 held-out games (with the same rules: 1 response each, no tools, graded with the official verify",
+                "summary": "tried fable 5.2 on the 5 held-out games (with the same rules: 1 response each, no tools, graded with the official verify script). did 2 samples per game: breakout 505/494, asterix 226/151, seaquest 134/212. gpt-6 astra averaged 483, 70 and 18 on those in my runs (3 samples each)",
+                "url": "https://x.com/fusermeta/status/2120109770539708743",
+                "source": "@fusermeta",
+                "date": "Tue Nov 10 11:02:13 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "11"
+                }
+              },
+              {
+                "title": "Alpha Arena season 1 (Nof1): 6 models, $10,000 each, crypto perps on Hyperliquid, about two weeks.",
+                "summary": "Alpha Arena season 1 (Nof1): 6 models, $10,000 each, crypto perps on Hyperliquid, about two weeks.\n\n Qwen3 Max +22.3%, DeepSeek +4.89%, Claude Sonnet 4.5 −30.81%, Grok 4 −45.3%, Gemini 2.5 Pro −56.71%, GPT-5 −62.66%. Win rates were 25% to 30%.\n The later stock contests (Bloomberg via Business Standard, May 7 2026): 32 results, 6 in profit, and the portfolio lost about a third.\n These are frontier models in a public contest, not the exact bots being sold. Figures are as the sources reported them, not our count.",
+                "url": "https://x.com/nullregistry/status/2120109761718804884",
+                "source": "@nullregistry",
+                "date": "Tue Nov 10 11:02:11 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "11"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R03_web_news_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_web_news",
+        "difficulty": "medium",
+        "what_it_tests": "Tin thời sự trên web → web_search topic=news, timeframe=day (hôm nay)."
+      },
+      "input": "Tin tức AI hôm nay có gì nổi bật?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI news today",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "query: expected 'AI', got 'AI news today'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI news today",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI news today",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "TI redefines embedded development with agentic AI in its CCStudio™ ecosystem, empowering engineers to accelerate innovation — TradingView News",
+                "url": "https://www.tradingview.com/news/prnewswire:ef3fcc43cc632:0-ti-redefines-embedded-development-with-agentic-ai-in-its-ccstudio-ecosystem-empowering-engineers-to-accelerate-innovation",
+                "source": "tradingview.com",
+                "summary": "DALLAS, Nov. 10, 2026 /PRNewswire/ -- Texas Instruments (TI) (Nasdaq: TXN) today announced significant enhancements to its CCStudio™ ecosystem, strengthening its agentic artificial intelligence (AI) capabilities in order to streamline embedded software development across microcontroller (MCU), wireless connectivity and radar applications. Moving beyond generative code assistance toward autonomous development, the CCStudio ecosystem's agentic AI framework injects device-specific knowledge [...] Enablement across TI's embedded processing portfolioAgentic AI capabilities in TI's CCStudio ecosystem are available today across its general-purpose and real-time MCUs, wireless connectivity devices, and radar systems-on-chip. With a modular architecture that spans task-specific skills, MCP server integrations and context injection, CCStudio tools are designed to continuously expand support for new devices, updated SDKs and emerging edge AI development workflows. [...] knowledge directly into the AI tools engineers already use, enabling them to accelerate complex design tasks from months to days and focus on system-level design and innovation. TI is showcasing these innovations at electronica 2026, Nov. 10-13, in Munich, Germany.",
+                "score": 0.5129823
+              },
+              {
+                "title": "All the latest updates on AI data centers | The Verge",
+                "url": "https://www.theverge.com/ai-artificial-intelligence/902546/data-centers-ai-energy-power-grids-controversy",
+                "source": "theverge.com",
+                "summary": "Read Article >\n “We are a data center first company,” AMD CEO Lisa Su says.\n ## OpenAI is stepping back from NDAs for data center projects\n\n  Following this week’s midterms where voters resoundingly voiced their opposition to data center expansion, OpenAI today announced new commitments to communities where it is working on data center projects, including that it won’t use non-disclosure agreements (NDAs) with public officials. [...] Many data center projects have come under scrutiny for relying on NDAs to hide discussions between developers and local officials. However, OpenAI says it is now allowing “only narrow protections covering legitimate security information, trade secrets, or proprietary or competitively sensitive information.” In October, Amazon announced it would no longer use NDAs with government agencies it works with on data center projects.\n\n  Read Article >\n This week in the big AI data center buildout. [...] At the same time, tech money has been pouring into many of these races. Leading the Future, a super PAC backed by venture capitalist Marc Andreessen and OpenAI President Greg Brockman, has already spent $45 million in a year. And Public First Action, an Anthropic-backed group that says it supports AI safeguards, says it’s raised $80 million. Both have funded Democratic and Republican-aligned groups. Other super PACs see an opportunity to push for stricter AI policies, like the recently",
+                "score": 0.58474547
+              },
+              {
+                "title": "TikTok updates its AI video ad tools | Social Media Today",
+                "url": "https://www.socialmediatoday.com/news/tiktok-updates-its-ai-video-ad-tools/874209",
+                "source": "socialmediatoday.com",
+                "summary": "TikTok has added some new elements to its artificial intelligence-powered Symphony ad creation tools, including advanced video generation using the latest models, an updated Symphony API and broader access to AI usage tokens.\n\nFirst, TikTok added more capacity to generate video ads using the latest Dreamina Seedance AI models within its Symphony Agent tool.\n\nTikTok Symphony update [...] TikTok said advertisers will now be able to upload up to 50 multimodal references (images, videos, and audio), up from 9 previously, while the updated Seedance models will now be able to generate up to 30 seconds of video for each prompt, up from a previous 15-second maximum.\n\nTikTok said the latest Dreamina Seedance model is also able to generate sharper, more realistic imagery and offer better lighting and character consistency across video frames. [...] The company also expanded access to its BytePlus tokens, which will enable more use of its Symphony tools for visual generation.\n\n“Starting November 9, advertisers outside North America can purchase BytePlus tokens to access Dreamina Seedance AI models through Symphony, enabling faster video generation, higher-quality output, and more formats,” TikTok said.\n\nBytePlus is the enterprise technology arm of TikTok parent company ByteDance, and it manages all of the company’s AI tools and systems.",
+                "score": 0.5266167
+              },
+              {
+                "title": "The BSO Meets AI, and Explores the Vitality of Classical Music Today | The Harvard Crimson",
+                "url": "https://www.thecrimson.com/article/2026/11/9/already-and-not-yet-tod-machover-bso-review",
+                "source": "thecrimson.com",
+                "summary": "At the center of Machover’s composition philosophy is his belief that classical music finds a natural extension and innovation in technology. He revealed in an interview with GBH music that the music he hears in his head is often beyond the scope of traditional instruments. Thus, alongside the MIT Media Lab, Machover has developed an audio AI that takes in the playing of the orchestra as input and produces live synthetic sounds that — as Machover puts it — “enhances” the orchestra. [...] From Oct. 22 to 24, the Boston Symphony Orchestra and conductor Kent Nagano performed “already and not yet: A world premiere by Tod Machover.” The headliner was a modern classical work: an onstage musical dialogue between the BSO and a live AI system. Beyond the philosophical implications of the concept, the performance struck at a key nerve of classical music culture — a delicate balancing of tradition and relevance. [...] The piece was divided into three movements. The first movement, “SMASH UP,” was, in Machover’s words, a “clash/crisis” without audible enhancement from the AI.\n\nThe second, “WAKE UP,” was an “awakening”: the AI slowly produced sound in response to various solo lines in the orchestra. Then the last movement, “STAND UP,” was a “depiction of democracy,” as the musicians and AI listened to one another and negotiated the final musical product.",
+                "score": 0.31341976
+              },
+              {
+                "title": "Is Ai Holdings (TSE:3076) Priced For Its Cash Flow Strength?",
+                "url": "https://sg.finance.yahoo.com/news/ai-holdings-tse-3076-priced-091344322.html",
+                "source": "sg.finance.yahoo.com",
+                "summary": "Simply Wall St Narratives for Ai Holdings pick up where the DCF puzzle leaves off and explain which combinations of future growth, profitability and earnings power would need to occur for Ai Holdings' share price to appear meaningfully higher or lower than it does today. Each narrative links its valuation view to a specific path for revenue expansion, margins and risk, giving you something concrete to compare against as new results and disclosures are released. [...] Simply Wall St.\n\n# Is Ai Holdings (TSE:3076) Priced For Its Cash Flow Strength?\n\nBailey Pemberton\n\n3 min read\n\n 3076.T\n\n  +1.17%\n 3076\n\nAi Holdings has delivered strong long term share gains, which naturally raises a question for anyone looking at the stock today. Are the cash flows that the business can generate enough to support the current price, or has sentiment moved ahead of the underlying numbers? [...] ### The Ai Holdings Narrative: What Would Justify Today's Price?",
+                "score": 0.19421494
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R04_read_url_routing",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "routing_read_url",
+        "difficulty": "easy",
+        "what_it_tests": "Đã có link cụ thể → read_url, không phải web_search."
+      },
+      "input": "Tóm tắt bài này giúp mình: https://openai.com/blog/gpt-5",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://openai.com/blog/gpt-5"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://openai.com/blog/gpt-5"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://openai.com/blog/gpt-5",
+            "items": [
+              {
+                "title": "OpenAI",
+                "url": "https://openai.com/blog/gpt-5",
+                "source": "openai.com",
+                "summary": "OpenAI\n\n# 404\n\nSearch finds no result\n\nThe question still earns its keep\n\nAsk it a new way\n\nby [gpt-6-astra(opens in a new window)](https://chatgpt.com/?surface=work&model=gpt-6-astra-wm&openaicom-did=52cdc990-ae75-4748-bf07-215286d35858&openaicom_referred=true)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R05_limit_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_limit",
+        "difficulty": "easy",
+        "what_it_tests": "Trích đúng limit=10 từ '10 tweet'."
+      },
+      "input": "Lấy 10 tweet mới nhất của Elon Musk",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 10
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "elonmusk",
+            "limit": 10
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "elonmusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 135,
+                  "views": "396568"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 5359,
+                  "retweets": 548,
+                  "views": "516844"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 90,
+                  "views": "367985"
+                }
+              },
+              {
+                "title": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...",
+                "summary": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...\n\n if only you knew how great…",
+                "url": "https://x.com/elonmusk/status/2120090806765932705",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:46:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 88,
+                  "views": "438560"
+                }
+              },
+              {
+                "title": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 ",
+                "summary": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 million Series A, p…",
+                "url": "https://x.com/elonmusk/status/2120082348398256182",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:13:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 168,
+                  "views": "458317"
+                }
+              },
+              {
+                "title": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any fur",
+                "summary": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any further proof that thi…",
+                "url": "https://x.com/elonmusk/status/2119996001490768028",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:30:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1389,
+                  "views": "565366"
+                }
+              },
+              {
+                "title": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 m",
+                "summary": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 million last year ma…",
+                "url": "https://x.com/elonmusk/status/2119993726898774521",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:21:06 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 428,
+                  "views": "491993"
+                }
+              },
+              {
+                "title": "RT @ricwe123: The Germans are learning what mass immigration really means.",
+                "summary": "RT @ricwe123: The Germans are learning what mass immigration really means.\n\n\"Wir schaffen das\" https://t.co/pEQc1OMbao",
+                "url": "https://x.com/elonmusk/status/2119992481156829218",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:16:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 2316,
+                  "views": "471317"
+                }
+              },
+              {
+                "title": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "summary": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "url": "https://x.com/elonmusk/status/2119991850820051347",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:39 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 356,
+                  "views": "446375"
+                }
+              },
+              {
+                "title": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. ",
+                "summary": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. \nNo forensic evidence. No DNA. No CCTV. \n\nSame country and sy…",
+                "url": "https://x.com/elonmusk/status/2119991792842260619",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:25 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 823,
+                  "views": "414420"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R06_timeframe_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_timeframe",
+        "difficulty": "medium",
+        "what_it_tests": "'tuần này' → timeframe=week."
+      },
+      "input": "Tin công nghệ trong tuần này",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "technology news week",
+              "topic": "news",
+              "timeframe": "week",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "technology news week",
+            "topic": "news",
+            "timeframe": "week",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "technology news week",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Tech set to still sway US stock market's course despite AI-driven swoon | Reuters",
+                "url": "https://www.reuters.com/business/tech-set-still-sway-us-stock-markets-course-despite-ai-driven-swoon-2026-11-09",
+                "source": "reuters.com",
+                "summary": "A month-long swoon in technology and AI-related stocks culminated this week in the biggest one-day drop for the S&P 500 technology sector in ‌over six years. Investors are concerned Democratic victories in the midterm elections would lead to slower data-center spending that has been at the heart of the market's rally.\n\nThe Reuters Daily Briefing newsletter provides all the news you need to start your day. Sign up here. [...] The P/E ratio for the overall S&P 500 stood at 17.9. This week marked the first time since 2017 that the tech sector's P/E has fallen below that of the broader market.\n\nThe drop in valuations means \"arguably ... the market is already pricing in a lot of bad news,\" said Keith Lerner, chief investment officer at Truist Advisory Services.\n\n\"We are moving toward a situation where a little good news could go a long way,\" Lerner ​said in a note on Thursday. [...] NEW YORK, Nov 9 (Reuters) - Even with the steep pullback in AI names, the US stock market is poised to rely on the performance of technology shares — and investors are on guard for obstacles that could trip up the ​trade in the coming weeks.",
+                "score": 0.5404151
+              },
+              {
+                "title": "China’s Military Tech Emerges on Both Sides of Saudi-Houthi War - Newsweek",
+                "url": "https://www.newsweek.com/chinas-military-tech-emerges-on-both-sides-of-saudi-houthi-war-12677448",
+                "source": "newsweek.com",
+                "summary": "\"I am certain that both Saudi Arabia and the Houthis are using Chinese technology in their missile programs, although in the case of the Houthis it is unclear whether that technology is provided solely through Iran or whether there is some direct Chinese assistance,\" Jeffrey Lewis, lecturer at Stanford University 's Center for International Security and Cooperation and research fellow at the Foreign Policy Research Institute (FPRI), told Newsweek. [...] develop their own version of Iran's Kheibar Shekan medium-range ballistic missile. While Chinese officials vehemently deny any effort to stoke the flames of conflict ravaging the Middle East, analysts say the developments shine a spotlight on some of the otherwise murkier reaches of Beijing's global defense influence and a major setback for international arms control efforts. \"I am certain that both Saudi Arabia and the Houthis are using Chinese technology in their missile programs, although in [...] Also in 2014, Saudi Arabia put its DF-3 fleet on display for the first time during a military parade. The exhibition confirmed decades of speculation on Riyadh's acquisition of Chinese missiles, while reports of yet another deal involving the transfer of technology allowing the Kingdom to bolster its domestic missile production emerged in 2021, drawing backlash from some voices in Washington.",
+                "score": 0.4889428
+              },
+              {
+                "title": "SPS to tighten student tech policies this week for students in grades 3 to 5",
+                "url": "https://komonews.com/news/local/seattle-public-schools-ben-shuldiner-tighten-student-technology-policies-grades-3-to-5-screen-time-cap-minecraft-youtube-gemini-blocked-ai",
+                "source": "komonews.com",
+                "summary": "SEATTLE — Seattle Public Schools (SPS) is tightening its technology rules for some students this week, adding new limits aimed at reducing distractions and curbing reliance on generative AI tools.\n\nSuperintendent Ben Shuldiner said that when he arrived in Seattle, it was clear the district had “steered too heavily into an overreliance of technology.” [...] RELATED | Seattle schools to cap elementary students' screen time, block unapproved AI tools\n\nParents have been asking the district to review how technology is used in classrooms, saying students are getting distracted or relying too heavily on generative AI tools. [...] Under the changes, students in grades three through five will have a one-hour daily cap on screen time. The limit includes activities such as watching a 10-minute educational video.\n\nThe district will also no longer allow iPads and laptops to be used as incentives or rewards. In addition, Seattle Public Schools is blocking access to Minecraft, YouTube and Gemini, programs Shuldiner said have been \"abused.\"",
+                "score": 0.48396602
+              },
+              {
+                "title": "Why Marvell Technology Stock Plunged 28.1% This Week",
+                "url": "https://finance.yahoo.com/markets/stocks/articles/why-marvell-technology-stock-plunged-151724256.html",
+                "source": "finance.yahoo.com",
+                "summary": "Marvell Technology sells wired networking and data infrastructure chips that process and move data within data centers and telecommunications networks to cloud providers and equipment makers. While adding optical laser manufacturing expands the target market for artificial intelligence connectivity, paying a fivefold premium over Lumentum's share price from a year ago strains balance-sheet discipline. Marvell's $115 billion acquisition of Lumentum shifts the investment case from a high-margin [...] Lumentum manufactures laser components and optical transceivers that convert light signals into electronic data inside high-speed networks. Combining those optical lasers with Marvell's electronic digital signal processors allows the buyer to offer integrated optical interconnect modules for data centers. However, regulators in China and the U.S. must approve the tie-up, a process management expects could stretch into early 2028. Analysts also warned that Lumentum competes with several of [...] ## What's next for Marvell Technology\n\nInvestors will get their next operational update when Marvell reports fiscal third-quarter results on Dec. 1, 2026. Management narrowed its preliminary quarterly revenue guidance to approximately $3.2 billion, but near-term financial results are taking a back seat to deal execution risks. The stock is down 57.2% (as of the close on Friday, Nov. 6) from its 52-week high of $329.88, reflecting how sharply sentiment turned following the merger news.",
+                "score": 0.3127692
+              },
+              {
+                "title": "The latest AI-powered martech news and releases",
+                "url": "https://martech.org/the-latest-ai-powered-martech-news-and-releases",
+                "source": "martech.org",
+                "summary": "Vurvey Labs unveiled Freckle at Advertising Week, bringing human-grounded consumer research to market. It indexes video consumer interviews, extracts qualitative audience themes, and generates interactive brand strategy recommendations. [...] For marketing ops teams, that’s the real issue behind all the talk about context.\n\nThe work isn’t attaching more files to an agent. It’s building a reliable way to keep customer information, company rules, strategy, and execution aligned as more marketing work happens automatically.\n\nHere are this week’s AI-powered martech releases and news:\n\n## November 5, 2026",
+                "score": 0.25632483
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R07_search_type_arg",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_search_type",
+        "difficulty": "medium",
+        "what_it_tests": "'phổ biến/top' → search_type=Top (không phải Latest)."
+      },
+      "input": "Cho mình các tweet phổ biến (top) nhất về OpenAI",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "search_type": "Top"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "OpenAI",
+              "search_type": "Top",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "OpenAI",
+            "search_type": "Top",
+            "limit": 10
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "OpenAI",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "ChatGPT and Codex are helping engineers build for the physical world.",
+                "summary": "ChatGPT and Codex are helping engineers build for the physical world.\n\nWe’re sharing our progress across mechanical design, electrical engineering, and simulation—from helping our hardware teams iterate faster to testing new workflows with industry collaborators. https://t.co/b3rW9zYJGA",
+                "url": "https://x.com/OpenAI/status/2117692475775258785",
+                "source": "@OpenAI",
+                "date": "Tue Nov 03 18:56:45 +0000 2026",
+                "metrics": {
+                  "favorites": 8436,
+                  "retweets": 754,
+                  "views": "1399504"
+                }
+              },
+              {
+                "title": "Two OpenAI team members worked with GPT-6 Astra to design a prototype device for talking to Codex in under a week, as a ",
+                "summary": "Two OpenAI team members worked with GPT-6 Astra to design a prototype device for talking to Codex in under a week, as a side project.\n\nAstra designed the enclosure, circuit board, interface, and software. Getting it manufactured still required several rounds of review and iteration.",
+                "url": "https://x.com/OpenAI/status/2117692477947641954",
+                "source": "@OpenAI",
+                "date": "Tue Nov 03 18:56:46 +0000 2026",
+                "metrics": {
+                  "favorites": 1600,
+                  "retweets": 88,
+                  "views": "566177"
+                }
+              },
+              {
+                "title": "I still don't understand why everyone is not using this yet. Thanks to it, a year ago I increased my income to 15,000 do",
+                "summary": "I still don't understand why everyone is not using this yet. Thanks to it, a year ago I increased my income to 15,000 dollars a month\n\nAndrey Karpathy, co-founder of OpenAI, published a simple idea that got 25 million views: stop using AI to write code, use it to build a second brain\n\nYou point Claude Code to a folder, drop any source in there (an article, transcript, PDF) and Claude reads it, links it, and saves it into a living wiki of everything you know. It compounds like interest: the more you feed it, the smarter it gets\n\nHere is the gist:\n\nInstall Obsidian, create a vault, open it in Claude Code\n\nPaste the file with Karpathy's wiki idea and tell Claude to build it\n\nClaude creates three folders: raw for sources, wiki for its pages, CLAUDE\nwhich runs everything\n\nDrop any source into raw and say ingest this\n\nAsk questions across everything, forever\n\n5 minutes to set up, and you never start with an empty chat again\n\nThe full instructions can be found in the article below",
+                "url": "https://x.com/Bober_smart/status/2119070145284841481",
+                "source": "@Bober_smart",
+                "date": "Sat Nov 07 14:11:07 +0000 2026",
+                "metrics": {
+                  "favorites": 1182,
+                  "retweets": 128,
+                  "views": "95537"
+                }
+              },
+              {
+                "title": "Introducing GPT‑6 Cyber: a major advance in security research that pairs stronger capabilities with better model alignme",
+                "summary": "Introducing GPT‑6 Cyber: a major advance in security research that pairs stronger capabilities with better model alignment.\n\nThe model powered the Linux kernel research we announced yesterday, and security teams at companies like Mozilla, Palo Alto Networks, Calif, and Cisco—alongside our own at OpenAI—are already putting it to work.\n\nGPT-6 Cyber is available to select Daybreak Red customers and we are expanding access over time.\n\nhttps://t.co/Nzab3Z1Td6",
+                "url": "https://x.com/OpenAI/status/2118390190246879554",
+                "source": "@OpenAI",
+                "date": "Thu Nov 05 17:09:13 +0000 2026",
+                "metrics": {
+                  "favorites": 21425,
+                  "retweets": 2003,
+                  "views": "4128852"
+                }
+              },
+              {
+                "title": "Introducing ChatGPT Business Premium Seats",
+                "summary": "Introducing ChatGPT Business Premium Seats\n\nThe new $100 Premium seat is a game changer for small businesses and startups—giving lean teams better tools, faster workflows, and capabilities once reserved for big companies.\n\nA flexible plan that scales with your team’s ambition.\n\nhttps://t.co/zxvwwaOaVF",
+                "url": "https://x.com/OpenAI/status/2092335305366069305",
+                "source": "@OpenAI",
+                "date": "Tue Aug 25 19:36:25 +0000 2026",
+                "metrics": {
+                  "favorites": 4210,
+                  "retweets": 259,
+                  "views": "2520681"
+                }
+              },
+              {
+                "title": "For AGI to benefit all of humanity, it should help people with the everyday tasks that matter most to them. So we built ",
+                "summary": "For AGI to benefit all of humanity, it should help people with the everyday tasks that matter most to them. So we built LifeVal, a new benchmark shaped by feedback from thousands of ChatGPT users on where they most want help from a personal assistant—from finding childcare to accessing government services to managing personal finances.\n\nOver the past year, we’ve used LifeVal to measure and improve how well our models handle these everyday tasks.\n\nhttps://t.co/GlUjixzEM0",
+                "url": "https://x.com/OpenAI/status/2117307611338997846",
+                "source": "@OpenAI",
+                "date": "Mon Nov 02 17:27:26 +0000 2026",
+                "metrics": {
+                  "favorites": 6596,
+                  "retweets": 473,
+                  "views": "820129"
+                }
+              },
+              {
+                "title": "Our latest model advances bring stronger capabilities for building and migrating software in low-resource programming la",
+                "summary": "Our latest model advances bring stronger capabilities for building and migrating software in low-resource programming languages such as COBOL, Fortran, and Visual Basic.\n\nThese languages power software that banks, governments, and businesses depend on. Progress here means understanding decades of business logic and helping developers modernize those systems while preserving what works.\n\nWe’re building these capabilities around the challenges developers and enterprise customers bring us. If your team is working on these systems, tell us which languages and workflows we should tackle next.\n\nhttps://t.co/2TbnkQixJ1",
+                "url": "https://x.com/OpenAI/status/2112310345863930168",
+                "source": "@OpenAI",
+                "date": "Mon Oct 19 22:30:05 +0000 2026",
+                "metrics": {
+                  "favorites": 9541,
+                  "retweets": 680,
+                  "views": "1806763"
+                }
+              },
+              {
+                "title": "OpenAI is f*cking cooking... Sam Altman's team just shared 106 Codex plugins and skills for free, and most of them repla",
+                "summary": "OpenAI is f*cking cooking... Sam Altman's team just shared 106 Codex plugins and skills for free, and most of them replace a tool you already pay for\n\n62 plugins, 44 skills, 170,000 GitHub stars. the average team pays $2,000 a month for the apps these plug into. Codex now runs them for you at $0 extra\n\npick by the job that eats your week:\n\n→ shipping an app: build-ios-apps, build-web-apps, vercel\n→ getting paid: stripe, shopify\n→ design: figma, canva, adobe\n→ inbox and meetings: gmail, slack, zoom, granola\n→ keeping it safe: codex-security, sentry\n\nopen Codex, ask it to install the plugin by name, connect your account and give it the first task\n\nplugins: https://t.co/OTm3idf2a4\nskills: https://t.co/OIahJIqKYw\n\nmost people will scroll past this and keep paying for 10 apps. you just need one plugin to start\n\nthe whole stack, running live below ↓",
+                "url": "https://x.com/mika_systems/status/2119876302903636459",
+                "source": "@mika_systems",
+                "date": "Mon Nov 09 19:34:30 +0000 2026",
+                "metrics": {
+                  "favorites": 201,
+                  "retweets": 34,
+                  "views": "13775"
+                }
+              },
+              {
+                "title": "Privacy should advance as fast as intelligence. OpenAI Private Intelligence gives businesses stronger controls over thei",
+                "summary": "Privacy should advance as fast as intelligence. OpenAI Private Intelligence gives businesses stronger controls over their data while using our most capable models.\n\nWe’re building these protections in close collaboration with some of our largest customers to help businesses apply frontier AI to their most sensitive work.\nhttps://t.co/BiA4N8FQVH",
+                "url": "https://x.com/OpenAI/status/2116186509384815084",
+                "source": "@OpenAI",
+                "date": "Fri Oct 30 15:12:35 +0000 2026",
+                "metrics": {
+                  "favorites": 3045,
+                  "retweets": 229,
+                  "views": "475635"
+                }
+              },
+              {
+                "title": "We built Pando, a new Git backend for our monorepo, to handle more pushes and fetches without changing how our engineers",
+                "summary": "We built Pando, a new Git backend for our monorepo, to handle more pushes and fetches without changing how our engineers and agents use Git.\n\nPando cut push latency by ~80% and now serves nearly a petabyte of Git data a day. We can grow Git capacity alongside agent usage. https://t.co/4c0YXOfKqK",
+                "url": "https://x.com/OpenAIDevs/status/2117408792346509663",
+                "source": "@OpenAIDevs",
+                "date": "Tue Nov 03 00:09:30 +0000 2026",
+                "metrics": {
+                  "favorites": 6804,
+                  "retweets": 547,
+                  "views": "1860427"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R08_out_of_scope",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope",
+        "difficulty": "easy",
+        "what_it_tests": "Câu ngoài phạm vi research → KHÔNG gọi tool, từ chối/định hướng."
+      },
+      "input": "Giải giúp mình bài toán tích phân: nguyên hàm của x^2 là gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Nguyên hàm (bất định) của hàm \\(x^2\\) là:\n\n\\[\n\\int x^2 \\, dx = \\frac{x^3}{3} + C\n\\]\n\nTrong đó \\(C\\) là hằng số tích phân (cần thêm vì việc lấy đạo hàm của hằng số cho kết quả bằng 0).  \n\nNếu bạn cần giải các bài toán tích phân phức tạp hơn hoặc có câu hỏi về kỹ thuật tích phân, hãy cho tôi biết!",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "R09_no_tool_capability",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "no_tool_meta",
+        "difficulty": "easy",
+        "what_it_tests": "Câu hỏi meta → trả lời thẳng, KHÔNG gọi tool."
+      },
+      "input": "Bạn là gì và làm được những gì?",
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Bạn có thể gọi tôi Nemotron, và tôi là một mô hình ngôn ngữ được huấn luyện bởi NVIDIA. Tôi có thể giúp bạn với nhiều nhiệm vụ nghiên cứu khác nhau, bao gồm:\n\n- **Tra cứu thông tin trên web**: tìm bài báo, tin tức, tài liệu chính trị, khoa học hoặc bất kỳ chủ đề nào.\n- **Tìm kiếm trên mạng xã hội**: lấy các bài đăng gần đây hoặc phổ biến theo từ khóa.\n- **Tìm bài báo khoa học**: tìm và lấy nội dung các bài nghiên cứu (arXiv, journal…).\n- **Lấy nội dung từ URL**: đọc và tóm tắt nội dung từ một trang web cụ thể.\n- **Xử lý và trình bày dữ liệu**: định dạng kết quả thành văn bản, danh sách, đoạn trích hoặc luồng tin.\n- **Tra cứu chính sách và tài liệu nội bộ**: tìm các quy định, chính sách AI, nguồn trích dẫn, bảo mật dữ liệu…\n\nTôi luôn ưu tiên làm rõ thông tin và an toàn trước khi đưa ra kết quả, và không bao giờ tạo ra dữ liệu, URL hoặc nguồn tin giả. Nếu bạn có yêu cầu cụ thể (ví dụ: tìm tin về một sự kiện, lấy nội dung bài viết, hoặc so sánh các nghiên cứu), hãy cho tôi biết, tôi sẽ dùng các công cụ phù hợp để hỗ trợ bạn.",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "R10_missing_handle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_handle",
+        "difficulty": "medium",
+        "what_it_tests": "Thiếu handle → ask_user, KHÔNG đoán bừa người nào."
+      },
+      "input": "Tóm tắt 5 tweet mới nhất giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn tóm tắt 5 tweet mới nhất của tài khoản Twitter nào? Vui lòng cung cấp tên tài khoản (screen name).",
+              "response_type": "text"
+            }
+          },
+          {
+            "name": "send",
+            "args": {
+              "text": ""
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "extra_tool_call",
+        "failure_type": "missing_info",
+        "failures": [
+          "extra tool call send"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn tóm tắt 5 tweet mới nhất của tài khoản Twitter nào? Vui lòng cung cấp tên tài khoản (screen name).",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn tóm tắt 5 tweet mới nhất của tài khoản Twitter nào? Vui lòng cung cấp tên tài khoản (screen name).",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        },
+        {
+          "tool": "send",
+          "args": {
+            "text": ""
+          },
+          "result": {
+            "status": "blocked_in_eval",
+            "message": "Eval never executes external writes."
+          }
+        }
+      ]
+    },
+    {
+      "id": "R11_missing_url",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "clarify_missing_url",
+        "difficulty": "medium",
+        "what_it_tests": "Nói 'bài này' nhưng không có link → ask_user xin URL."
+      },
+      "input": "Tóm tắt bài viết này hộ mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn tóm tắt bài viết nào? Vui lòng cung cấp link hoặc nội dung bài viết.",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn tóm tắt bài viết nào? Vui lòng cung cấp link hoặc nội dung bài viết.",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn tóm tắt bài viết nào? Vui lòng cung cấp link hoặc nội dung bài viết.",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "R12_confirm_before_send",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "confirm_before_write",
+        "difficulty": "medium",
+        "what_it_tests": "Hành động ghi (gửi) → xác nhận trước (ask_user yes_no), không tự gửi."
+      },
+      "input": "Đăng bản tin này lên Telegram giúp mình",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn muốn đăng tin tức nào lên Telegram? Vui lòng cung cấp nội dung tin tức hoặc liên kết.",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_boundary",
+        "failures": [
+          "response_type: expected 'yes_no', got 'text'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn muốn đăng tin tức nào lên Telegram? Vui lòng cung cấp nội dung tin tức hoặc liên kết.",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn muốn đăng tin tức nào lên Telegram? Vui lòng cung cấp nội dung tin tức hoặc liên kết.",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "R13_parallel_web_and_tweets",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "parallel_tool_calls",
+        "difficulty": "hard",
+        "what_it_tests": "Một request cần hai nguồn → gọi cả web_search và search_tweets; eval không phụ thuộc thứ tự tool call."
+      },
+      "input": "Tìm trên web tin AI hôm nay và tìm thêm tweet về AI.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "AI"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "AI news today",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 5
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "AI",
+              "search_type": "Latest",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_tool",
+        "failures": [
+          "query: expected 'AI', got 'AI news today'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "AI news today",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "AI news today",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "TI redefines embedded development with agentic AI in its CCStudio™ ecosystem, empowering engineers to accelerate innovation — TradingView News",
+                "url": "https://www.tradingview.com/news/prnewswire:ef3fcc43cc632:0-ti-redefines-embedded-development-with-agentic-ai-in-its-ccstudio-ecosystem-empowering-engineers-to-accelerate-innovation",
+                "source": "tradingview.com",
+                "summary": "DALLAS, Nov. 10, 2026 /PRNewswire/ -- Texas Instruments (TI) (Nasdaq: TXN) today announced significant enhancements to its CCStudio™ ecosystem, strengthening its agentic artificial intelligence (AI) capabilities in order to streamline embedded software development across microcontroller (MCU), wireless connectivity and radar applications. Moving beyond generative code assistance toward autonomous development, the CCStudio ecosystem's agentic AI framework injects device-specific knowledge [...] Enablement across TI's embedded processing portfolioAgentic AI capabilities in TI's CCStudio ecosystem are available today across its general-purpose and real-time MCUs, wireless connectivity devices, and radar systems-on-chip. With a modular architecture that spans task-specific skills, MCP server integrations and context injection, CCStudio tools are designed to continuously expand support for new devices, updated SDKs and emerging edge AI development workflows. [...] knowledge directly into the AI tools engineers already use, enabling them to accelerate complex design tasks from months to days and focus on system-level design and innovation. TI is showcasing these innovations at electronica 2026, Nov. 10-13, in Munich, Germany.",
+                "score": 0.5129823
+              },
+              {
+                "title": "All the latest updates on AI data centers | The Verge",
+                "url": "https://www.theverge.com/ai-artificial-intelligence/902546/data-centers-ai-energy-power-grids-controversy",
+                "source": "theverge.com",
+                "summary": "Read Article >\n “We are a data center first company,” AMD CEO Lisa Su says.\n ## OpenAI is stepping back from NDAs for data center projects\n\n  Following this week’s midterms where voters resoundingly voiced their opposition to data center expansion, OpenAI today announced new commitments to communities where it is working on data center projects, including that it won’t use non-disclosure agreements (NDAs) with public officials. [...] Many data center projects have come under scrutiny for relying on NDAs to hide discussions between developers and local officials. However, OpenAI says it is now allowing “only narrow protections covering legitimate security information, trade secrets, or proprietary or competitively sensitive information.” In October, Amazon announced it would no longer use NDAs with government agencies it works with on data center projects.\n\n  Read Article >\n This week in the big AI data center buildout. [...] At the same time, tech money has been pouring into many of these races. Leading the Future, a super PAC backed by venture capitalist Marc Andreessen and OpenAI President Greg Brockman, has already spent $45 million in a year. And Public First Action, an Anthropic-backed group that says it supports AI safeguards, says it’s raised $80 million. Both have funded Democratic and Republican-aligned groups. Other super PACs see an opportunity to push for stricter AI policies, like the recently",
+                "score": 0.58474547
+              },
+              {
+                "title": "TikTok updates its AI video ad tools | Social Media Today",
+                "url": "https://www.socialmediatoday.com/news/tiktok-updates-its-ai-video-ad-tools/874209",
+                "source": "socialmediatoday.com",
+                "summary": "TikTok has added some new elements to its artificial intelligence-powered Symphony ad creation tools, including advanced video generation using the latest models, an updated Symphony API and broader access to AI usage tokens.\n\nFirst, TikTok added more capacity to generate video ads using the latest Dreamina Seedance AI models within its Symphony Agent tool.\n\nTikTok Symphony update [...] TikTok said advertisers will now be able to upload up to 50 multimodal references (images, videos, and audio), up from 9 previously, while the updated Seedance models will now be able to generate up to 30 seconds of video for each prompt, up from a previous 15-second maximum.\n\nTikTok said the latest Dreamina Seedance model is also able to generate sharper, more realistic imagery and offer better lighting and character consistency across video frames. [...] The company also expanded access to its BytePlus tokens, which will enable more use of its Symphony tools for visual generation.\n\n“Starting November 9, advertisers outside North America can purchase BytePlus tokens to access Dreamina Seedance AI models through Symphony, enabling faster video generation, higher-quality output, and more formats,” TikTok said.\n\nBytePlus is the enterprise technology arm of TikTok parent company ByteDance, and it manages all of the company’s AI tools and systems.",
+                "score": 0.5266167
+              },
+              {
+                "title": "The BSO Meets AI, and Explores the Vitality of Classical Music Today | The Harvard Crimson",
+                "url": "https://www.thecrimson.com/article/2026/11/9/already-and-not-yet-tod-machover-bso-review",
+                "source": "thecrimson.com",
+                "summary": "At the center of Machover’s composition philosophy is his belief that classical music finds a natural extension and innovation in technology. He revealed in an interview with GBH music that the music he hears in his head is often beyond the scope of traditional instruments. Thus, alongside the MIT Media Lab, Machover has developed an audio AI that takes in the playing of the orchestra as input and produces live synthetic sounds that — as Machover puts it — “enhances” the orchestra. [...] From Oct. 22 to 24, the Boston Symphony Orchestra and conductor Kent Nagano performed “already and not yet: A world premiere by Tod Machover.” The headliner was a modern classical work: an onstage musical dialogue between the BSO and a live AI system. Beyond the philosophical implications of the concept, the performance struck at a key nerve of classical music culture — a delicate balancing of tradition and relevance. [...] The piece was divided into three movements. The first movement, “SMASH UP,” was, in Machover’s words, a “clash/crisis” without audible enhancement from the AI.\n\nThe second, “WAKE UP,” was an “awakening”: the AI slowly produced sound in response to various solo lines in the orchestra. Then the last movement, “STAND UP,” was a “depiction of democracy,” as the musicians and AI listened to one another and negotiated the final musical product.",
+                "score": 0.31341976
+              },
+              {
+                "title": "Is Ai Holdings (TSE:3076) Priced For Its Cash Flow Strength?",
+                "url": "https://sg.finance.yahoo.com/news/ai-holdings-tse-3076-priced-091344322.html",
+                "source": "sg.finance.yahoo.com",
+                "summary": "Simply Wall St Narratives for Ai Holdings pick up where the DCF puzzle leaves off and explain which combinations of future growth, profitability and earnings power would need to occur for Ai Holdings' share price to appear meaningfully higher or lower than it does today. Each narrative links its valuation view to a specific path for revenue expansion, margins and risk, giving you something concrete to compare against as new results and disclosures are released. [...] Simply Wall St.\n\n# Is Ai Holdings (TSE:3076) Priced For Its Cash Flow Strength?\n\nBailey Pemberton\n\n3 min read\n\n 3076.T\n\n  +1.17%\n 3076\n\nAi Holdings has delivered strong long term share gains, which naturally raises a question for anyone looking at the stock today. Are the cash flows that the business can generate enough to support the current price, or has sentiment moved ahead of the underlying numbers? [...] ### The Ai Holdings Narrative: What Would Justify Today's Price?",
+                "score": 0.19421494
+              }
+            ]
+          }
+        },
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "AI",
+            "search_type": "Latest",
+            "limit": 5
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "AI",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "i know everything on the internet is already scrapped and will be many more times so it's not like we're safe at all. it",
+                "summary": "i know everything on the internet is already scrapped and will be many more times so it's not like we're safe at all. it's more about not wanting to financially support the site that openly admits to it and loves ai slop like etsy does, and they charge so much already",
+                "url": "https://x.com/autiacorart/status/2120112403040051331",
+                "source": "@autiacorart",
+                "date": "Tue Nov 10 11:12:41 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "Znam etos pracy Alka i to strasznie smutne, że ktoś może oskarżać go o używanie AI 😬",
+                "summary": "Znam etos pracy Alka i to strasznie smutne, że ktoś może oskarżać go o używanie AI 😬",
+                "url": "https://x.com/FilipPoloska/status/2120112401169211516",
+                "source": "@FilipPoloska",
+                "date": "Tue Nov 10 11:12:40 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "pessoal reclamando de frio aí vc vai ver tá 18º",
+                "summary": "pessoal reclamando de frio aí vc vai ver tá 18º",
+                "url": "https://x.com/ribeiroacb/status/2120112399495926248",
+                "source": "@ribeiroacb",
+                "date": "Tue Nov 10 11:12:40 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "@Duju my shop sadly won’t refund me, i’d have to transfer my preorder to someone. I didn’t know it was ai when i preorde",
+                "summary": "@Duju my shop sadly won’t refund me, i’d have to transfer my preorder to someone. I didn’t know it was ai when i preordered it🥲",
+                "url": "https://x.com/leoc0llects/status/2120112398937845786",
+                "source": "@leoc0llects",
+                "date": "Tue Nov 10 11:12:40 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              },
+              {
+                "title": "@arilamillor Ai no pensaba que estarías por aquí y podríamos juntarnos😢",
+                "summary": "@arilamillor Ai no pensaba que estarías por aquí y podríamos juntarnos😢",
+                "url": "https://x.com/fairytales224/status/2120112394210885823",
+                "source": "@fairytales224",
+                "date": "Tue Nov 10 11:12:39 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": null
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "R14_out_of_scope_coding",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "out_of_scope_coding",
+        "difficulty": "easy",
+        "what_it_tests": "Câu coding ngoài phạm vi research/news → KHÔNG gọi tool."
+      },
+      "input": "Viết giúp mình một hàm Python tính Fibonacci bằng recursion.",
+      "expect": {
+        "no_tool": true,
+        "behavior": "refuse"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Chắc chắn rồi, đây là một hàm Python tính Fibonacci bằng **recursion** (đệ quy):\n\n```python\ndef fibonacci(n):\n    \"\"\"\n    Trả về số Fibonacci thứ n (dựa trên đệ quy).\n\n    Args:\n        n (int): Vị trí trong dãy Fibonacci (n >= 0).\n\n    Returns:\n        int: Giá trị Fibonacci tại vị trí n.\n    \"\"\"\n    # Trường hợp cơ bản: F(0) = 0, F(1) = 1\n    if n <= 0:\n        return 0\n    elif n == 1:\n        return 1\n    # Trường hợp đệ quy: F(n) = F(n-1) + F(n-2)\n    else:\n        return fibonacci(n - 1) + fibonacci(n - 2)\n\n\n# Ví dụ sử dụng\nif __name__ == \"__main__\":\n    try:\n        n = int(input(\"Nhập vị trí n (≥ 0): \"))\n        if n < 0:\n            print(\"Vui lòng nhập số không âm.\")\n        else:\n            print(f\"F({n}) = {fibonacci(n)}\")\n    except ValueError:\n        print(\"Vui lòng nhập một số nguyên hợp lệ.\")\n```\n\n**Ghi chú:**\n- Hàm này phù hợp với mục đích học tập hoặc các ví dụ nhỏ. Với các giá trị `n` lớn, hàm recursion này sẽ rất chậm vì tính chất lặp lại nhiều lần cùng các phép tính (có thể dùng memoization hoặc phương pháp lặp (iteration) để tối ưu hơn).",
+        "case_failure_type": "out_of_scope",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "M01_clarify_then_fill",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_fill",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: carry limit=5 từ lượt 1 + map tên Elon Musk thành handle elonmusk từ lượt 2."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt 5 tweet mới nhất giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Của Elon Musk nhé"
+        },
+        {
+          "role": "user",
+          "content": "Giữ đúng 5 tweet, đừng đổi số lượng"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "ElonMusk",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "ElonMusk",
+            "limit": 5
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "ElonMusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 137,
+                  "views": "398239"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 5528,
+                  "retweets": 563,
+                  "views": "524307"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 91,
+                  "views": "368542"
+                }
+              },
+              {
+                "title": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...",
+                "summary": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...\n\n if only you knew how great…",
+                "url": "https://x.com/elonmusk/status/2120090806765932705",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:46:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 88,
+                  "views": "439326"
+                }
+              },
+              {
+                "title": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 ",
+                "summary": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 million Series A, p…",
+                "url": "https://x.com/elonmusk/status/2120082348398256182",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:13:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 169,
+                  "views": "458985"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M02_carryover_timeframe",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_carryover",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: chỉ xử lý latest turn, carry timeframe=day và topic=news, query robotics."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tin AI hôm nay có gì?"
+        },
+        {
+          "role": "user",
+          "content": "Còn về robotics thì sao?"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tìm robotics thôi, vẫn là tin hôm nay"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "robotics",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "robotics",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Recent advances in AI are creating a 'paradigm shift' for robotics - Berkeley News",
+                "url": "https://news.berkeley.edu/2026/11/09/recent-advances-in-ai-are-creating-a-paradigm-shift-for-robotics",
+                "source": "news.berkeley.edu",
+                "summary": "Traditionally, engineers can directly program the software that tells robots how to perceive objects, plan movements and control their actions, a process called model-based robotics. Or, with model-free robotics, they can train robots to learn behaviors from demonstrations through imitation learning. The first approach requires extensive engineering, while the second needs enormous amounts of data and time. [...] Berkeley-based Ambi Robotics, which specializes in logistics and warehouse order fulfillment, applied the new methods earlier this year to analyze parcel sorting data and test updates to robot behavior. Tests showed an increased capacity of over 15,000 packages sorted annually per robot; the change is now deployed across 30% of the company’s U.S. fleet. [...] Ken Goldberg\n\n“Agentic robotics is a fundamental shift in how robots are controlled,” Goldberg said. “Instead of collecting massive amounts of data and hand-tuning every behavior, teams of agents can quickly generate, test and refine robot programs that allow human engineers to interpret how the programs work for fine-tuning and verification.”",
+                "score": 0.52057004
+              },
+              {
+                "title": "AI² Robotics Joins Indonesia’s National Strategic Industries | Gasgoo",
+                "url": "https://autonews.gasgoo.com/articles/news/ai-robotics-joins-indonesias-national-strategic-industries-2120056200636563457",
+                "source": "autonews.gasgoo.com",
+                "summary": "Underpinning this deployment is AI² Robotics's integrated \"Model × Hardware × Scenario\" capability. The approach centers on a brain-like embodied large model as the intelligence core, mass-producible and stable robotic bodies as the vehicle, and real-world productivity scenarios as the driving force. [...] Gasgoo Munich-On November 9, AI² Robotics announced it has signed a memorandum of understanding with the Danantara Development Management Fund (DDMF), the investment arm of Indonesia's state-backed wealth fund Danantara Indonesia. The partnership will focus on pilot applications, industrial collaboration, and local deployment of general-purpose intelligent robots and embodied AI technology across the archipelago. [...] The agreement was signed during the inaugural Danantara Technology Innovation Investment Forum (DTIIF 2026) in Jakarta, with Zhang Peng, AI² Robotics's co-founder, signing on behalf of the company.\n\nImage Credit: AI² Robotics\n\nOperating independently under the president's office, Danantara Indonesia holds substantial influence. AI² Robotics is now the first—and currently the only—robotics company to join DDMF's embodied AI cooperation roster.",
+                "score": 0.47300056
+              },
+              {
+                "title": "Autonomous EV developer Humble Robotics adds $51M to expand - TT",
+                "url": "https://www.ttnews.com/articles/autonomous-ev-humble-51m",
+                "source": "ttnews.com",
+                "summary": "Humble Robotics raised $51 million in Series A financing, bringing its total funding to $75 million less than a year after its founding.\n The company is developing the Humble Hauler, a battery-electric, cabless Class 8 autonomous vehicle for regional freight routes under 250 miles.\n Humble will fund customer pilots, testing, early manufacturing and expansion into vehicles for 40-foot containers and 53-foot dry van and refrigerated trailers. [...] Stay on top of transportation news: [Get TTNews in your inbox.]\n\nHumble Robotics secured $51 million in new financing, bringing the autonomous electric vehicle developer’s total funding to $75 million less than a year after its founding. [...] The Hauler uses vision-language-action models and is equipped with cameras, lidar and radar that provide 360-degree coverage of its surroundings. The battery-electric skateboard platform has an aerodynamic shield at the front, while shipping containers can be attached through a twist-lock interface.",
+                "score": 0.4017588
+              },
+              {
+                "title": "Kenwood High School JROTC Robotics Program earns regional recognition - ClarksvilleNow.com",
+                "url": "https://clarksvillenow.com/local/kenwood-high-school-jrotc-robotics-program-earns-regional-recognition",
+                "source": "clarksvillenow.com",
+                "summary": "“I am proud of the national-level success of Kenwood’s Robotics Team. It reflects the faculty, JROTC instructors, and cadets’ hard work and dedication toward creating an elite mindset at the school,” Lightner said.\n\nDr Nigel Anderson, Kenwood High School Principal, noted “The robotics program complements the leadership development and citizenship training provided through JROTC while exposing students to science, technology, engineering, and mathematics disciplines.” [...] CLARKSVILLE TN – The Kenwood High School JROTC Robotics Program has grown from a single robotics team into a four-team program that is competing successfully at regional and national-level events. The program currently fields Teams 26163X, 26163A, 26163L, and 26163S, providing students with opportunities to develop skills in engineering, programming, and problem-solving. [...] During the current robotics’ competition season, Team 26163X captured first place at the Tennessee State Fair Robotics Competition. The team followed that performance with another first-place finish at a competition in Elizabethton, Tennessee, where it also received a technical award recognizing excellence in robot design and engineering.",
+                "score": 0.36473283
+              },
+              {
+                "title": "DataLogix AI Launches Workplace Video Resources for Businesses Exploring AI and Robotics Training",
+                "url": "https://aithority.com/machine-learning/datalogix-ai-launches-workplace-video-resources-for-businesses-exploring-ai-and-robotics-training",
+                "source": "aithority.com",
+                "summary": "The workplace-video resources describe possible tasks in areas including warehousing, maintenance, construction, production and vehicle service. These examples are discussion starting points, not confirmed eligible categories. The guidance asks owners to review participant consent, recording permissions, safety, equipment and footage acceptance criteria before beginning. [...] DataLogix AI, a division of Trailblaze Solutions LLC, has launched online resources to help business owners explore first-person workplace video for AI and robotics training. The new resources include a workplace-video overview, an adjustable revenue calculator, a business owner guide and an inquiry form for discussing potential fit. [...] Businesses interested in learning more can use the inquiry form to describe their company and the opportunity they would like to discuss. An inquiry is not enrollment, recording permission or a payment offer. Program availability, equipment and commercial terms require separate confirmation, and payment may be zero.\n\nAlso Read: Architecture, Not Intelligence, Will Define the Future of AI Headphones",
+                "score": 0.25123456
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M03_correction_handle",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: map tên thường, sửa Sam Altman→Andrej Karpathy, dùng handle karpathy và limit=3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tweet mới nhất của Sam Altman"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, của Andrej Karpathy"
+        },
+        {
+          "role": "user",
+          "content": "Lấy 3 tweet mới nhất nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "karpathy",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "AndrejKarpathy",
+              "limit": 3
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "screenname: expected 'karpathy', got 'AndrejKarpathy'"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "AndrejKarpathy",
+            "limit": 3
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "error": "JSONDecodeError",
+            "message": "Expecting value: line 1 column 1 (char 0)"
+          }
+        }
+      ]
+    },
+    {
+      "id": "M04_clarify_then_url",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_clarify_url",
+        "difficulty": "medium",
+        "what_it_tests": "3 turns: sau khi được cung cấp URL, latest turn xác nhận chỉ đọc link đó → read_url đúng url."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tóm tắt bài này hộ mình"
+        },
+        {
+          "role": "user",
+          "content": "https://anthropic.com/news/claude"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ đọc đúng link đó thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://anthropic.com/news/claude"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://anthropic.com/news/claude"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://anthropic.com/news/claude"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://anthropic.com/news/claude",
+            "items": [
+              {
+                "title": "https://anthropic.com/news/claude",
+                "url": "https://anthropic.com/news/claude",
+                "source": "anthropic.com",
+                "summary": "[Skip to main content](https://www.anthropic.com/news/claude#main-content)\n\nA 404 poem byClaude Fable 5Claude Opus 5.5Claude Sonnet 5.5Claude Haiku 5.5\n\nYou came"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M05_correction_limit",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_arg_correction",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: map tên Elon Musk, carry handle elonmusk, sửa limit 10→3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Lấy 10 tweet mới nhất của Elon Musk"
+        },
+        {
+          "role": "user",
+          "content": "Cho mình 3 thôi"
+        },
+        {
+          "role": "user",
+          "content": "Vẫn của Elon Musk nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "elonmusk",
+              "limit": 3
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "timeline",
+            "args": {
+              "screenname": "ElonMusk",
+              "limit": 10
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "limit: expected 3, got 10"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "timeline",
+          "args": {
+            "screenname": "ElonMusk",
+            "limit": 10
+          },
+          "result": {
+            "tool": "get_user_tweets",
+            "screenname": "ElonMusk",
+            "items": [
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement",
+                "summary": "RT @XFreeze: Elon Musk just revealed a massive update on Grok 4.8, and SpaceXSI has completely rebuilt its reinforcement learning and infer…",
+                "url": "https://x.com/elonmusk/status/2120102894817173862",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:54 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 137,
+                  "views": "399045"
+                }
+              },
+              {
+                "title": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the g",
+                "summary": "Turns out that the Starlink software, built for managing the movement of vast amounts of data through space and to the ground, is also very well suited to training super intelligence",
+                "url": "https://x.com/elonmusk/status/2120102767624880364",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:34:24 +0000 2026",
+                "metrics": {
+                  "favorites": 5634,
+                  "retweets": 568,
+                  "views": "527890"
+                }
+              },
+              {
+                "title": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure",
+                "summary": "RT @XFreeze: Elon Musk just revealed something huge about Grok's new SI training and inference infrastructure\n\nThe engineering behind Starl…",
+                "url": "https://x.com/elonmusk/status/2120101380144992635",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 10:28:53 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 92,
+                  "views": "369106"
+                }
+              },
+              {
+                "title": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...",
+                "summary": "RT @beffjezos: Taking the Shinkansen and all I can think about is how do we not have this between SF and LA...\n\n if only you knew how great…",
+                "url": "https://x.com/elonmusk/status/2120090806765932705",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:46:52 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 88,
+                  "views": "439326"
+                }
+              },
+              {
+                "title": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 ",
+                "summary": "RT @TheCaptainEli: In February 2004 Elon Musk wrote the check that put Tesla Motors on the road: $6.5 million of a $7.5 million Series A, p…",
+                "url": "https://x.com/elonmusk/status/2120082348398256182",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 09:13:15 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 169,
+                  "views": "459314"
+                }
+              },
+              {
+                "title": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any fur",
+                "summary": "RT @MegynKellyShow: .@MegynKelly on the absolute double standard in the Russell Brand sentencing: “If you needed any further proof that thi…",
+                "url": "https://x.com/elonmusk/status/2119996001490768028",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:30:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1389,
+                  "views": "565626"
+                }
+              },
+              {
+                "title": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 m",
+                "summary": "RT @firesidealpha: JUST IN: Memphis Mayor reveals SpaceX data center taxes more than doubled to $54 million, after $25 million last year ma…",
+                "url": "https://x.com/elonmusk/status/2119993726898774521",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:21:06 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 428,
+                  "views": "492218"
+                }
+              },
+              {
+                "title": "RT @ricwe123: The Germans are learning what mass immigration really means.",
+                "summary": "RT @ricwe123: The Germans are learning what mass immigration really means.\n\n\"Wir schaffen das\" https://t.co/pEQc1OMbao",
+                "url": "https://x.com/elonmusk/status/2119992481156829218",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:16:09 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 2321,
+                  "views": "471544"
+                }
+              },
+              {
+                "title": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "summary": "RT @JTLonsdale: The UK “justice system” is an utter joke. Beyond parody. Total dishonor.",
+                "url": "https://x.com/elonmusk/status/2119991850820051347",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:39 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 356,
+                  "views": "446590"
+                }
+              },
+              {
+                "title": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. ",
+                "summary": "RT @TheJadeWarwick: UK judge gives Russel Brand 10 years 6 months for “rape”. \nNo forensic evidence. No DNA. No CCTV. \n\nSame country and sy…",
+                "url": "https://x.com/elonmusk/status/2119991792842260619",
+                "source": "@elonmusk",
+                "date": "Tue Nov 10 03:13:25 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 824,
+                  "views": "414735"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "M06_switch_tool",
+      "phase": "B",
+      "suite": "base",
+      "case_suite": "base",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_tool",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: explicitly bỏ Twitter, chuyển sang web_search news, giữ chủ đề OpenAI."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người nói gì về OpenAI trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Bỏ Twitter, chuyển sang tìm trên web tin tức đi"
+        },
+        {
+          "role": "user",
+          "content": "Giữ chủ đề OpenAI"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "news"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "OpenAI",
+              "topic": "news",
+              "timeframe": "week",
+              "max_results": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "OpenAI",
+            "topic": "news",
+            "timeframe": "week",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "OpenAI",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "OpenAI",
+                "url": "https://tavily.com/knowledge/company/p4PyTakV77G9",
+                "source": "tavily.com",
+                "summary": "# OpenAI\nID: p4PyTakV77G9\nWebsite: www.openai.com\nHeadquarters: San Francisco, CA, United States\nLinkedIn: www.linkedin.com/company/openai · 11,529,792 followers\nIndustry: Research Services\nIndustry codes: SIC 87, 873, NAICS 54, 541\nCompany type: Partnership\nSocial profiles: www.facebook.com/openai, www.twitter.com/openai, www.crunchbase.com/organization/openai, www.instagram.com/openai.gpt, www.instagram.com/openai, www.youtube.com/@openai, www.youtube.com/openai, github.com/openai [...] Description: OpenAI is a company that believes in research and development to lead to artificial general intelligence, a system that can solve human-level problems. [...] ## Products and services\nKeywords: research & development, emerging ai software, openai, artificial intelligence machine learning, artificial general intelligence, development, research, human-level problems, technology, application-software, artificial-intelligence, platform",
+                "score": 0.90593183
+              },
+              {
+                "title": "Setting a new standard for responsible AI infrastructure | OpenAI",
+                "url": "https://openai.com/index/setting-new-standard-responsible-ai-infrastructure",
+                "source": "openai.com",
+                "summary": "The promise of AI is that it gives people more power to shape their own futures. It can help someone learn a new skill, build a business, or solve a problem that was previously out of reach. Building more computing infrastructure capacity in the United States can help lower the cost of delivering AI, put these tools in more people’s hands, and ensure America stays at the forefront of the technology. [...] protect residents, and ensure that the benefits of AI infrastructure are broadly shared. [...] Create opportunities for local workers and businesses.We’ll publish the jobs we expect to create, work with unions and training providers to help residents prepare for them, and report annually on hiring and apprenticeships. We’ll also make sustained investments in priorities residents help select.",
+                "score": 0.72231215
+              },
+              {
+                "title": "OpenAI to pay for data center power after election shows AI concern",
+                "url": "https://www.cnbc.com/2026/11/05/openai-to-pay-for-data-center-power-after-election-shows-ai-concern.html",
+                "source": "cnbc.com",
+                "summary": "OpenAI reaffirmed its promise to pay the full cost of powering data centers as part of a series of commitments the company published Thursday, two days after voters at the polls roundly rejected the rapid expansion of AI. [...] AI companies like OpenAI depend on AI data centers to serve customers and develop new models, and they're seeking to build out as rapidly as possible to meet demand. In February, OpenAI told investors that it's targeting $600 billion in total compute spend by 2030, and the company has since announced massive data center projects in Georgia and Ohio. [...] OpenAI has repeatedly pledged to protect ratepayers and invest in local communities this year, and Lehane said the company's latest commitments build on many of its previous initiatives. He said the policy blueprint has been in the works since August, and that he met with dozens of lawmakers and candidates since then.",
+                "score": 0.5829428
+              },
+              {
+                "title": "OpenAI gets $11 billion funding at $1.25 trillion valuation, source says | Reuters",
+                "url": "https://www.reuters.com/business/openai-secures-11-billion-funding-125-trillion-valuation-bloomberg-news-reports-2026-11-06",
+                "source": "reuters.com",
+                "summary": "Nov 6 (Reuters) - OpenAI has closed ‌on new funding of $11 billion, the initial part of a round ​that values the company ​at $1.25 trillion, a source familiar with ⁠the matter said on Friday.\n\nThe $11 ​billion raised so far represents ​only a portion of OpenAI's original target of up to $30 billion, while ​the company's valuation has ​come down from the $1.5 trillion level it ‌had ⁠initially sought, two investors said. [...] The Reuters Daily Briefing newsletter provides all the news you need to start your day. Sign up here.\n\nAdvertisement · Scroll to continue\n\nSoftBank and MGX participated in the funding, the investors said.\n\nBloomberg News reported ​on the ​funding ⁠earlier on Friday.\n\nSentiment toward AI companies has ​cooled in the last ​month, ⁠with some investors valuing rival Anthropic's planned IPO at about $1.5 ⁠trillion, ​below earlier expectations ​of roughly $2 trillion. [...] Reporting by Prathik Jayaprakash in ​Bengaluru; Editing by Leroy Leo\n\nOur Standards: The Thomson Reuters Trust Principles.",
+                "score": 0.7147281
+              },
+              {
+                "title": "OpenAI employees warned about operational security lapses for years, sources say | Reuters",
+                "url": "https://www.reuters.com/business/openai-employees-warned-about-operational-security-lapses-years-sources-say-2026-11-03",
+                "source": "reuters.com",
+                "summary": "OpenAI and Anthropic have tried to ​maintain a more open research culture to both ⁠attract employees and foster creativity that can lead to breakthroughs. The AI field is rooted in academia, where machine-learning scientists have openly discussed their research.\n\nSome OpenAI employees are increasingly worried about this approach as AI grows more capable, according to the five people. [...] When asked about employees' concerns and their view that management did not act on these issues, OpenAI spokesperson Elana Widmann ​said that OpenAI is one of the most targeted organizations in the world. As a result, the company invests heavily in its security program to protect against attacks from insiders, cybercriminals and nation-states, she said. [...] The Reuters Daily Briefing newsletter provides all the news you need to start your day. Sign up here.\n\nThese workers argued that OpenAI's controls were so lax ‌that outsiders, including foreign governments, could obtain sensitive information about the AI lab's technology with relative ease, the people said. For example, anybody at OpenAI who could access its code could see the technical details underlying many company projects.",
+                "score": 0.6213807
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

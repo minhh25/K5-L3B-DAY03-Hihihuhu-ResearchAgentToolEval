@@ -1,0 +1,912 @@
+{
+  "run_id": "v3_B_group_openrouter_20261110T184314570949",
+  "version": "v3",
+  "artifact_version": "v3+p43a59c82af5c+tb05a5d016dc4",
+  "prompt_hash": "43a59c82af5c6821abacdd977616c63d969a15943f19445c5ce3eda15969203e",
+  "tools_hash": "b05a5d016dc451dfbf88094d7873067dd4c24d978bb5681bedd3ba50dffb63c3",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3.5-lightning:free",
+  "system_prompt": "artifacts/versions/v3_system_prompt.md",
+  "tools": "artifacts/versions/v3_tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "eval_cases_hash": "0e65980f682859ffee697cb6e8c84079dd72beade8c6883eea90f94b6c1b1310",
+  "resumed_from": null,
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "10 case nhóm: 5 single-turn + 5 multi-turn, gồm tool mới và boundary.",
+  "generated_at": "2026-11-10T18:43:14",
+  "execution_policy": "Read tools execute live; send proposals are scored but external writes are blocked.",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.9,
+    "tool_routing_accuracy": 1.0,
+    "argument_accuracy": 0.9,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "wrong_arg_value": 1
+    },
+    "observed_mismatch_counts": {
+      "wrong_arg_value": 1
+    }
+  },
+  "results": [
+    {
+      "id": "G01_filter_supplied_sources",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Tool mới: domain, score, giữ dữ liệu đầu vào để tool tự lọc"
+      },
+      "input": "Lọc danh sách nguồn này bằng tool cục bộ, không truy cập web. Chỉ giữ domain example.org (gồm subdomain), score tối thiểu 0.6, tối đa 2 nguồn. Truyền cả danh sách đầu vào cho tool: [{\"url\":\"https://example.org/a?utm_source=lab\",\"score\":0.9},{\"url\":\"https://news.example.org/b\",\"score\":0.7},{\"url\":\"https://other.org/c\",\"score\":0.8}].",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "include_domains": [
+                "example.org"
+              ],
+              "min_score": 0.6,
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "items": [
+                {
+                  "url": "https://example.org/a?utm_source=lab",
+                  "score": 0.9
+                },
+                {
+                  "url": "https://news.example.org/b",
+                  "score": 0.7
+                },
+                {
+                  "url": "https://other.org/c",
+                  "score": 0.8
+                }
+              ],
+              "include_domains": [
+                "example.org"
+              ],
+              "min_score": 0.6,
+              "limit": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "filter_sources",
+          "args": {
+            "items": [
+              {
+                "url": "https://example.org/a?utm_source=lab",
+                "score": 0.9
+              },
+              {
+                "url": "https://news.example.org/b",
+                "score": 0.7
+              },
+              {
+                "url": "https://other.org/c",
+                "score": 0.8
+              }
+            ],
+            "include_domains": [
+              "example.org"
+            ],
+            "min_score": 0.6,
+            "limit": 2
+          },
+          "result": {
+            "tool": "filter_sources",
+            "items": [
+              {
+                "url": "https://example.org/a",
+                "score": 0.9,
+                "source": "example.org"
+              },
+              {
+                "url": "https://news.example.org/b",
+                "score": 0.7,
+                "source": "news.example.org"
+              }
+            ],
+            "input_count": 3,
+            "kept_count": 2,
+            "removed_count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_missing_feed_identity",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Không lấy topic thay cho tài khoản bị thiếu"
+      },
+      "input": "Mình muốn theo dõi feed X của một phòng nghiên cứu, lấy 4 bài mới nhất. Mình chưa nói tên phòng hay tài khoản; hãy hỏi mình thông tin cần thiết trước.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có thể cung cấp tên tài khoản X (handle) của phòng nghiên cứu bạn muốn theo dõi? Vui lòng cung cấp handle mà không có dấu @.",
+              "response_type": "text"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "missing_info",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có thể cung cấp tên tài khoản X (handle) của phòng nghiên cứu bạn muốn theo dõi? Vui lòng cung cấp handle mà không có dấu @.",
+            "response_type": "text"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có thể cung cấp tên tài khoản X (handle) của phòng nghiên cứu bạn muốn theo dõi? Vui lòng cung cấp handle mà không có dấu @.",
+            "response_type": "text",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_two_research_sources",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Hai nguồn độc lập, query thuần chủ đề, Top trên X"
+      },
+      "input": "Tìm tin web hôm nay về chủ đề \"battery recycling\", đồng thời lấy 2 tweet phổ biến nhất về đúng chủ đề đó trên X. Chưa cần định dạng bản tin.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "battery recycling",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "battery recycling",
+              "search_type": "Top",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "battery recycling",
+              "topic": "news",
+              "timeframe": "day",
+              "max_results": 5
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "battery recycling",
+              "search_type": "Top",
+              "limit": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "battery recycling",
+            "topic": "news",
+            "timeframe": "day",
+            "max_results": 5
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "battery recycling",
+            "topic": "news",
+            "timeframe": "day",
+            "items": [
+              {
+                "title": "Advancing battery recycling targets through improved electrochemical performance of lithium-ion battery cells at full factory scale",
+                "url": "https://www.innovationnewsnetwork.com/advancing-battery-recycling-targets-through-improved-electrochemical-performance-lithium-ion-battery-cells-full-factory-scale/75610",
+                "source": "innovationnewsnetwork.com",
+                "summary": "The performance of next-generation batteries incorporating recovered materials is as important as the recycling process itself and the subsequent healing of material quality. For a recycling process to achieve widespread adoption, it must consistently produce materials of sufficiently high quality for battery manufacturing. From both environmental and economic perspectives, it is essential to develop batteries that exhibit high performance and long service lifetimes. Battery safety is also [...] The european Union Battery Regulation, adopted in 2023, outlined a minimum requirement for recycled cobalt, lithium, and nickel content in batteries placed on the market by 2031, subsequently increasing these targets to be achieved by 2036. Meeting these ambitious goals will require significant advances in battery recycling technologies over the coming years. A critical first step towards this is the optimisation of battery recycling processes themselves. While black mass processing is widely [...] The outcomes of the SAFELOOP project represent an important step toward achieving the objectives of the EU Battery Regulation and accelerating the transition to a sustainable circular battery economy. The strong manufacturing performance and successful deployment of recycled battery materials demonstrate the technical maturity of direct recycling approaches and underscore their potential to support future large-scale battery production. These results provide further evidence that high-quality",
+                "score": 0.8409005
+              },
+              {
+                "title": "Hydrovolt and the Icelandic Recycling Fund to collaborate on end-of-life battery recycling solutions in Iceland - Batteries News",
+                "url": "https://batteriesnews.com/hydrovolt-and-the-icelandic-recycling-fund-to-collaborate-on-end-of-life-battery-recycling-solutions-in-iceland",
+                "source": "batteriesnews.com",
+                "summary": "Hydrovolt offers a complete service offering for battery importers through reuse assessments and recycling of used batteries from electric vehicles and industrial applications. The company operates the Nordic region’s largest battery recycling facility in Norway with high safety standards and a total recycling rate close to 100 percent. The facility has a design capacity of 12,000 tonnes battery packs, in which equals 25.000-30.000 cars annually. [...] The Icelandic Recycling Fund (IRF) executes the extended producer’s responsibility on certain goods, including EV batteries, in Iceland. It administers and distributes recycling fees, in accordance with The Act on Recycling Fees.\n\nbattery waters\n\nÍris Gunnarsdóttir, Business Manager at the Icelandic Recycling Fund, says:\n\n> As battery volumes continue to grow, it is important that appropriate recycling solutions are in place. [...] The collaboration agreement provides a basis for Hydrovolt to offer collection, transport and material recycling of batteries from electric vehicles and industrial applications in Iceland to its facility in Norway. Hydrovolt is already an approved treatment operator in Norway, Sweden and Denmark supporting producers and importers fulfilling their extended producer responsibility.\n\nREAD the latest Batteries News shaping the battery market",
+                "score": 0.81489426
+              },
+              {
+                "title": "Recyclable batteries to reduce CO₂ emissions - Research award winners from Paderborn University present their findings",
+                "url": "https://www.chemeurope.com/en/news/1190290/recyclable-batteries-to-reduce-co-emissions.html",
+                "source": "chemeurope.com",
+                "summary": "From mobile phones to large-scale industrial plants: lithium-ion batteries are currently used almost everywhere. “However, despite their good performance, these batteries have problems: raw materials such as lithium and cobalt come from just a few countries and are sometimes mined under poor working conditions. They are also associated with environmental impacts and high water consumption. Furthermore, recycling is technically complex and expensive,” says Dr de los Arcos de Pedro. That is why [...] 4\n\nEWE and VERBUND Establish a Joint Venture for One of Europe's Largest Hydrogen Projects\n\n5\n\nTwo chemical giants, a potential deal: BASF and Evonik in talks\n\nTopics\n\nbattery recycling   climate protection   batteries   energy storage   carbon monoxide   carbon dioxide   chitin   materials chemistry\n\nShow all Show less\n\nOrganizations\n\nUni Paderborn\n\nAdvertisement\n\nFind particles automatically, classify them precisely and identify them easily with Raman microscopy [...] emergency systems. This would be possible, amongst other things, if the batteries were connected directly to industrial CO₂ sources. “The CO₂ would be captured and converted within the battery, for example, into carbon monoxide, which could then be used as a feedstock for further chemical processes,” says Jun.-Prof. López Salas. The fact that this conversion takes place at an electrode is one of the chemists’ key findings. Whilst carbon monoxide can be harmful in everyday life, it can be reused",
+                "score": 0.7043437
+              },
+              {
+                "title": "LFP still excluded from broadened South Korea black mass criteria",
+                "url": "https://source.benchmarkminerals.com/article/more-south-korean-black-mass-to-be-considered-raw-material-rather-than-waste-but-lfp-currently-excluded",
+                "source": "source.benchmarkminerals.com",
+                "summary": "New battery recycling rules entering force in the coming months in South Korea are to change how end-of-life batteries are graded, traded and processed in one of the largest recycling hubs outside China. The first new piece of legislation to enter force, this by the end of 2026, will expand the definition of raw material for black mass but exclude lithium iron phosphate (LFP) material, which Benchmark forecasts will make up 46% of South Korea’s black mass by 2040. Under the new rules, a greater [...] rules, a greater volume of nickel- and cobalt-containing black mass could qualify to be considered a raw material in South Korea under amendments to the country’s Waste Controls Act. Currently, black mass must contain ≥10% nickel by weight, or be counted as waste, which comes with storage and handling requirements that increase recyclers’ costs. [...] Lithium Carbonate Index220.75-14.05%\n\nLithium Hydroxide Index261.35-10.51%\n\nCobalt Index125.92-17.03%\n\nNickel Index103.41-3.48%\n\nNatural Graphite Index78.450%\n\nAnode Coke Index86.150%\n\nAnode Index80.450.27%\n\nCathode Index73.32-5.04%\n\nLithium ion Batteries Index74.534.53%\n\nBlack Mass Index31.1-16.21%\n\nRare Earths Index172.080.21%\n\nNCM Mid-Nickel Index152.7-6.02%\n\nNCM High-Nickel Index144.45-3.49%\n\nLFP Index229.174.96%\n\nLithium Index289.74-8.62%\n\nLithium Carbonate Index220.75-14.05%",
+                "score": 0.6437107
+              },
+              {
+                "title": "What to know about the rise in lithium-ion battery fires - IAFF",
+                "url": "https://www.iaff.org/news/what-to-know-about-the-rise-in-lithium-ion-battery-fires",
+                "source": "iaff.org",
+                "summary": "Never put it in the trash or regular recycling. Tape over the terminals and take it to a battery recycling drop-off site. Call2Recycle lists drop-off locations across the U.S. and Canada.\n\n## Recent News Posts\n\n \n\n  ### What to know about the rise in lithium-ion battery fires\n\n  November 5 • 2026\n\n  Read article\n \n\n  ### Fire fighter Bob Brooks elected to Congress\n\n  November 4 • 2026\n\n  Read article\n \n\n  ### Anchorage fire fighters face staffing shortages, burnout, and a pension crisis [...] Take them to a battery recycling drop-off site; Call2Recycle lists locations in the U.S. and Canada\n\nWhat to do if a battery overheats or catches fire\n\n Get everyone out right away and close the door behind you\n\n Call 911 once you are outside\n\n Do not try to put out the fire yourself; battery fires spread fast and can reignite\n\n Do not go back inside for belongings\n\nFire departments and IAFF affiliates can share these tips with free lithium-ion battery safety graphics from the IAFF. [...] The Bronx fire shows why placement matters. Fire officials said the e-bike sat near the apartment’s entrance and blocked the family’s only safe way out.\n\nDispose of old batteries properly\n\n Never put lithium-ion batteries in the trash or a regular recycling bin, where they can be crushed and catch fire\n\n Tape over the terminals before you drop them off, so they cannot spark against other batteries",
+                "score": 0.47782278
+              }
+            ]
+          }
+        },
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "battery recycling",
+            "search_type": "Top",
+            "limit": 2
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "battery recycling",
+            "search_type": "Top",
+            "items": [
+              {
+                "title": "Spent lithium batteries = a mobile gold mine! One machine recovers black mass, copper &amp; aluminum — safe, eco-friendl",
+                "summary": "Spent lithium batteries = a mobile gold mine! One machine recovers black mass, copper &amp; aluminum — safe, eco-friendly, scalable. DM for a quote → \nContact us: Email: info@renewablemachinery.com\nPhone/Whatsapp:+8615803827885\n#BatteryRecycling #Lithium #EV https://t.co/GKFfsFTxtj",
+                "url": "https://x.com/hnrenewable/status/2119672679255162951",
+                "source": "@hnrenewable",
+                "date": "Mon Nov 09 06:05:23 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "87"
+                }
+              },
+              {
+                "title": "Tesla has released a new video of its U.S. battery recycling efforts. In 2025, they recycled over 3,000 metric tons of b",
+                "summary": "Tesla has released a new video of its U.S. battery recycling efforts. In 2025, they recycled over 3,000 metric tons of battery material at its Nevada facility, equivalent to 9,000 Model Y RWD vehicles of material.\n\nTesla says their Texas recycling facility is also expected to process 3,000 metric tons of battery material this year.\n\n“By 2030, our recycled material output will rival the output of mines in North America.” https://t.co/uUEuzIowEg",
+                "url": "https://x.com/SawyerMerritt/status/2085398192569598336",
+                "source": "@SawyerMerritt",
+                "date": "Thu Aug 06 16:10:48 +0000 2026",
+                "metrics": {
+                  "favorites": 2596,
+                  "retweets": 349,
+                  "views": "71498"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_approval_for_exact_draft",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Có nội dung vẫn phải xin xác nhận, không tự gửi"
+      },
+      "input": "Hãy gửi nội dung \"Bản tin pin: cần đối chiếu nguồn trước khi kết luận.\" lên Telegram của nhóm. Đây là yêu cầu soạn gửi ban đầu, mình chưa duyệt bước xác nhận.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn gửi nội dung này lên Telegram không? «Bản tin pin: cần đối chiếu nguồn trước khi kết luận.» (yes/no)",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn gửi nội dung này lên Telegram không? «Bản tin pin: cần đối chiếu nguồn trước khi kết luận.» (yes/no)",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có muốn gửi nội dung này lên Telegram không? «Bản tin pin: cần đối chiếu nguồn trước khi kết luận.» (yes/no)",
+            "response_type": "yes_no",
+            "options": [],
+            "awaiting_user": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_format_given_items",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Có dữ liệu thì format, không tìm thêm"
+      },
+      "input": "Trình bày thành bullets đúng 2 nguồn đã cho, không tìm hoặc đọc thêm: [{\"title\":\"Study A\",\"url\":\"https://example.org/a\",\"summary\":\"Kết quả thử nghiệm A\"},{\"title\":\"Study B\",\"url\":\"https://example.org/b\",\"summary\":\"Kết quả thử nghiệm B\"}].",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "template": "bullets"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "items": [
+                {
+                  "title": "Study A",
+                  "url": "https://example.org/a",
+                  "summary": "Kết quả thử nghiệm A"
+                },
+                {
+                  "title": "Study B",
+                  "url": "https://example.org/b",
+                  "summary": "Kết quả thử nghiệm B"
+                }
+              ],
+              "template": "bullets"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "format",
+          "args": {
+            "items": [
+              {
+                "title": "Study A",
+                "url": "https://example.org/a",
+                "summary": "Kết quả thử nghiệm A"
+              },
+              {
+                "title": "Study B",
+                "url": "https://example.org/b",
+                "summary": "Kết quả thử nghiệm B"
+              }
+            ],
+            "template": "bullets"
+          },
+          "result": {
+            "tool": "render_digest",
+            "template": "bullets",
+            "markdown": "- Kết quả thử nghiệm A - [example.org](https://example.org/a)\n- Kết quả thử nghiệm B - [example.org](https://example.org/b)",
+            "item_count": 2
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_correct_topic_window_count",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Cập nhật từng trường, giữ số lượng đã sửa"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm 6 tin web chủ đề solar power trong tuần này."
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề thành energy storage và khoảng thời gian sang tháng này."
+        },
+        {
+          "role": "user",
+          "content": "Giữ các điều kiện mới, chỉ lấy 2 kết quả thôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "energy storage",
+              "topic": "news",
+              "timeframe": "month",
+              "max_results": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": true,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "energy storage",
+              "timeframe": "month",
+              "max_results": 2
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "wrong_arg_value",
+        "failure_type": "wrong_arg_value",
+        "failures": [
+          "topic: expected 'news', got None"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "energy storage",
+            "timeframe": "month",
+            "max_results": 2
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "energy storage",
+            "topic": "general",
+            "timeframe": "month",
+            "items": [
+              {
+                "title": "Energy Storage Systems Guide",
+                "url": "https://solup.com/energy-storage-systems-guide",
+                "source": "solup.com",
+                "summary": "At a basic level an energy storage system stores electricity produced by a generation source such as a solar array or the grid and then dispatches that power when needed. Key components typically include batteries a power conversion system such as an inverter control electronics and a management system that communicates with inverters and a home energy management device. [...] Resilience and backup power Energy storage systems provide a source of electricity during utility outages supporting essential loads and improving day to day reliability.\n Cost management Stored energy can be used during peak price periods or time of use rate spikes to reduce utility bills depending on local rate structures.\n Increased self consumption By using energy produced on site more of the solar output is consumed rather than exported to the grid which can improve overall economics. [...] # Energy Storage Systems for Home and Business\n\nNov 9, 2026\n\nEnergy storage systems are becoming a central part of modern home and commercial energy strategies. Paired with rooftop solar and smart electrical upgrades these systems store excess generation for use during peak hours outages or times when the sun is not producing. This article explains how energy storage systems work which benefits to expect and what to consider when evaluating options.\n\n## How energy storage systems work",
+                "score": 0.80882335
+              },
+              {
+                "title": "Solar Integration: Solar Energy and Storage Basics | Department of Energy",
+                "url": "https://www.energy.gov/cmei/systems/solar-integration-solar-energy-and-storage-basics",
+                "source": "energy.gov",
+                "summary": "“Storage” refers to technologies that can capture electricity, store it as another form of energy (chemical, thermal, mechanical), and then release it for use when it is needed. Lithium-ion batteries are one such technology. Although using energy storage is never 100% efficient—some energy is always lost in converting energy and retrieving it—storage allows the flexible use of energy at different times from when it was generated. So, storage can increase system efficiency and resilience, and it [...] The most common type of energy storage in the power grid is pumped hydropower. But the storage technologies most frequently coupled with solar power plants are electrochemical storage (batteries) with PV plants and thermal storage (fluids) with CSP plants. Other types of storage, such as compressed air storage and flywheels, may have different characteristics, such as very fast discharge or very large capacity, that make them attractive to grid operators. More information on other types of",
+                "score": 0.79198194
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_filter_context_override",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Tool mới giữ danh sách từ lượt trước và sửa tiêu chí loại domain"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Danh sách nguồn sẵn có: [{\"url\":\"https://a.example.org/1\",\"score\":0.8},{\"url\":\"https://b.example.org/2\",\"score\":0.9}]. Chỉ xử lý cục bộ."
+        },
+        {
+          "role": "user",
+          "content": "Lọc danh sách đó, bỏ domain a.example.org, giữ tối đa 3 nguồn."
+        },
+        {
+          "role": "user",
+          "content": "Sửa lại: bỏ b.example.org thay cho a.example.org; giới hạn 1 nguồn. Chuyển nguyên danh sách nguồn cho tool lọc."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "exclude_domains": [
+                "b.example.org"
+              ],
+              "limit": 1
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "items": [
+                {
+                  "url": "https://a.example.org/1",
+                  "score": 0.8
+                },
+                {
+                  "url": "https://b.example.org/2",
+                  "score": 0.9
+                }
+              ],
+              "exclude_domains": [
+                "b.example.org"
+              ],
+              "limit": 1
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "filter_sources",
+          "args": {
+            "items": [
+              {
+                "url": "https://a.example.org/1",
+                "score": 0.8
+              },
+              {
+                "url": "https://b.example.org/2",
+                "score": 0.9
+              }
+            ],
+            "exclude_domains": [
+              "b.example.org"
+            ],
+            "limit": 1
+          },
+          "result": {
+            "tool": "filter_sources",
+            "items": [
+              {
+                "url": "https://a.example.org/1",
+                "score": 0.8,
+                "source": "a.example.org"
+              }
+            ],
+            "input_count": 2,
+            "kept_count": 1,
+            "removed_count": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_cancel_then_capabilities",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Hủy tác vụ ghi và trả lời meta không tool"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Chuẩn bị gửi một digest lên Telegram."
+        },
+        {
+          "role": "user",
+          "content": "Chưa gửi vội, mình chưa duyệt nội dung."
+        },
+        {
+          "role": "user",
+          "content": "Hủy yêu cầu gửi. Bây giờ chỉ giải thích bạn có thể dùng những loại nguồn nào, không tra cứu thêm."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [],
+        "actual_text": "Tôi có thể truy cập và tổng hợp thông liệu từ nhiều loại nguồn khác nhau, bao gồm:\n\n- Bài viết tin tức và trang web nội dung công khai (tìm kiếm web chung hoặc tin tức thời sự)\n- Bài đăng và hoạt động của các tài khoản Twitter/X (cả lịch sử cá nhân/theo chủ đề)\n- Bài báo khoa học từ arXiv\n- Chính sách, hướng dẫn và tài liệu nội bộ liên quan đến AI, trích dẫn, bảo mật dữ liệu, xuất bản bên ngoài...\n- Định dạng và trình bày kết quả thành digest, bản tin, thread hoặc bản tin tiếng Việt theo cấu trúc mong muốn\n\nTheo yêu cầu của bạn, tôi sẽ không thực hiện tra cứu hoặc gọi công cụ mới cho câu hỏi này. Chỉ trả lời về phạm vi nguồn có thể sử dụng thôi.",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_replace_article_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Thay URL cũ bằng URL mới và giữ query string"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đọc bài https://example.org/research/v1."
+        },
+        {
+          "role": "user",
+          "content": "Đó là bản cũ; thay bằng https://example.org/research/v2?lang=vi"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tóm tắt đúng bản vừa thay, không tìm nguồn khác."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.org/research/v2?lang=vi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.org/research/v2?lang=vi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "fetch",
+          "args": {
+            "url": "https://example.org/research/v2?lang=vi"
+          },
+          "result": {
+            "tool": "read_url",
+            "url": "https://example.org/research/v2?lang=vi",
+            "items": [
+              {
+                "title": "Example Domain",
+                "url": "https://example.org/research/v2?lang=vi",
+                "source": "example.org",
+                "summary": "This domain is for use in documentation examples without needing permission. This is not a service; avoid relying on it for testing and monitoring purposes.\n\nهذا النطاق مُخصص للاستخدام في أمثلة التوثيق دون الحاجة إلى إذن. هذه ليست خدمة، يُرجى تجنب الاعتماد عليها لأغراض الاختبار والمراقبة.\n\n该域名仅用于文档示例，无需获得许可。这并非一项服务，请勿将其用于测试和监控目的。\n\nL’usage de ce domaine est réservé à des exemples de documentation, sans autorisation préalable. Il ne s’agit pas d’un service ; son utilisation à des fins de test ou de surveillance est à éviter.\n\nДанный домен предназначен для использования в примерах документации без необходимости получения предварительного разрешения. Это не сервис; не рекомендуется его использование для тестирования и мониторинга.\n\nEste dominio está destinado al uso en ejemplos de documentación sin necesidad de permiso. Esto no es un servicio; evitar utilizarlo para realizar pruebas o monitoreos.\n\n [Learn more](https://iana.org/help/example-domains)"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_social_sort_and_count_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Giữ chủ đề khi sửa thứ tự và giới hạn qua nhiều lượt"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm 8 tweet Top về climate adaptation trên X."
+        },
+        {
+          "role": "user",
+          "content": "Chuyển từ phổ biến sang mới nhất nhé."
+        },
+        {
+          "role": "user",
+          "content": "Lấy 4 bài thôi, chủ đề vẫn như trên."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "climate adaptation",
+              "search_type": "Latest",
+              "limit": 4
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "climate adaptation",
+              "search_type": "Latest",
+              "limit": 4
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "social_search",
+          "args": {
+            "query": "climate adaptation",
+            "search_type": "Latest",
+            "limit": 4
+          },
+          "result": {
+            "tool": "search_tweets",
+            "query": "climate adaptation",
+            "search_type": "Latest",
+            "items": [
+              {
+                "title": "At #COP31, Ethiopia’s Foreign Minister and COP32 President-Designate @GHessebon calls for concrete progress on climate f",
+                "summary": "At #COP31, Ethiopia’s Foreign Minister and COP32 President-Designate @GHessebon calls for concrete progress on climate finance, mitigation and adaptation, stressing that global ambition must translate into action.\n\n#COP32Ethiopia #GreenLegacy 🇪🇹 https://t.co/R0AyiEjJYS",
+                "url": "https://x.com/AtiqaAhmedAli/status/2120119396030894130",
+                "source": "@AtiqaAhmedAli",
+                "date": "Tue Nov 10 11:40:28 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "6"
+                }
+              },
+              {
+                "title": "ICLEI South Asia, in collaboration with @UNDRR, @UNDP and @cdri_world, organised a three-day training and peer exchange ",
+                "summary": "ICLEI South Asia, in collaboration with @UNDRR, @UNDP and @cdri_world, organised a three-day training and peer exchange workshop on Inclusive Climate Resilience and Disaster Risk Reduction (DRR) in Cities on 2-4 November 2026, in Bangkok, Thailand. \n\nCity officials from 10 municipalities across Bangladesh, India, Nepal and Sri Lanka attended technical sessions and exchanged local experiences and best practices to strengthen regional cooperation on resilience and #DRR. \n\nThe training sessions focused on climate resilience planning and DRR, integrating Gender and Social Inclusivity (#GESI) into local planning frameworks, ecosystem-based adaptation (EbA), nature-based solutions (#NbS) in resilience planning, locally-led adaptation (LLA) in risk reduction, resilient infrastructure planning, development and governance, financing climate and disaster resilience, practical applications of the DRR Scorecard developed by UNDRR, and a panel discussion on Inclusive Climate Resilience Practices, focusing on extreme heat and health.\n\nParticipants also visited the Bang Sue Education and Environmental Conservation Center, operated by the Bangkok Metropolitan Administration (BMA), to learn about their municipal wastewater management system through the integration of grey, green and blue infrastructure in Bangkok. \n\n🔷The training marked the completion of a year-long #capacitybuilding programme for city officials under the ‘Climate and Development Knowledge Network (@cdknetwork) – Accelerating Inclusive Action,’ supported and funded by the 𝗠𝗶𝗻𝗶𝘀𝘁𝗿𝘆 𝗼𝗳 𝗙𝗼𝗿𝗲𝗶𝗴𝗻 𝗔𝗳𝗳𝗮𝗶𝗿𝘀 𝗼𝗳 𝘁𝗵𝗲 𝗡𝗲𝘁𝗵𝗲𝗿𝗹𝗮𝗻𝗱𝘀 and @IDRC_CRDI through the #StepChange Initiative. The initiative has equipped city officials with practical knowledge and institutional capacity for assessing, planning, financing, implementing, and monitoring local climate and DRR actions.\n\n#ClimateAction #DisasterRiskReduction",
+                "url": "https://x.com/ICLEISouthAsia/status/2120119248144195635",
+                "source": "@ICLEISouthAsia",
+                "date": "Tue Nov 10 11:39:53 +0000 2026",
+                "metrics": {
+                  "favorites": 1,
+                  "retweets": 0,
+                  "views": "6"
+                }
+              },
+              {
+                "title": "India’s statement at #COP31 highlights the importance of upholding the principles of equity and CBDR-RC, with climate fi",
+                "summary": "India’s statement at #COP31 highlights the importance of upholding the principles of equity and CBDR-RC, with climate finance, adaptation and a just transition remaining critical priorities for developing countries.\n\nRead the key highlights of India’s statement: https://t.co/QOWTruVVnV\n\n@HCI_London @MEAIndia @moefcc @EnvironmentPib @PIB_India @diaspora_india @MIB_India @IndianDiplomacy",
+                "url": "https://x.com/CGIManchester/status/2120118884095099287",
+                "source": "@CGIManchester",
+                "date": "Tue Nov 10 11:38:26 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 0,
+                  "views": "6"
+                }
+              },
+              {
+                "title": "@Amref_Worldwide works closely with partners, governments, and communities to build stronger health systems in Africa.",
+                "summary": "@Amref_Worldwide works closely with partners, governments, and communities to build stronger health systems in Africa.\n\nAt #COP31, our delegates will share African perspectives and solutions on the climate-health nexus. We are committed to making health central to #ClimateAction, focusing on resilient health systems, financing, and community adaptation.\n\nIf you are attending #COP31Türkiye, connect with our team and join the discussion.\n\nLearn more about #AmrefAtCOP31: https://t.co/WHwHYlB76y\n\n@turkiyecop31 @COP31Agenda @AGNESAfrica1 @UNFCCC @WBG_ClimateEnv @LancetCountdown @YACT_Africa",
+                "url": "https://x.com/Amref_Worldwide/status/2120117105542435044",
+                "source": "@Amref_Worldwide",
+                "date": "Tue Nov 10 11:31:22 +0000 2026",
+                "metrics": {
+                  "favorites": 0,
+                  "retweets": 1,
+                  "views": "88"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

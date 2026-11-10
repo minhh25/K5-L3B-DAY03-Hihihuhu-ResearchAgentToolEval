@@ -39,6 +39,12 @@ class ResearchAgent:
         )
         results: list[dict[str, Any]] = []
         for call in response.tool_calls:
+            # Eval measures proposed calls. It must never publish benchmark data.
+            if call.name == "send":
+                results.append({"tool": call.name, "args": call.args, "result": {
+                    "status": "blocked_in_eval", "message": "Eval never executes external writes."
+                }})
+                continue
             func = TOOL_FUNCTIONS.get(call.name)
             if not func:
                 results.append({"tool": call.name, "error": "unknown_tool"})

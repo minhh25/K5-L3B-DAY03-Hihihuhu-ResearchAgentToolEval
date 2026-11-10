@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import re
 from datetime import datetime
@@ -101,7 +102,9 @@ def normalize_value(value: Any) -> Any:
     if isinstance(value, str):
         return value.strip().lower()
     if isinstance(value, list):
-        return sorted(normalize_value(item) for item in value)
+        return sorted((normalize_value(item) for item in value), key=lambda item: json.dumps(item, sort_keys=True, ensure_ascii=False))
+    if isinstance(value, dict):
+        return {k: normalize_value(v) for k, v in value.items()}
     return value
 
 
@@ -270,6 +273,7 @@ def main() -> None:
     parser.add_argument("--tools", type=Path, default=ARTIFACTS_DIR / "tools.yaml")
     parser.add_argument("--eval-cases", type=Path, default=DATA_DIR / "eval_base.json")
     parser.add_argument("--runs-dir", type=Path, default=ROOT / "runs")
+    parser.add_argument("--resume-from", type=Path, help="Reuse measured cases from an interrupted run with identical artifacts, provider/model, and dataset.")
     args = parser.parse_args()
 
     system_prompt = args.system_prompt.read_text(encoding="utf-8")
@@ -278,6 +282,7 @@ def main() -> None:
     selected_model = args.model or getattr(provider, "default_model", None)
     dataset_info = load_dataset_info(args.eval_cases)
     cases = load_cases(args.eval_cases, args.phase)
+    dataset_hash = hashlib.sha256(args.eval_cases.read_bytes()).hexdigest()
     if not cases:
         raise SystemExit(f"No cases matched phase={args.phase!r} in {args.eval_cases}")
 
@@ -286,16 +291,47 @@ def main() -> None:
     openai_tools = to_openai_tools(tool_declarations)
 
     results: list[dict[str, Any]] = []
+    reusable: dict[str, dict[str, Any]] = {}
+    if args.resume_from:
+        previous = json.loads(args.resume_from.read_text(encoding="utf-8"))
+        for key, current in {
+            "prompt_hash": artifact_version.prompt_hash, "tools_hash": artifact_version.tools_hash,
+            "provider": args.provider, "model": selected_model, "suite": args.suite,
+            "version": args.version, "phase": args.phase,
+        }.items():
+            if previous.get(key) != current:
+                raise SystemExit(f"Cannot resume: {key} changed")
+        if previous.get("eval_cases_hash") and previous["eval_cases_hash"] != dataset_hash:
+            raise SystemExit("Cannot resume: dataset hash changed")
+        by_id = {item["id"]: item for item in previous["results"]}
+        if set(by_id) != {case["id"] for case in cases}:
+            raise SystemExit("Cannot resume: dataset cases changed")
+        for case in cases:
+            item = by_id[case["id"]]
+            if item["input"] != (case.get("input") or case.get("query") or case.get("turns")) or item["expect"] != case["expect"]:
+                raise SystemExit("Cannot resume: case contents changed")
+            if item["result"].get("failure_type") != "provider_error":
+                reusable[case["id"]] = {**item, "reused_from": previous["run_id"]}
+    quota_exhausted = False
     for case in cases:
-        print(f"Running {case['id']}...", flush=True)
+        if case["id"] in reusable:
+            print(f"Reusing measured {case['id']}...", flush=True)
+            results.append(reusable[case["id"]])
+            continue
+        print(f"{'Not executed (quota)' if quota_exhausted else 'Running'} {case['id']}...", flush=True)
         agent = ResearchAgent(provider, system_prompt=system_prompt, tools=openai_tools, model=args.model)
         try:
+            if quota_exhausted:
+                raise RuntimeError("NOT EXECUTED: stopped after provider daily quota exhaustion")
             tool_choice = None if case["expect"].get("no_tool") else "required"
             run = agent.run(case_messages(case), tool_choice=tool_choice)
             calls = [{"name": call.name, "args": call.args} for call in run.tool_calls]
             result = evaluate_phase_b(case, calls, run.text)
             tool_results = run.tool_results
         except Exception as exc:
+            was_not_executed = quota_exhausted
+            if "free-models-per-day" in str(exc):
+                quota_exhausted = True
             calls = []
             tool_results = []
             result = {
@@ -308,6 +344,7 @@ def main() -> None:
                 "actual_text": None,
                 "routing_correct": False,
                 "args_correct": False,
+                "execution_status": "not_executed_quota" if was_not_executed else "provider_call_failed",
             }
         results.append({
             "id": case["id"],
@@ -345,8 +382,11 @@ def main() -> None:
         "system_prompt": str(args.system_prompt),
         "tools": str(args.tools),
         "eval_cases": str(args.eval_cases),
+        "eval_cases_hash": dataset_hash,
+        "resumed_from": str(args.resume_from) if args.resume_from else None,
         **dataset_info,
         "generated_at": generated_at,
+        "execution_policy": "Read tools execute live; send proposals are scored but external writes are blocked.",
         "summary": summary,
         "results": results,
     }

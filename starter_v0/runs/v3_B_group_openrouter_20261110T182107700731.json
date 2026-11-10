@@ -1,0 +1,473 @@
+{
+  "run_id": "v3_B_group_openrouter_20261110T182107700731",
+  "version": "v3",
+  "artifact_version": "v3+p43a59c82af5c+tb05a5d016dc4",
+  "prompt_hash": "43a59c82af5c6821abacdd977616c63d969a15943f19445c5ce3eda15969203e",
+  "tools_hash": "b05a5d016dc451dfbf88094d7873067dd4c24d978bb5681bedd3ba50dffb63c3",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "nvidia/nemotron-3.5-lightning:free",
+  "system_prompt": "artifacts/versions/v3_system_prompt.md",
+  "tools": "artifacts/versions/v3_tools.yaml",
+  "eval_cases": "data/eval_group.json",
+  "eval_cases_hash": "0e65980f682859ffee697cb6e8c84079dd72beade8c6883eea90f94b6c1b1310",
+  "resumed_from": null,
+  "dataset_id": "day03_v2_research_group",
+  "dataset_role": "group",
+  "description": "10 case nhóm: 5 single-turn + 5 multi-turn, gồm tool mới và boundary.",
+  "generated_at": "2026-11-10T18:21:07",
+  "execution_policy": "Read tools execute live; send proposals are scored but external writes are blocked.",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 0,
+    "provider_error_cases": 10,
+    "passed_cases": 0,
+    "case_accuracy": 0.0,
+    "failure_counts": {},
+    "observed_mismatch_counts": {}
+  },
+  "results": [
+    {
+      "id": "G01_filter_supplied_sources",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Tool mới: domain, score, giữ dữ liệu đầu vào để tool tự lọc"
+      },
+      "input": "Lọc danh sách nguồn này bằng tool cục bộ, không truy cập web. Chỉ giữ domain example.org (gồm subdomain), score tối thiểu 0.6, tối đa 2 nguồn. Truyền cả danh sách đầu vào cho tool: [{\"url\":\"https://example.org/a?utm_source=lab\",\"score\":0.9},{\"url\":\"https://news.example.org/b\",\"score\":0.7},{\"url\":\"https://other.org/c\",\"score\":0.8}].",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "include_domains": [
+                "example.org"
+              ],
+              "min_score": 0.6,
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RateLimitError: Error code: 429 - Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "provider_call_failed"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G02_missing_feed_identity",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Không lấy topic thay cho tài khoản bị thiếu"
+      },
+      "input": "Mình muốn theo dõi feed X của một phòng nghiên cứu, lấy 4 bài mới nhất. Mình chưa nói tên phòng hay tài khoản; hãy hỏi mình thông tin cần thiết trước.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "text"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "missing_info",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G03_two_research_sources",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Hai nguồn độc lập, query thuần chủ đề, Top trên X"
+      },
+      "input": "Tìm tin web hôm nay về chủ đề \"battery recycling\", đồng thời lấy 2 tweet phổ biến nhất về đúng chủ đề đó trên X. Chưa cần định dạng bản tin.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "battery recycling",
+              "topic": "news",
+              "timeframe": "day"
+            }
+          },
+          {
+            "name": "social_search",
+            "args": {
+              "query": "battery recycling",
+              "search_type": "Top",
+              "limit": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G04_approval_for_exact_draft",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Có nội dung vẫn phải xin xác nhận, không tự gửi"
+      },
+      "input": "Hãy gửi nội dung \"Bản tin pin: cần đối chiếu nguồn trước khi kết luận.\" lên Telegram của nhóm. Đây là yêu cầu soạn gửi ban đầu, mình chưa duyệt bước xác nhận.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "clarify",
+            "args": {
+              "response_type": "yes_no"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G05_format_given_items",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "what_it_tests": "Có dữ liệu thì format, không tìm thêm"
+      },
+      "input": "Trình bày thành bullets đúng 2 nguồn đã cho, không tìm hoặc đọc thêm: [{\"title\":\"Study A\",\"url\":\"https://example.org/a\",\"summary\":\"Kết quả thử nghiệm A\"},{\"title\":\"Study B\",\"url\":\"https://example.org/b\",\"summary\":\"Kết quả thử nghiệm B\"}].",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "format",
+            "args": {
+              "template": "bullets"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "unnecessary_tool",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G06_correct_topic_window_count",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Cập nhật từng trường, giữ số lượng đã sửa"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm 6 tin web chủ đề solar power trong tuần này."
+        },
+        {
+          "role": "user",
+          "content": "Đổi chủ đề thành energy storage và khoảng thời gian sang tháng này."
+        },
+        {
+          "role": "user",
+          "content": "Giữ các điều kiện mới, chỉ lấy 2 kết quả thôi."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "energy storage",
+              "topic": "news",
+              "timeframe": "month",
+              "max_results": 2
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G07_filter_context_override",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Tool mới giữ danh sách từ lượt trước và sửa tiêu chí loại domain"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Danh sách nguồn sẵn có: [{\"url\":\"https://a.example.org/1\",\"score\":0.8},{\"url\":\"https://b.example.org/2\",\"score\":0.9}]. Chỉ xử lý cục bộ."
+        },
+        {
+          "role": "user",
+          "content": "Lọc danh sách đó, bỏ domain a.example.org, giữ tối đa 3 nguồn."
+        },
+        {
+          "role": "user",
+          "content": "Sửa lại: bỏ b.example.org thay cho a.example.org; giới hạn 1 nguồn. Chuyển nguyên danh sách nguồn cho tool lọc."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "filter_sources",
+            "args": {
+              "exclude_domains": [
+                "b.example.org"
+              ],
+              "limit": 1
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G08_cancel_then_capabilities",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Hủy tác vụ ghi và trả lời meta không tool"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Chuẩn bị gửi một digest lên Telegram."
+        },
+        {
+          "role": "user",
+          "content": "Chưa gửi vội, mình chưa duyệt nội dung."
+        },
+        {
+          "role": "user",
+          "content": "Hủy yêu cầu gửi. Bây giờ chỉ giải thích bạn có thể dùng những loại nguồn nào, không tra cứu thêm."
+        }
+      ],
+      "expect": {
+        "no_tool": true,
+        "behavior": "answer_without_tool"
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G09_replace_article_url",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Thay URL cũ bằng URL mới và giữ query string"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đọc bài https://example.org/research/v1."
+        },
+        {
+          "role": "user",
+          "content": "Đó là bản cũ; thay bằng https://example.org/research/v2?lang=vi"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ tóm tắt đúng bản vừa thay, không tìm nguồn khác."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "fetch",
+            "args": {
+              "url": "https://example.org/research/v2?lang=vi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    },
+    {
+      "id": "G10_social_sort_and_count_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "what_it_tests": "Giữ chủ đề khi sửa thứ tự và giới hạn qua nhiều lượt"
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm 8 tweet Top về climate adaptation trên X."
+        },
+        {
+          "role": "user",
+          "content": "Chuyển từ phổ biến sang mới nhất nhé."
+        },
+        {
+          "role": "user",
+          "content": "Lấy 4 bài thôi, chủ đề vẫn như trên."
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "social_search",
+            "args": {
+              "query": "climate adaptation",
+              "search_type": "Latest",
+              "limit": 4
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "failure_type": "provider_error",
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": "provider_error",
+        "failures": [
+          "RuntimeError: NOT EXECUTED: stopped after provider daily quota exhaustion"
+        ],
+        "actual_tool_calls": [],
+        "actual_text": null,
+        "routing_correct": false,
+        "args_correct": false,
+        "execution_status": "not_executed_quota"
+      },
+      "tool_results": []
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+2026-11-10 18:41:28.562 WARNING streamlit.runtime.scriptrunner_utils.script_run_context: Thread 'MainThread': missing ScriptRunContext! This warning can be ignored when running in bare mode.
+🔧 filter_sources({"include_domains": ["example.org"], "items": [{"url": "https://example.org/a"}, {"url": "https://example.net/b"}]})
+{"check": "Real Streamlit AppTest with live provider; no fake provider or HTTP mocks", "passed": true, "provider": "openrouter", "model": "nvidia/nemotron-3.5-lightning:free", "artifact_version": "v3+p43a59c82af5c+tb05a5d016dc4", "status": "answered", "transcript": "transcripts/v3_ui_20261110T184128802184.transcript.json", "assistant_text": "URL giữ lại: **https://example.org/a**", "tool_names": ["filter_sources"], "external_send_clicked": false}
