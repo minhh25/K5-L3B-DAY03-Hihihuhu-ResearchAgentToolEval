@@ -45,4 +45,4 @@
 
 - Hoàn thành đầy đủ các yêu cầu cơ bản (cải tiến tool, eval, tạo tool mới và viết 3 test cho tool mới).
 - Đạt điểm Challenge: Điền và code chạy thành công toàn bộ các `pytest.skip(TODO)` trong bài.
-- Đạt điểm Challenge+: Phát hiện lỗi và giới hạn của bộ mock test ban đầu, tự fix bằng phương pháp Mocking hướng đối tượng (tạo MockResponse riêng). Mức độ đóng góp và nắm bắt logic kiến trúc của Agent (phân biệt giữa khai báo yaml cho model đọc và code python thực thi local) là rất tốt. Đánh giá hoàn thành xuất sắc 100% khối lượng công việc.
+- Đạt điểm Challenge+: Phát hiện lỗi và giới hạn của bộ mock test ban đầu, tự fix bằng phương pháp Mocking hướng đối tượng (tạo MockResponse riêng). Mức độ đóng góp và nắm bắt logic kiến trúc của Agent (phân biệt giữa khai báo yaml cho model đọc và code python thực thi local) là rất tốt. Đánh giá hoàn thành
